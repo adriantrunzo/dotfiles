@@ -1,0 +1,19 @@
+# https://github.com/github/gitignore
+# Mac OS X
+.*
+.DS_Store?
+Icon?
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Python
+.py[co]
+*~
+
+# Vim
+*.sw[a-z]
