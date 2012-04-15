@@ -7,3 +7,5 @@ source $ZSH/oh-my-zsh.sh
 
 alias ls="ls -GFh"
 
+# Homebrew requires /usr/local/bin beforehand
+export PATH="/usr/local/bin:$PATH"
