@@ -60,9 +60,9 @@ nnoremap <tab> %
 vnoremap <tab> %
 
 " Handling long lines
-"set wrap
-"set textwidth=79
-"set formatoptions=qrn1
+set wrap
+set textwidth=79
+set formatoptions=qrn1
 set colorcolumn=85
 
 " Color
@@ -89,6 +89,9 @@ vnoremap <F1> <ESC>
 
 " Same key!
 nnoremap ; :
+
+" Save on lost focus
+au FocusLost * :wa
 
 let python_space_errors = 1
 let c_space_errors = 1
