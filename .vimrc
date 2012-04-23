@@ -28,7 +28,6 @@ set statusline=%-3.n%t\ %m\ %y%=%l/%L\ %c\ %P
 
 " Basic settings
 set encoding=utf-8
-set fileencodings=utf-8
 set scrolloff=3
 set showmode
 set showcmd
