@@ -6,6 +6,8 @@ plugins=(git github osx)
 source $ZSH/oh-my-zsh.sh
 
 alias ls="ls -GFh"
+alias ulcom="ssh ulcom@ultralingua.com"
+alias hooper="ssh trunzo@hooper.ultralingua.com"
 
 # Homebrew requires /usr/local/bin beforehand
 export PATH="/usr/local/bin:/usr/local/share/python:$PATH"
