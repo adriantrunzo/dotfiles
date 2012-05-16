@@ -11,3 +11,6 @@ alias hooper="ssh trunzo@hooper.ultralingua.com"
 
 # Homebrew requires /usr/local/bin beforehand
 export PATH="/usr/local/bin:/usr/local/share/python:$PATH"
+
+# Wordnet 
+export PATH="/usr/local/WordNet-3.0/bin:$PATH"
