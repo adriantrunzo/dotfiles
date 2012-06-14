@@ -19,6 +19,9 @@ set smarttab
 set smartindent
 set autoindent
 
+" Treat underscore as word delimiter
+set iskeyword-=_
+
 " Backspace in insert mode
 set backspace=indent,eol,start
 
