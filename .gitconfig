@@ -1,9 +1,9 @@
 [user]
-	name = Adrian Trunzo
-	email = adrian.trunzo@gmail.com
+    name = Adrian Trunzo
+    email = adrian.trunzo@gmail.com
 [core]
     editor = vim
-	excludesfile = ~/.gitignore-global
+    excludesfile = ~/.gitignore-global
 [color]
     status = auto
     diff = auto
