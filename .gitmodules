@@ -19,3 +19,6 @@
 [submodule ".oh-my-zsh"]
 	path = .oh-my-zsh
 	url = git@github.com:trunzoa/oh-my-zsh.git
+[submodule ".terminal-solarized"]
+	path = .terminal-solarized
+	url = git://github.com/tomislav/osx-lion-terminal.app-colors-solarized.git
