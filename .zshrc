@@ -9,8 +9,5 @@ alias ls="ls -GFh"
 alias qs3304="ssh ultralingua@qs3304.pair.com"
 alias hooper="ssh trunzo@hooper.ultralingua.com"
 
-# Homebrew requires /usr/local/bin beforehand
-export PATH="/usr/local/bin:/usr/local/share/python:$PATH"
-
-# Wordnet 
-export PATH="/usr/local/WordNet-3.0/bin:$PATH"
+# OS X 10.7 : /usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin
+export PATH="/usr/local/bin:/usr/local/share/python:/usr/bin:/bin:/usr/sbin:/sbin:/usr/X11/bin"
