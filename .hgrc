@@ -1,0 +1,22 @@
+[ui]
+username = Adrian Trunzo <adrian.trunzo@gmail.com>
+editor = vim
+commitsubrepos = False
+
+[extensions]
+prompt = ~/.mercurial/hg-prompt/prompt.py
+hgext.identities = ~/.mercurial/hgidentities/identities.py
+
+# Kiln
+gestalt = ~/.mercurial/kiln/gestalt.py
+kilnauth = ~/.mercurial/kiln/kilnauth.py
+kilnpath = ~/.mercurial/kiln/kilnpath.py
+big-push = ~/.mercurial/kiln/big-push.py
+kiln = ~/.mercurial/kiln/kiln.py
+caseguard = ~/.mercurial/kiln/caseguard.py
+
+[web]
+cacerts = /etc/hg-dummycert.pem
+
+[identities]
+ultralingua.kilnhg.com = Adrian Trunzo <trunzo@ultralingua.com>
