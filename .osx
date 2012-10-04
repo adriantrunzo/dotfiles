@@ -164,6 +164,9 @@ unset file
 # Set the icon size of Dock items to 36 pixels
 #defaults write com.apple.dock tilesize -int 36
 
+# Pin the dock in the corner
+defaults write com.apple.dock pinning -string end
+
 # Show indicator lights for open applications in the Dock
 defaults write com.apple.dock show-process-indicators -bool true
 
