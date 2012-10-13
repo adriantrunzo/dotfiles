@@ -110,3 +110,9 @@ let g:syntastic_check_on_open=1
 let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 let mapleader = ","
+
+" Strip all trailing whitespace in current file
+nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+
+" Re-hardwrap paragraphs of text
+nnoremap <leader>q gqip
