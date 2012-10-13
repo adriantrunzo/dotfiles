@@ -100,10 +100,8 @@ nnoremap ; :
 " Save on lost focus
 au FocusLost * :wa
 
-let python_space_errors = 1
-let c_space_errors = 1
-let javascript_space_errors = 1
-let c_C99 = 1
+" Read html files as jinja syntax
+au BufRead,BufNewFile *.html set filetype=htmljinja
 
 " Syntastic
 let g:syntastic_check_on_open=1
