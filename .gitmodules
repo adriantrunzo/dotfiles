@@ -22,3 +22,6 @@
 [submodule ".terminal-solarized"]
 	path = .terminal-solarized
 	url = git://github.com/tomislav/osx-lion-terminal.app-colors-solarized.git
+[submodule ".vim/bundle/syntastic"]
+	path = .vim/bundle/syntastic
+	url = https://github.com/scrooloose/syntastic.git
