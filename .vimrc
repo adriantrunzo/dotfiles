@@ -21,13 +21,17 @@ set autoindent
 
 " Treat underscore as word delimiter
 set iskeyword-=_
-
+ 
 " Backspace in insert mode
 set backspace=indent,eol,start
 
 " Status
 set laststatus=2
-set statusline=%-3.n%t\ %m\ %y%=%l/%L\ %c\ %P
+set statusline=%-2.n\ %t\ %y " Buffer number, file name, file type 
+set statusline+=%(\ %r%m%) " Read only and modfified flags
+set statusline+=%(\ %{SyntasticStatuslineFlag()}%) " Syntastic!
+set statusline+=%= " Left/Right breaker
+set statusline+=%l/%L\ %c\ %P " Line number, column number, percentage
 
 " Basic settings
 set encoding=utf-8
@@ -100,5 +104,9 @@ let python_space_errors = 1
 let c_space_errors = 1
 let javascript_space_errors = 1
 let c_C99 = 1
+
+" Syntastic
+let g:syntastic_check_on_open=1
+let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 let mapleader = ","
