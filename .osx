@@ -13,10 +13,10 @@ while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
 ## General UI/UX
 
 # Set computer name (as done via System Preferences → Sharing)
-sudo scutil --set ComputerName "$0"
-sudo scutil --set HostName "$0"
-sudo scutil --set LocalHostName "$0"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$0"
+sudo scutil --set ComputerName "$1"
+sudo scutil --set HostName "$1"
+sudo scutil --set LocalHostName "$1"
+sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$1"
 
 # Menu Bar: no transparency, keep useful menus
 defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
@@ -226,7 +226,7 @@ defaults write com.apple.iTunes disablePing -bool true
 defaults write com.apple.terminal StringEncodings -array 4
 
 # Use solarized as the default theme
-open "~/dotfiles/.terminal-solarized/Solarized\ Dark.terminal"
+open ".terminal-solarized/Solarized Dark.terminal"
 sleep 1 # Wait a bit to make sure the theme is loaded
 defaults write com.apple.terminal "Default Window Settings" -string "Solarized Dark"
 defaults write com.apple.terminal "Startup Window Settings" -string "Solarized Dark"
@@ -260,7 +260,7 @@ defaults write com.apple.DiskUtility advanced-image-options -bool true
 ## Cleanup
 
 # Kill affected applications
-for app in "Dock" "Finder" "Safari" "SystemUIServer" "Terminal" "iTunes"; do
+for app in "Dock" "Finder" "Safari" "SystemUIServer" "iTunes"; do
 	killall "$app" > /dev/null 2>&1
 done
 echo "Logout/restart for some of these changes to take effect."
