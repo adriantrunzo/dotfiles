@@ -5,6 +5,7 @@ commitsubrepos = False
 
 [extensions]
 record =
+color = 
 prompt = ~/.mercurial/hg-prompt/prompt.py
 hgext.identities = ~/.mercurial/hgidentities/identities.py
 
