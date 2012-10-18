@@ -4,6 +4,7 @@ editor = vim
 commitsubrepos = False
 
 [extensions]
+record =
 prompt = ~/.mercurial/hg-prompt/prompt.py
 hgext.identities = ~/.mercurial/hgidentities/identities.py
 
