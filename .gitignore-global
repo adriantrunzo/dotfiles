@@ -12,7 +12,7 @@ Icon?
 .Trashes
 
 # Python
-.py[co]
+*.py[co]
 *~
 
 # Vim
