@@ -11,9 +11,9 @@ set nocompatible
 set modelines=0
 
 " Spaces and Tabs
-set tabstop=4
-set softtabstop=4
-set shiftwidth=4
+set tabstop=2
+set softtabstop=2
+set shiftwidth=2
 set expandtab
 set smarttab
 set smartindent
@@ -102,6 +102,8 @@ au FocusLost * :wa
 
 " Read html files as jinja syntax
 au BufRead,BufNewFile *.html set filetype=htmljinja
+
+au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
 
 " Syntastic
 let g:syntastic_check_on_open=1
