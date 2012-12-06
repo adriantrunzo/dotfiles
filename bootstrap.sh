@@ -6,7 +6,7 @@
 
 cd "$(dirname "$0")"
 
-FILES=".gitignore-global .gitconfig .hgrc .vim .vimrc .zshrc .oh-my-zsh .mercurial"
+FILES=".gitignore-global .gitconfig .hgrc .vim .vimrc .zshrc .zshenv .oh-my-zsh .mercurial"
 
 # Pull latest changes
 git pull
