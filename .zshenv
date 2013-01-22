@@ -4,5 +4,3 @@ export PATH="/usr/local/bin:/usr/local/sbin:/usr/local/share/python:/usr/bin:/bi
 # homebrew rbenv
 # chsh -s /bin/zsh, always a dank move
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-export ANDROID_SDK_ROOT=/usr/local/opt/android-sdk
