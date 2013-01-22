@@ -138,7 +138,7 @@ au VimResized * :wincmd =
 " Read html files as jinja syntax
 au BufRead,BufNewFile *.html set filetype=htmljinja
 
-au FileType python setlocal tabstop=4 softtabstop=4 shiftwidth=4
+au FileType javascript,html,css,php setlocal tabstop=4 softtabstop=2 shiftwidth=2
 
 " Syntastic
 let g:syntastic_check_on_open=1
