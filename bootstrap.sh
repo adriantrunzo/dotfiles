@@ -6,7 +6,7 @@
 
 cd "$(dirname "$0")"
 
-FILES=".gitignore-global .gitconfig .hgrc .vim .vimrc .zshrc .zshenv .oh-my-zsh .mercurial"
+FILES="gitignore-global gitconfig hgrc vim vimrc zshrc zshenv oh-my-zsh mercurial"
 
 # Pull latest changes
 git pull
@@ -21,7 +21,7 @@ hg clone https://developers.kilnhg.com/Code/Kiln/Group/Kiln-Extensions .mercuria
 # Create Links
 function install() {
     for file in $FILES; do
-        ln -sf $file ~/$file
+        ln -sf $file ~/.$file
     done
 }
 
