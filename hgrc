@@ -7,7 +7,7 @@ commitsubrepos = False
 record =
 color = 
 prompt = ~/.mercurial/hg-prompt/prompt.py
-hgext.identities = ~/.mercurial/hgidentities/identities.py
+hgext.identities = ~/.mercurial/hg-identities/identities.py
 
 # Kiln
 gestalt = ~/.mercurial/kiln/gestalt.py
