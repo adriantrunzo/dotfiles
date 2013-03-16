@@ -8,3 +8,5 @@
     status = auto
     diff = auto
     branch = auto
+[push]
+	default = simple
