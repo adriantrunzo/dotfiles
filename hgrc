@@ -9,6 +9,7 @@ color =
 mq =
 prompt = ~/.mercurial/hg-prompt/prompt.py
 hgext.identities = ~/.mercurial/hg-identities/identities.py
+#hggit = 
 
 # Kiln
 gestalt = ~/.mercurial/kiln/gestalt.py
