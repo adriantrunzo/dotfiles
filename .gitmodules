@@ -3,7 +3,7 @@
 	url = git://github.com/tomislav/osx-lion-terminal.app-colors-solarized.git
 [submodule "oh-my-zsh"]
 	path = oh-my-zsh
-	url = git@github.com:adriantrunzo/oh-my-zsh.git
+	url = git@github.com:robbyrussell/oh-my-zsh.git
 [submodule "vim/bundle/vim-colors-solarized"]
 	path = vim/bundle/vim-colors-solarized
 	url = git://github.com/altercation/vim-colors-solarized.git

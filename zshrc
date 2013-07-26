@@ -1,6 +1,6 @@
 # Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
-ZSH_THEME="trunzoa"
+ZSH_THEME="adriantrunzo"
 DISABLE_AUTO_TITLE="true"
 plugins=(git github osx)
 source $ZSH/oh-my-zsh.sh
