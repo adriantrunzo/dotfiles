@@ -6,9 +6,6 @@ plugins=(git github osx)
 source $ZSH/oh-my-zsh.sh
 
 alias ls="ls -GFh"
-alias qs3304="ssh ultralingua@qs3304.pair.com"
-alias hooper="ssh trunzo@hooper.ultralingua.com"
-alias ernie="ssh trunzo@ernie.ultralingua.com"
 
 # Need to use vim compiled against system python
 alias vim="/usr/local/bin/vim"
