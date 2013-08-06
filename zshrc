@@ -1,8 +1,9 @@
-# Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
+ZSH_CUSTOM=$HOME/.config/zsh
 ZSH_THEME="adriantrunzo"
 DISABLE_AUTO_TITLE="true"
-plugins=(git github osx)
+plugins=(git github mercurial python osx)
+
 source $ZSH/oh-my-zsh.sh
 
 # Overwrite oh-my-zsh default alias
