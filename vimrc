@@ -157,3 +157,7 @@ nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
 
 " Re-hardwrap paragraphs of text
 nnoremap <leader>q gqip
+
+" Toggle spell-check
+" https://github.com/jmdeldin/dotfiles/blob/master/.vimrc
+nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
