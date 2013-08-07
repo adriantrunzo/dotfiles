@@ -1,2 +1,6 @@
+!.*
 .DS_Store
-mercurial
+.netrwhist
+
+# vim temporary files
+vim/tmp
