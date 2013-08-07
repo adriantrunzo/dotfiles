@@ -3,6 +3,5 @@
 .netrwhist
 
 # vim
-vim/tmp
 .vim/tmp
 .vim/bundle

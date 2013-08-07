@@ -3,7 +3,6 @@
 
 " Pathogen
 filetype off
-"call pathogen#infect()
 
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
