@@ -55,17 +55,17 @@ set backspace=indent,eol,start
 
 " Status
 set laststatus=2
-set statusline=%-2.n\ %t\ %y " Buffer number, file name, file type
-set statusline+=%(\ %r%m%) " Read only and modfified flags
-set statusline+=%(\ %{SyntasticStatuslineFlag()}%) " Syntastic!
-set statusline+=%= " Left/Right breaker
-set statusline+=%l/%L\ %c\ %P " Line number, column number, percentage
+"set statusline=%-2.n\ %t\ %y " Buffer number, file name, file type
+"set statusline+=%(\ %r%m%) " Read only and modfified flags
+"set statusline+=%(\ %{SyntasticStatuslineFlag()}%) " Syntastic!
+"set statusline+=%= " Left/Right breaker
+"set statusline+=%l/%L\ %c\ %P " Line number, column number, percentage
 
-" Powerline
-"python from powerline.vim import setup as powerline_setup
-"python powerline_setup()
-"python del powerline_setup
-"set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+" Airline
+let g:airline_theme='solarized'
+let g:airline_powerline_fonts=1
+let g:airline_left_sep=''
+let g:airline_right_sep=''
 
 " Basic settings
 set encoding=utf-8
