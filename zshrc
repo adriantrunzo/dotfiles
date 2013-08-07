@@ -2,7 +2,7 @@ ZSH=$HOME/.oh-my-zsh
 ZSH_CUSTOM=$HOME/.config/zsh
 ZSH_THEME="adriantrunzo"
 DISABLE_AUTO_TITLE="true"
-plugins=(git github python osx)
+plugins=(git github python mercurial osx)
 
 source $ZSH/oh-my-zsh.sh
 

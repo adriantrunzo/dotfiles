@@ -7,10 +7,6 @@ commitsubrepos = False
 record =
 color = 
 mq =
-prompt = ~/.mercurial/hg-prompt/prompt.py
-#hgext.identities = ~/.mercurial/hg-identities/identities.py
 
 [web]
 cacerts = /etc/hg-dummycert.pem
-
-#[identities]
