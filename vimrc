@@ -27,6 +27,7 @@ Bundle 'elzr/vim-json'
 Bundle 'nginx.vim'
 Bundle 'Jinja'
 Bundle 'hynek/vim-python-pep8-indent'
+Bundle 'othree/html5.vim'
 
 filetype plugin indent on
 
