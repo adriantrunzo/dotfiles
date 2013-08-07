@@ -4,7 +4,44 @@
 " Pathogen
 filetype off
 call pathogen#infect()
+
+"set rtp+=~/.vim/bundle/vundle/
+"call vundle#rc()
+"
+"Bundle 'gmarik/vundle'
+"
+"Bundle 'scrooloose/nerdcommenter'
+"Bundle 'scrooloose/nerdtree'
+"Bundle 'scrooloose/syntastic'
+"Bundle 'myusuf3/numbers.vim'
+"
+"" Appearance
+"Bundle 'bling/vim-airline'
+"Bundle 'altercation/vim-colors-solarized'
+"
+"" Syntax/Indent
+"Bundle 'groenewege/vim-less'
+"Bundle 'jtratner/vim-flavored-markdown'
+"Bundle 'tpope/vim-git'
+"Bundle 'pangloss/vim-javascript'
+"Bundle 'elzr/vim-json'
+"Bundle 'nginx.vim'
+"Bundle 'Jinja'
+
 filetype plugin indent on
+
+" TODO need something similar for jinja
+" http://www.vim.org/scripts/script.php?script_id=1886
+"au BufRead,BufNewFile /etc/nginx/*,/usr/local/nginx/conf/* if &ft == '' | setfiletype nginx | endif
+
+" https://github.com/jtratner/vim-flavored-markdown
+"augroup markdown
+"    au!
+"    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
+"augroup END
+
+au FileType javascript setlocal softtabstop=2 shiftwidth=2
+au FileType html setlocal softtabstop=2 shiftwidth=2
 
 " No vi compatibility
 set nocompatible
@@ -12,7 +49,7 @@ set modelines=0
 set lazyredraw
 
 " Spaces and Tabs
-set tabstop=8
+set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
@@ -142,9 +179,7 @@ au FocusLost * :silent! wall
 au VimResized * :wincmd =
 
 " Read html files as jinja syntax
-au BufRead,BufNewFile *.html set filetype=htmljinja
-
-au FileType javascript,html,css,php setlocal tabstop=4 softtabstop=2 shiftwidth=2
+"au BufRead,BufNewFile *.html set filetype=htmljinja
 
 " Syntastic
 let g:syntastic_check_on_open=1
