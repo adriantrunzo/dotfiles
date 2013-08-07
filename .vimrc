@@ -179,9 +179,6 @@ au FocusLost * :silent! wall
 " Resize splits when the window is resized
 au VimResized * :wincmd =
 
-" Read html files as jinja syntax
-"au BufRead,BufNewFile *.html set filetype=htmljinja
-
 " Syntastic
 let g:syntastic_check_on_open=1
 let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
