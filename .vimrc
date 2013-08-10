@@ -42,7 +42,7 @@ augroup markdown
 augroup END
 
 au FileType javascript setlocal softtabstop=2 shiftwidth=2
-au FileType html setlocal softtabstop=2 shiftwidth=2
+au FileType html,xml setlocal softtabstop=2 shiftwidth=2
 
 " No vi compatibility
 set nocompatible
