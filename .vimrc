@@ -12,7 +12,6 @@ Bundle 'gmarik/vundle'
 Bundle 'scrooloose/nerdcommenter'
 Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/syntastic'
-Bundle 'myusuf3/numbers.vim'
 
 " Appearance
 Bundle 'bling/vim-airline'
@@ -123,7 +122,9 @@ set undofile
 set splitbelow
 set splitright
 
-" Use relative line numbers
+" Rather than use numbers.vim, 7.4 allows the use of numbering combinations,
+" see Patch 7.3.1115 or :he number_relativenumber
+set number
 set relativenumber
 
 " Wildmenu

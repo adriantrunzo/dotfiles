@@ -1,5 +1,10 @@
 #!/bin/zsh
 
+# Swith login shell to zsh
+chsh -s /bin/bash `whoami`
+
+
+
 # This sscript is largely a subset of the original by Mathias Bynens
 # ~/.osx — http://mths.be/osx
 
