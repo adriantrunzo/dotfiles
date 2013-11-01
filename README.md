@@ -15,13 +15,15 @@ Perhaps later I will need something more complicated.
 
 ### Install
 
-    git clone git@github.com:adriantrunzo/dotfiles.git ~/dotfiles
-    cd dotfiles; stow .
+    git clone git@github.com:adriantrunzo/dotfiles.git
+    git submodules init; git submodules update
+    bash setup/setup.sh [Computer Name]
 
-Assuming you cloned the dotfiles into your home directory, this will create
-symlinks to the appropriate files there. If you cloned somewhere else, you'll
-have to change stow's target.
+Regardless of where you cloned the dotfiles, this install will create symlinks 
+your home directory to the appropriate dotfiles.
 
 ### Uninstall
 
-    cd dotfiles; stow -D .
+This uninstall will just remove the symlinks, any other settings will remain.
+
+    cd /path/to/dotfiles/repository; stow -D . --target ~
