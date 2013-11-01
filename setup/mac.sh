@@ -13,7 +13,6 @@ fi
 export PATH=/usr/local/bin:$PATH
 which brew || ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
 
-which git || brew install git
 which hg || brew install hg
 which stow || brew install stow
 which markdown || brew install markdown
@@ -22,26 +21,23 @@ which rbenv || brew install rbenv
 
 if ! brew ls python &> /dev/null; then brew install python --framework; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
+if ! brew ls git &> /dev/null; then brew install git; fi
 
 
 # Use UTF-8 in Terminal
 defaults write com.apple.terminal StringEncodings -array 4
 
 
-# Use solarized as the default theme
-curl -Os https://raw.github.com/tomislav/osx-terminal.app-colors-solarized/master/Solarized%20Dark.terminal
-open "Solarized Dark.terminal"
-sleep 1 # Wait a bit to make sure the theme is loaded
-defaults write com.apple.terminal "Default Window Settings" -string "Solarized Dark"
-defaults write com.apple.terminal "Startup Window Settings" -string "Solarized Dark"
-mv "Solarized Dark.terminal" ~/.Trash
-
-
-# Set computer name
-sudo scutil --set ComputerName "$1"
-sudo scutil --set HostName "$1"
-sudo scutil --set LocalHostName "$1"
-sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$1"
+if [[ -n $1 ]]
+then
+    # Set computer name
+    sudo scutil --set ComputerName "$1"
+    sudo scutil --set HostName "$1"
+    sudo scutil --set LocalHostName "$1"
+    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$1"
+else
+    echo "Computer name not set."
+fi
 
 
 # Opaque menu bar
@@ -104,7 +100,7 @@ chflags nohidden ~/Library
 
 
 # Set the size of Dock icons
-defaults write com.apple.dock tilesize -int 35
+defaults write com.apple.dock tilesize -int 40
 
 # Left orientation
 defaults write com.apple.dock orientation -string left
@@ -130,7 +126,7 @@ defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
 
 
-for app in "Dock" "Finder" "SystemUIServer"
+for app in "Dock" "Finder" "SystemUIServer" "Terminal"
 do
     killall "$app" > /dev/null 2 >&1
 done
