@@ -19,8 +19,8 @@ Perhaps later I will need something more complicated.
     git submodules init; git submodules update
     bash setup/setup.sh [Computer Name]
 
-Regardless of where you cloned the dotfiles, this install will create symlinks 
-your home directory to the appropriate dotfiles.
+Regardless of where you cloned the dotfiles, this install will create symlinks
+in your home directory to the appropriate dotfiles.
 
 ### Uninstall
 
