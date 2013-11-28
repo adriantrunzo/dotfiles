@@ -18,6 +18,7 @@ which stow || brew install stow
 which markdown || brew install markdown
 which mysql || brew install mysql
 which rbenv || brew install rbenv
+which ruby-build || brew install ruby-build
 
 if ! brew ls python &> /dev/null; then brew install python --framework; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
