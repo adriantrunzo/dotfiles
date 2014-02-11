@@ -15,6 +15,7 @@ export PATH=/usr/local/bin:$PATH
 vim +BundleInstall +qall
 
 pip install flake8
+pip install virtualenv
 
 # Switch login shell to zsh
 chsh -s /bin/zsh $(whoami)

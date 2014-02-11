@@ -23,6 +23,7 @@ which ruby-build || brew install ruby-build
 if ! brew ls python &> /dev/null; then brew install python --framework; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
 if ! brew ls git &> /dev/null; then brew install git; fi
+if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi
 
 
 # Use UTF-8 in Terminal
