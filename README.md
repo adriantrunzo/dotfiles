@@ -15,8 +15,8 @@ Perhaps later I will need something more complicated.
 
 ### Install
 
-    git clone git@github.com:adriantrunzo/dotfiles.git
-    git submodules init; git submodules update
+    git clone git@github.com:adriantrunzo/dotfiles.git; cd dotfiles
+    git submodule init; git submodule update
     bash setup/setup.sh [Computer Name]
 
 Regardless of where you cloned the dotfiles, this install will create symlinks
