@@ -25,6 +25,10 @@ if ! brew ls vim &> /dev/null; then brew install vim; fi
 if ! brew ls git &> /dev/null; then brew install git; fi
 if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi
 
+# Install mactex
+curl -OL http://mirror.ctan.org/systems/mac/mactex/mactex-basic.pkg
+sudo installer -package mactex-basic.pkg -target $(bless --getBoot)
+
 
 # Use UTF-8 in Terminal
 defaults write com.apple.terminal StringEncodings -array 4
@@ -35,8 +39,6 @@ then
     # Set computer name
     sudo scutil --set ComputerName "$1"
     sudo scutil --set HostName "$1"
-    sudo scutil --set LocalHostName "$1"
-    sudo defaults write /Library/Preferences/SystemConfiguration/com.apple.smb.server NetBIOSName -string "$1"
 else
     echo "Computer name not set."
 fi
