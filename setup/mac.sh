@@ -11,7 +11,7 @@ fi
 
 # install homebrew and set appropriate path
 export PATH=/usr/local/bin:$PATH
-which brew || ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go)"
+which brew || ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
 
 which hg || brew install hg
 which stow || brew install stow
@@ -28,6 +28,7 @@ if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi
 # Install mactex
 curl -OL http://mirror.ctan.org/systems/mac/mactex/mactex-basic.pkg
 sudo installer -package mactex-basic.pkg -target $(bless --getBoot)
+mv mactex-basic.pkg ~/.Trash
 
 
 # Use UTF-8 in Terminal
