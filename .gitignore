@@ -5,3 +5,6 @@
 # vim
 .vim/tmp
 .vim/bundle
+
+# Third party configs
+.config/filezilla
