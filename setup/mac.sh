@@ -9,9 +9,9 @@ then
     exit 0
 fi
 
-# install homebrew and set appropriate path
+# Install homebrew and set appropriate path
 export PATH=/usr/local/bin:$PATH
-which brew || ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)"
+which brew || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
 which hg || brew install hg
 which stow || brew install stow
