@@ -21,6 +21,7 @@ which rbenv || brew install rbenv
 which ruby-build || brew install ruby-build
 
 if ! brew ls python &> /dev/null; then brew install python --framework; fi
+if ! brew ls python3 &> /dev/null; then brew install python3; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
 if ! brew ls git &> /dev/null; then brew install git; fi
 if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi

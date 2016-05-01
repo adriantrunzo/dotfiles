@@ -14,7 +14,8 @@ Bundle 'scrooloose/nerdtree'
 Bundle 'scrooloose/syntastic'
 
 " Appearance
-Bundle 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Bundle 'altercation/vim-colors-solarized'
 
 " Syntax/Indent
