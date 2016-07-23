@@ -1,34 +1,36 @@
 " Much of this was adapted from
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-" Pathogen
+" Configure Plugins
 filetype off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+set rtp+=~/.vim/bundle/Vundle.vim/
+call vundle#begin()
 
-Bundle 'gmarik/vundle'
+" Let Vundle manage Vundle
+Plugin 'VundleVim/Vundle.vim'
 
-Bundle 'scrooloose/nerdcommenter'
-Bundle 'scrooloose/nerdtree'
-Bundle 'scrooloose/syntastic'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
 
 " Appearance
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Bundle 'altercation/vim-colors-solarized'
+Plugin 'altercation/vim-colors-solarized'
 
 " Syntax/Indent
-Bundle 'groenewege/vim-less'
-Bundle 'jtratner/vim-flavored-markdown'
-Bundle 'tpope/vim-git'
-Bundle 'pangloss/vim-javascript'
-Bundle 'elzr/vim-json'
-Bundle 'nginx.vim'
-Bundle 'Jinja'
-Bundle 'hynek/vim-python-pep8-indent'
-Bundle 'othree/html5.vim'
+Plugin 'groenewege/vim-less'
+Plugin 'jtratner/vim-flavored-markdown'
+Plugin 'tpope/vim-git'
+Plugin 'pangloss/vim-javascript'
+Plugin 'elzr/vim-json'
+Plugin 'nginx.vim'
+Plugin 'Jinja'
+Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'othree/html5.vim'
 
+call vundle#end()
 filetype plugin indent on
 
 " TODO need something similar for jinja
