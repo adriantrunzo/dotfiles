@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 
 echo "Prerequisites: sudo access and Xcode/command-line tools."
 read -p "Continue? (y/n) "
@@ -17,113 +16,99 @@ which hg || brew install hg
 which stow || brew install stow
 which markdown || brew install markdown
 which mysql || brew install mysql
-which rbenv || brew install rbenv
-which ruby-build || brew install ruby-build
+which pass || brew install pass
 
-if ! brew ls python &> /dev/null; then brew install python --framework; fi
+if ! brew ls python &> /dev/null; then brew install python; fi
 if ! brew ls python3 &> /dev/null; then brew install python3; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
 if ! brew ls git &> /dev/null; then brew install git; fi
 if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi
 
-# Install mactex
-curl -OL http://mirror.ctan.org/systems/mac/mactex/mactex-basic.pkg
-sudo installer -package mactex-basic.pkg -target $(bless --getBoot)
-mv mactex-basic.pkg ~/.Trash
+# Install brew cask and some extras
+brew tap caskroom/cask
+brew tap caskroom/fonts
 
+brew cask install google-chrome
+brew cask install skype
+brew cask install spotify
 
-# Use UTF-8 in Terminal
-defaults write com.apple.terminal StringEncodings -array 4
+brew cask install font-source-code-pro
+brew cask install font-sauce-code-powerline
 
+# App Store: Automatically check for new updates, download them in the
+# background and install security/OS updates as well
+defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
+defaults write com.apple.SoftwareUpdate AutomaticDownload -int 1
+defaults write com.apple.SoftwareUpdate CriticalUpdateInstall -int 1
+defaults write com.apple.commerce AutoUpdate -bool true
 
-if [[ -n $1 ]]
-then
-    # Set computer name
-    sudo scutil --set ComputerName "$1"
-    sudo scutil --set HostName "$1"
-else
-    echo "Computer name not set."
-fi
+# App Store: Allow rebooting for updates
+defaults write com.apple.commerce AutoUpdateRestartRequired -bool true
 
+# Dock: Set tile size and pin left
+defaults write com.apple.dock tilesize -int 48
+defaults write com.apple.dock orientation -string left
 
-# Opaque menu bar
-defaults write NSGlobalDomain AppleEnableMenuBarTransparency -bool false
+# Dock: Minimize to app icon, show indicators and not launch animations
+defaults write com.apple.dock minimize-to-application -bool true
+defaults write com.apple.dock show-process-indicators -bool true
+defaults write com.apple.dock launchanim -bool false
 
-# Always show scrollbars
-defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
+# Finder:  Show all file extensions, status bar, path and posix path
+defaults write NSGlobalDomain AppleShowAllExtensions -bool true
+defaults write com.apple.finder ShowStatusBar -bool true
+defaults write com.apple.finder ShowPathbar -bool true
+defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
 
-# Disable opening and closing window animations
-defaults write NSGlobalDomain NSAutomaticWindowAnimationsEnabled -bool false
-
-# Trackpad: enable tap to click for this user and for the login screen
-defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
-defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
-
-
-# Show icons for hard drives, servers, and removable media on the desktop
+# Finder: Show icons for hard drives, servers, and removable media on the desktop
 defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-# Show all filename extensions
-defaults write NSGlobalDomain AppleShowAllExtensions -bool true
-
-# Show status bar
-defaults write com.apple.finder ShowStatusBar -bool true
-
-# Allow text selection in Quick Look
+# Finder: Allow text selection in Quick Look
 defaults write com.apple.finder QLEnableTextSelection -bool true
 
-# Display full POSIX path as Finder window title
-defaults write com.apple.finder _FXShowPosixPathInTitle -bool true
-
-# When performing a search, search the current folder by default
+# Finder: Search current firectory by default
 defaults write com.apple.finder FXDefaultSearchScope -string "SCcf"
 
-# Disable the warning when changing a file extension
+# Finder: Don't warn about extension changes
 defaults write com.apple.finder FXEnableExtensionChangeWarning -bool false
 
-# Show item info below icons on the desktop and in other icon views
+# Finder: Show item info below icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:showItemInfo true" ~/Library/Preferences/com.apple.finder.plist
 
-# Enable snap-to-grid for icons on the desktop and in other icon views
+# Finder: Enable snap-to-grid for icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:arrangeBy grid" ~/Library/Preferences/com.apple.finder.plist
 
-# Increase the size of icons on the desktop and in other icon views
+# Finder:  Increase the size of icons on the desktop and in other icon views
 /usr/libexec/PlistBuddy -c "Set :DesktopViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
-/usr/libexec/PlistBuddy -c "Set :FK_StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
 /usr/libexec/PlistBuddy -c "Set :StandardViewSettings:IconViewSettings:iconSize 64" ~/Library/Preferences/com.apple.finder.plist
 
-
-# Show the ~/Library folder
+# Finder: Don't hide ~/Library or /Volumes
 chflags nohidden ~/Library
+sudo chflags nohidden /Volumes
 
+# General: Always show scrollbars
+defaults write NSGlobalDomain AppleShowScrollBars -string "Always"
 
-# Set the size of Dock icons
-defaults write com.apple.dock tilesize -int 40
+# General:  Reduce Transparency in menu bar and elsewhere
+defaults write com.apple.universalaccess reduceTransparency -bool true
 
-# Left orientation
-defaults write com.apple.dock orientation -string left
+# General: Save to disk, not iCloud, by default
+defaults write NSGlobalDomain NSDocumentSaveNewDocumentsToCloud -bool false
 
-# Pin the dock in the corner
-defaults write com.apple.dock pinning -string end
-
-# Show indicator lights for open applications in the Dock
-defaults write com.apple.dock show-process-indicators -bool true
-
-# Don’t animate opening applications from the Dock
-defaults write com.apple.dock launchanim -bool false
-
-
-# Use plain text mode for new TextEdit documents
+# TextEdit: UTF-8 by default and plaintext for new documents
 defaults write com.apple.TextEdit RichText -int 0
-
-# Open and save files as UTF-8 in TextEdit
 defaults write com.apple.TextEdit PlainTextEncoding -int 4
 defaults write com.apple.TextEdit PlainTextEncodingForWrite -int 4
+
+# Terminal: Use UTF-8 in Terminal
+defaults write com.apple.terminal StringEncodings -array 4
+
+# Trackpad: enable tap to click for this user and for the login screen
+defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
+defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
+defaults write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
