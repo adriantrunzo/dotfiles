@@ -12,7 +12,7 @@ stow --stow . --target ~
 export PATH=/usr/local/bin:$PATH
 
 # install vim bundles
-vim +BundleInstall +qall
+vim +PluginInstall +qall
 
 pip install flake8
 pip install virtualenv
