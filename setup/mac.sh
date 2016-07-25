@@ -29,6 +29,7 @@ brew tap caskroom/cask
 brew tap caskroom/fonts
 
 brew cask install google-chrome
+brew cask install kindle
 brew cask install skype
 brew cask install spotify
 
