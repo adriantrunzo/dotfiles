@@ -117,6 +117,9 @@ defaults write com.apple.terminal StringEncodings -array 4
 # Terminal: Don't automark commands
 defaults write com.apple.Terminal AutoMarkPromptLines -int 0
 
+# Terminal: Set Solarized Dark Theme and Source Code Pro Font
+osascript setup/set-terminal-theme.applescript
+
 # Trackpad: enable tap to click for this user and for the login screen
 defaults write com.apple.driver.AppleBluetoothMultitouch.trackpad Clicking -bool true
 defaults -currentHost write NSGlobalDomain com.apple.mouse.tapBehavior -int 1
