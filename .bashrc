@@ -1,18 +1,25 @@
-ZSH=$HOME/.oh-my-zsh
-ZSH_CUSTOM=$HOME/.config/zsh
-ZSH_THEME="adriantrunzo"
-DISABLE_AUTO_TITLE="true"
-plugins=(git github python mercurial osx)
+## Global settings
 
-source $ZSH/oh-my-zsh.sh
+alias ll="ls -lA"
 
-if [ "$(uname -s)" = "Darwin" -a -f $(brew --prefix)/etc/zsh_completion ]
-then
-    source $(brew --prefix)/etc/zsh_completion
+export PATH="/usr/local/bin:$PATH"
+
+# Set up python/virtualenvwrapper
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+    export WORKON_HOME=$HOME/.virtualenvs
+    export PROJECT_HOME=$HOME/Code
+    export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
+    source /usr/local/bin/virtualenvwrapper.sh
 fi
 
-# Overwrite oh-my-zsh default alias
-alias ls="ls -alGFh"
+## macOS settings
+if [ "$(uname -s)" = "Darwin" ]; then
 
-# A most excellent discovery
-umask u=rwx,g=rw,o=r
+    # Install git completion
+    if [ -f $(brew --prefix)/etc/bash_completion ]; then
+        source $(brew --prefix)/etc/bash_completion
+    fi
+
+    # macOS aliases
+    alias ls="ls -AGF"
+fi
