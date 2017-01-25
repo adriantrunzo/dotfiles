@@ -18,6 +18,3 @@ vim +PluginInstall +qall
 pip install flake8
 pip install virtualenv
 pip install virtualenvwrapper
-
-# Switch login shell to zsh
-chsh -s /bin/zsh $(whoami)
