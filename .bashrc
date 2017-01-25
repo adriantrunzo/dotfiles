@@ -14,10 +14,16 @@ fi
 
 ## macOS settings
 if [ "$(uname -s)" = "Darwin" ]; then
+    
+    # Homebrew install all bash completions to one directory
+    readonly completions_dir=$(brew --prefix)/etc/bash_completion.d
 
-    # Install git completion
-    if [ -f $(brew --prefix)/etc/bash_completion ]; then
-        source $(brew --prefix)/etc/bash_completion
+    # If the directory exists, source all of the completion scripts
+    # This loop will include git-prompt.sh
+    if [ -d $completions_dir ]; then
+        for completion in $completions_dir/*; do
+            source $completion
+        done
     fi
 
     # macOS aliases
