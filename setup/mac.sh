@@ -12,7 +12,6 @@ fi
 export PATH=/usr/local/bin:$PATH
 which brew || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
-which hg || brew install hg
 which stow || brew install stow
 which markdown || brew install markdown
 which mysql || brew install mysql
