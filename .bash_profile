@@ -9,8 +9,7 @@ MY_PROMPT_SUFFIX=' \\$ '
 PS1="$MY_PROMPT_PREFIX$MY_PROMPT_SUFFIX"
 
 # Load git prompt if it is installed and add it to the prompt
-if [ -f ~/.git-prompt.sh ]; then
-    source ~/.git-prompt.sh
+if [[ "$(type -t __git_ps1)" == "function" ]]; then
 
     # Settings for git output
     GIT_PS1_SHOWDIRTYSTATE=1
