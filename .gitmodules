@@ -19,3 +19,6 @@
 [submodule ".vim/pack/extensions/start/syntastic"]
 	path = .vim/pack/extensions/start/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
+[submodule ".vim/pack/language/start/vim-javascript"]
+	path = .vim/pack/language/start/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
