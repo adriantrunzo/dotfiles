@@ -159,9 +159,9 @@ inoremap <right> <nop>
 
 """ Filetype settings
 
-" Use two spaces for html and javascript
+" Use two spaces for html, css and javascript
 au FileType javascript setlocal softtabstop=2 shiftwidth=2
-au FileType html,xml setlocal softtabstop=2 shiftwidth=2
+au FileType html,css,xml setlocal softtabstop=2 shiftwidth=2
 
 
 """ Plugin settings
