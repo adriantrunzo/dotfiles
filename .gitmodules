@@ -24,3 +24,4 @@
 [submodule ".vim/pack/extensions/start/syntastic"]
 	path = .vim/pack/extensions/start/syntastic
 	url = https://github.com/vim-syntastic/syntastic.git
+	shallow = true
