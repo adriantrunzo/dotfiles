@@ -1,48 +1,6 @@
 " Much of this was adapted from
 " http://stevelosh.com/blog/2010/09/coming-home-to-vim/
 
-" Configure Plugins
-filetype off
-
-set rtp+=~/.vim/bundle/Vundle.vim/
-call vundle#begin()
-
-" Let Vundle manage Vundle
-Plugin 'VundleVim/Vundle.vim'
-
-Plugin 'scrooloose/nerdcommenter'
-Plugin 'scrooloose/nerdtree'
-Plugin 'scrooloose/syntastic'
-
-" Appearance
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'altercation/vim-colors-solarized'
-
-" Syntax/Indent
-Plugin 'groenewege/vim-less'
-Plugin 'jtratner/vim-flavored-markdown'
-Plugin 'tpope/vim-git'
-Plugin 'pangloss/vim-javascript'
-Plugin 'elzr/vim-json'
-Plugin 'nginx.vim'
-Plugin 'Jinja'
-Plugin 'hynek/vim-python-pep8-indent'
-Plugin 'othree/html5.vim'
-
-call vundle#end()
-filetype plugin indent on
-
-" TODO need something similar for jinja
-" http://www.vim.org/scripts/script.php?script_id=1886
-au BufRead,BufNewFile /etc/nginx/*,/usr/local/nginx/conf/* if &ft == '' | setfiletype nginx | endif
-
-" https://github.com/jtratner/vim-flavored-markdown
-augroup markdown
-    au!
-    au BufNewFile,BufRead *.md,*.markdown setlocal filetype=ghmarkdown
-augroup END
-
 au FileType javascript setlocal softtabstop=2 shiftwidth=2
 au FileType html,xml setlocal softtabstop=2 shiftwidth=2
 
