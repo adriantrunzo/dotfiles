@@ -22,3 +22,6 @@
 [submodule ".vim/pack/language/start/vim-javascript"]
 	path = .vim/pack/language/start/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
+[submodule ".vim/pack/language/start/vim-json"]
+	path = .vim/pack/language/start/vim-json
+	url = https://github.com/elzr/vim-json.git
