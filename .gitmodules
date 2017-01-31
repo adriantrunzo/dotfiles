@@ -8,7 +8,7 @@
 	path = .vim/pack/appearance/start/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes.git
 [submodule ".vim/pack/appearance/start/vim-colors-solarized"]
-	path = .vim/pack/appearance/start/vim-colors-solarized
+	path = .vim/pack/appearance/opt/vim-colors-solarized
 	url = https://github.com/altercation/vim-colors-solarized.git
 [submodule ".vim/pack/extensions/start/nerdcommenter"]
 	path = .vim/pack/extensions/start/nerdcommenter
