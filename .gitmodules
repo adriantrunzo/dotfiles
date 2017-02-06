@@ -1,33 +1,6 @@
 [submodule ".config/themes/osx-terminal.app-colors-solarized"]
 	path = .config/themes/osx-terminal.app-colors-solarized
 	url = https://github.com/tomislav/osx-terminal.app-colors-solarized.git
-[submodule ".vim/pack/appearance/start/vim-airline"]
-	path = .vim/pack/appearance/start/vim-airline
-	url = https://github.com/vim-airline/vim-airline.git
-[submodule ".vim/pack/appearance/start/vim-airline-themes"]
-	path = .vim/pack/appearance/start/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
-[submodule ".vim/pack/appearance/start/vim-colors-solarized"]
-	path = .vim/pack/appearance/opt/vim-colors-solarized
-	url = https://github.com/altercation/vim-colors-solarized.git
-[submodule ".vim/pack/extensions/start/nerdcommenter"]
-	path = .vim/pack/extensions/start/nerdcommenter
-	url = https://github.com/scrooloose/nerdcommenter.git
-[submodule ".vim/pack/extensions/start/syntastic"]
-	path = .vim/pack/extensions/start/syntastic
-	url = https://github.com/vim-syntastic/syntastic.git
-[submodule ".vim/pack/language/start/vim-javascript"]
-	path = .vim/pack/language/start/vim-javascript
-	url = https://github.com/pangloss/vim-javascript.git
-[submodule ".vim/pack/language/start/vim-json"]
-	path = .vim/pack/language/start/vim-json
-	url = https://github.com/elzr/vim-json.git
-[submodule ".vim/pack/language/start/vim-python-pep8-indent"]
-	path = .vim/pack/language/start/vim-python-pep8-indent
-	url = https://github.com/Vimjas/vim-python-pep8-indent.git
-[submodule ".vim/pack/language/start/html5.vim"]
-	path = .vim/pack/language/start/html5.vim
-	url = https://github.com/othree/html5.vim.git
-[submodule ".vim/pack/language/start/rust.vim"]
-	path = .vim/pack/language/start/rust.vim
-	url = https://github.com/rust-lang/rust.vim.git
+[submodule ".vim/autoload/vim-plug"]
+	path = .vim/autoload/vim-plug
+	url = https://github.com/junegunn/vim-plug.git
