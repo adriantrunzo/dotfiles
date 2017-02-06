@@ -173,7 +173,8 @@ let g:airline_left_sep=''
 let g:airline_right_sep=''
 
 " Syntastic
-let g:syntastic_check_on_open=1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 
