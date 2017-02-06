@@ -3,8 +3,7 @@
 .netrwhist
 
 # vim
-.vim/tmp
-.vim/bundle
+.vim/plugged
 
 # Third party configs
 .config/filezilla

@@ -2,6 +2,29 @@
 " options that had acumulated previously and understand every line in my
 " configuration without having to pull up the help menu.
 
+runtime autoload/vim-plug/plug.vim
+
+""" Plugins
+call plug#begin()
+
+" General
+Plug 'scrooloose/nerdcommenter'
+Plug 'vim-syntastic/syntastic'
+
+" Languges
+Plug 'othree/html5.vim'
+Plug 'rust-lang/rust.vim'
+Plug 'pangloss/vim-javascript'
+Plug 'elzr/vim-json'
+Plug 'Vimjas/vim-python-pep8-indent'
+
+" Appearance
+Plug 'altercation/vim-colors-solarized'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+call plug#end()
+
 
 """ General Settings
 
