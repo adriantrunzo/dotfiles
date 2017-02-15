@@ -124,17 +124,11 @@ set autoindent
 set wrap  " no hortizontal scrolling, please!
 set textwidth=80
 set formatoptions=tcn1
-set colorcolumn=81
+set colorcolumn=+1
 set showbreak=↪
 
 " Don't try to highlight lines longer than 800 characters.
 set synmaxcol=800
-
-" Move cursor up/down one display line, not physical line. This is not helpful
-" for line wrapping.
-" See http://vim.wikia.com/wiki/Move_cursor_by_display_lines_when_wrapping.
-"nnoremap j gj
-"nnoremap k gk
 
 
 """ Wildmenu
@@ -182,9 +176,37 @@ inoremap <right> <nop>
 
 """ Filetype settings
 
-" Use two spaces for html, css and javascript
-au FileType javascript setlocal softtabstop=2 shiftwidth=2
-au FileType html,css,xml setlocal softtabstop=2 shiftwidth=2
+" Javascript: Use two spaces
+autocmd FileType javascript call UseTwoSpaces()
+
+" CSS: Use two spaces
+autocmd FileType css call UseTwoSpaces()
+
+" HTML/XML: Use two spaces and don't break at textwidth
+autocmd FileType html,xml call UseTwoSpaces() | call DontBreakText()
+
+" Markdown: Don't break lines
+autocmd FileType markdown call DontBreakText()
+
+function UseTwoSpaces()
+    setlocal shiftwidth=2
+    setlocal softtabstop=2
+endfunction
+
+function DontBreakText()
+
+    " Setting textwidth to zero will also remove the color column due to "+1"
+    setlocal textwidth=0
+
+    " Don't break text or comments.
+    setlocal formatoptions-=tc
+
+    " Move cursor up/down by screen line, not file line. This is helpful for
+    " wrapped lines.
+    " See http://vim.wikia.com/wiki/Move_cursor_by_display_lines_when_wrapping.
+    nnoremap j gj
+    nnoremap k gk
+endfunction
 
 
 """ Plugin settings
