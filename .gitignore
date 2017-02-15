@@ -7,3 +7,4 @@
 
 # Third party configs
 .config/filezilla
+.config/gtk-2.0
