@@ -38,6 +38,13 @@ brew cask install vlc
 brew cask install font-source-code-pro
 brew cask install font-source-code-pro-for-powerline
 
+# Change login shell to homebrew bash
+# From https://github.com/mathiasbynens/dotfiles/issues/544
+if ! grep '/usr/local/bin/bash' /etc/shells; then
+  echo '/usr/local/bin/bash' | sudo tee -a /etc/shells;
+  chsh -s /usr/local/bin/bash;
+fi;
+
 # App Store: Automatically check for new updates, download them in the
 # background and install security/OS updates as well
 defaults write com.apple.SoftwareUpdate AutomaticCheckEnabled -bool true
