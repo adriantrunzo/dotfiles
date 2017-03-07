@@ -17,6 +17,7 @@ which markdown || brew install markdown
 which mysql || brew install mysql
 which pass || brew install pass
 
+if ! brew ls bash &> /dev/null; then brew install bash; fi
 if ! brew ls python &> /dev/null; then brew install python; fi
 if ! brew ls python3 &> /dev/null; then brew install python3; fi
 if ! brew ls vim &> /dev/null; then brew install vim; fi
@@ -34,7 +35,7 @@ brew cask install spotify
 brew cask install vlc
 
 brew cask install font-source-code-pro
-brew cask install font-sauce-code-powerline
+brew cask install font-source-code-pro-for-powerline
 
 # App Store: Automatically check for new updates, download them in the
 # background and install security/OS updates as well
