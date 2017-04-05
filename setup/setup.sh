@@ -2,8 +2,6 @@
 
 cd $(dirname "$0")/..
 
-git submodule init; git submodule update
-
 if [[ $(uname -s) == "Darwin" ]]
 then
     bash setup/mac.sh

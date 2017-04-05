@@ -10,7 +10,7 @@ Perhaps later I will need something more complicated.
 
 ### Install
 
-    git clone https://github.com/adriantrunzo/dotfiles.git
+    git clone --recursive https://github.com/adriantrunzo/dotfiles.git
     cd dotfiles
     bash setup/setup.sh
 
