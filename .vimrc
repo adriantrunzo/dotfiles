@@ -94,7 +94,7 @@ set visualbell
 " Colorscheme
 syntax enable
 set background=dark
-colorscheme solarized
+silent! colorscheme solarized
 
 " Resize splits when the window is resized
 au VimResized * :wincmd =
