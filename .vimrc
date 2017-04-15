@@ -10,11 +10,14 @@ call plug#begin()
 " General
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
+Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 
 " Languges
 Plug 'othree/html5.vim'
 Plug 'rust-lang/rust.vim'
 Plug 'pangloss/vim-javascript'
+Plug 'leafgarland/typescript-vim'
+" Plug 'Quramy/tsuquyomi'
 Plug 'elzr/vim-json'
 Plug 'Vimjas/vim-python-pep8-indent'
 
@@ -221,6 +224,10 @@ let g:airline_right_sep=''
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+
+" YouCompleteMe
+set completeopt-=preview
+let g:ycm_add_preview_to_completeopt = 0
 
 
 """ Leader key and macros
