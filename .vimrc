@@ -12,14 +12,17 @@ Plug 'scrooloose/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
 Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 
-" Languges
-Plug 'othree/html5.vim'
-Plug 'rust-lang/rust.vim'
+" Javascript/Typescript
+Plug 'elzr/vim-json'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-" Plug 'Quramy/tsuquyomi'
-Plug 'elzr/vim-json'
+Plug 'Quramy/vim-js-pretty-template'
+Plug 'othree/javascript-libraries-syntax.vim'
+
+" Other Languages
+Plug 'othree/html5.vim'
 Plug 'Vimjas/vim-python-pep8-indent'
+Plug 'rust-lang/rust.vim'
 
 " Appearance
 Plug 'altercation/vim-colors-solarized'
@@ -228,6 +231,9 @@ let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 " YouCompleteMe
 set completeopt-=preview
 let g:ycm_add_preview_to_completeopt = 0
+
+" Javascript Libraries Syntax
+let g:used_javascript_libs = 'jquery,underscore,backbone,angularjs'
 
 
 """ Leader key and macros
