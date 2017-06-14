@@ -17,6 +17,10 @@ if [[ "$(type -t __git_ps1)" == "function" ]]; then
     GIT_PS1_SHOWUPSTREAM="auto"
     GIT_PS1_SHOWCOLORHINTS=1
 
+    set_git_prompt() {
+        __git_ps1 "$MY_PROMPT_PREFIX" "$MY_PROMPT_SUFFIX"
+    }
+
     # Overwrite the prompt command
-    PROMPT_COMMAND='__git_ps1 "$MY_PROMPT_PREFIX" "$MY_PROMPT_SUFFIX"'
+    PROMPT_COMMAND="set_git_prompt; $PROMPT_COMMAND"
 fi
