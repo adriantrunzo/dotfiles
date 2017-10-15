@@ -4,14 +4,6 @@ alias ll="ls -lA"
 
 export PATH="/usr/local/bin:$PATH"
 
-# Set up python/virtualenvwrapper
-if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
-    export WORKON_HOME=$HOME/.virtualenvs
-    export PROJECT_HOME=$HOME/Code
-    export VIRTUALENVWRAPPER_VIRTUALENV_ARGS='--no-site-packages'
-    source /usr/local/bin/virtualenvwrapper.sh
-fi
-
 # Set up nvm for node installs
 export NVM_DIR="$HOME/.nvm"
 if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -20,7 +12,7 @@ fi
 
 ## macOS settings
 if [ "$(uname -s)" = "Darwin" ]; then
-    
+
     # Homebrew install all bash completions to one directory
     readonly completions_dir=$(brew --prefix)/etc/bash_completion.d
 

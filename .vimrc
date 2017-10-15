@@ -10,14 +10,11 @@ call plug#begin()
 " General
 Plug 'scrooloose/nerdcommenter'
 Plug 'vim-syntastic/syntastic'
-Plug 'Valloric/YouCompleteMe', { 'do': './install.py --tern-completer' }
 
 " Javascript/Typescript
 Plug 'elzr/vim-json'
 Plug 'pangloss/vim-javascript'
 Plug 'leafgarland/typescript-vim'
-Plug 'Quramy/vim-js-pretty-template'
-Plug 'othree/javascript-libraries-syntax.vim'
 
 " Other Languages
 Plug 'othree/html5.vim'
@@ -183,7 +180,7 @@ inoremap <right> <nop>
 """ Filetype settings
 
 " Javascript: Use two spaces
-autocmd FileType javascript call UseTwoSpaces()
+autocmd FileType javascript,json call UseTwoSpaces()
 
 " CSS: Use two spaces
 autocmd FileType css call UseTwoSpaces()
@@ -220,20 +217,12 @@ endfunction
 " vim-airline
 let g:airline_theme='solarized'
 let g:airline_powerline_fonts=1
-let g:airline_left_sep=''
-let g:airline_right_sep=''
+let g:airline#extensions#tabline#enabled = 1
 
 " Syntastic
 let g:syntastic_check_on_open = 1
 let g:syntastic_check_on_wq = 0
 let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
-
-" YouCompleteMe
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = 0
-
-" Javascript Libraries Syntax
-let g:used_javascript_libs = 'jquery,underscore,backbone,angularjs'
 
 
 """ Leader key and macros

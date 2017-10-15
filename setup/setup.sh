@@ -18,8 +18,6 @@ fi
 vim +PluginInstall +qall
 
 pip install flake8
-pip install virtualenv
-pip install virtualenvwrapper
 
 git clone https://github.com/creationix/nvm.git "$NVM_DIR"
 cd "$NVM_DIR"

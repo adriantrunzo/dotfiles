@@ -14,7 +14,6 @@ which brew || ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/i
 
 which stow || brew install stow
 which markdown || brew install markdown
-which mysql || brew install mysql
 which pass || brew install pass
 
 if ! brew ls bash &> /dev/null; then brew install bash; fi
@@ -24,19 +23,8 @@ if ! brew ls vim &> /dev/null; then brew install vim; fi
 if ! brew ls git &> /dev/null; then brew install git; fi
 if ! brew ls coreutils &> /dev/null; then brew install coreutils; fi
 
-# Install brew cask and some extras
-brew tap caskroom/cask
 brew tap caskroom/fonts
-
-brew cask install atom
-brew cask install google-chrome
-brew cask install kindle
-brew cask install skype
-brew cask install spotify
-brew cask install vlc
-
 brew cask install font-source-code-pro
-brew cask install font-source-code-pro-for-powerline
 
 # Make sure brew bash is available in /etc/shells
 # From https://github.com/mathiasbynens/dotfiles/issues/544
