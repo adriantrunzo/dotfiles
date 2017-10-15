@@ -17,7 +17,7 @@ tell application "Terminal"
     set themeFile to themePath & themeName & ".terminal"
 
     (* Set our desired font. *)
-    set fontName to "SauceCodePowerline-Medium"
+    set fontName to "SourceCodePro-Regular"
     set fontSize to 12
 
     (* Store the IDs of all the open terminal windows. *)
