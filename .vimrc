@@ -100,7 +100,7 @@ set background=dark
 silent! colorscheme solarized
 
 " Resize splits when the window is resized
-au VimResized * :wincmd =
+"au VimResized * :wincmd =
 
 
 """ Spaces and Tabs
@@ -214,6 +214,18 @@ endfunction
 
 """ Plugin settings
 
+" netrw
+" Adapted from https://shapeshed.com/vim-netrw/
+let g:netrw_banner = 0
+let g:netrw_liststyle = 3
+let g:netrw_browse_split = 4
+let g:netrw_altv = 1
+let g:netrw_winsize = 20
+augroup ProjectDrawer
+  autocmd!
+  autocmd VimEnter * :Vexplore
+augroup END
+
 " vim-airline
 let g:airline_theme='solarized'
 let g:airline_powerline_fonts=1
@@ -241,3 +253,6 @@ nnoremap <leader>s :setlocal spell! spelllang=en_us<CR>
 
 " Turn off any highlighting and clear search matches
 noremap <leader><space> :noh<cr>:call clearmatches()<cr>
+
+" https://stackoverflow.com/a/19619038
+noremap <leader>d :b#<bar>bd#<cr>
