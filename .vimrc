@@ -9,7 +9,8 @@ call plug#begin()
 
 " General
 Plug 'scrooloose/nerdcommenter'
-Plug 'vim-syntastic/syntastic'
+"Plug 'vim-syntastic/syntastic'
+Plug 'w0rp/ale'
 
 " Javascript/Typescript
 Plug 'elzr/vim-json'
@@ -181,6 +182,7 @@ inoremap <right> <nop>
 
 " Javascript: Use two spaces
 autocmd FileType javascript,json call UseTwoSpaces()
+"autocmd bufwritepost *.js silent !standard --fix %
 
 " CSS: Use two spaces
 autocmd FileType css call UseTwoSpaces()
@@ -220,9 +222,9 @@ let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled = 1
 
 " Syntastic
-let g:syntastic_check_on_open = 1
-let g:syntastic_check_on_wq = 0
-let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 0
+"let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
 
 
 """ Leader key and macros
