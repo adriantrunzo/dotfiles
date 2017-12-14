@@ -9,7 +9,6 @@ call plug#begin()
 
 " General
 Plug 'scrooloose/nerdcommenter'
-"Plug 'vim-syntastic/syntastic'
 Plug 'w0rp/ale'
 
 " Javascript/Typescript
@@ -221,10 +220,9 @@ let g:airline_theme='solarized'
 let g:airline_powerline_fonts=1
 let g:airline#extensions#tabline#enabled = 1
 
-" Syntastic
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 0
-"let g:syntastic_stl_format='[%E{Err: %fe #%e}%B{, }%W{Warn: %fw #%w}]'
+" nerd commenter
+let g:NERDSpaceDelims = 1
+let g:NERDTrimTrailingWhitespace = 1
 
 
 """ Leader key and macros
