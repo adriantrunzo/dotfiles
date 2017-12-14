@@ -184,7 +184,7 @@ autocmd FileType javascript,json call UseTwoSpaces()
 "autocmd bufwritepost *.js silent !standard --fix %
 
 " CSS: Use two spaces
-autocmd FileType css call UseTwoSpaces()
+autocmd FileType css,less call UseTwoSpaces()
 
 " HTML/XML: Use two spaces and don't break at textwidth
 autocmd FileType html,xml call UseTwoSpaces() | call DontBreakText()
