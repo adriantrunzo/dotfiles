@@ -7,3 +7,6 @@
   ff = only
 [submodule]
   recurse = true
+
+[includeif "gitdir:~/slice/"]
+  path = ~/slice/.gitconfig
