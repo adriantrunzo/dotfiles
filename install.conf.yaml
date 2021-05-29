@@ -1,17 +1,18 @@
-- defaults
-  link:
-    create: true
-    relink: true
+- defaults:
+    link:
+      create: true
+      relink: true
 
 - clean:
-  ~/:
-    force: false
-  ~/.config:
-    recursive: true
+    ~/:
+      force: false
+    ~/.config:
+      recursive: true
 
 - link:
-  ~/.config/kitty/kitty.conf: kitty/kitty.conf
-  ~/.config/nvim/coc-settings.json: nvim/coc-settings.json
-  ~/.config/nvim/init.vim: nvim/init.vim
-  ~/.gitconfig: git/.gitconfig
-  ~/.zshrc: zsh/.zshrc
+    ~/.config/kitty/kitty.conf: kitty/kitty.conf
+    ~/.config/nvim/coc-settings.json: nvim/coc-settings.json
+    ~/.config/nvim/init.vim: nvim/init.vim
+    ~/.gitconfig: git/.gitconfig
+    ~/.zshrc: zsh/.zshrc
+
