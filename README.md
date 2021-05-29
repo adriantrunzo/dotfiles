@@ -1,24 +1,18 @@
 # dotfiles
 
-My dotfiles, mainly based around vim, git and bash. Nothing too exciting here,
-but please feel free to copy anything if you find it useful.
+My dotfiles, mainly based around nvim, git and kitty. Please feel free to copy
+anything you find useful into your own dotfiles.
 
 ## Usage
 
-I use [GNU Stow](http://www.gnu.org/software/stow/) to manage my dotfiles.
-Perhaps later I will need something more complicated.
+I use [dotbot](https://github.com/anishathalye/dotbot) to manage my dotfiles.
 
 ### Install
 
-    git clone --recursive https://github.com/adriantrunzo/dotfiles.git
+    git clone --recurse-submodules https://github.com/adriantrunzo/dotfiles.git
     cd dotfiles
-    bash setup/setup.sh
+    ./install 
 
 Regardless of where you cloned the dotfiles, this install will create symlinks
 in your home directory to the appropriate dotfiles.
 
-### Uninstall
-
-This uninstall will just remove the symlinks, any other settings will remain.
-
-    cd /path/to/dotfiles/repository; stow -D . --target ~
