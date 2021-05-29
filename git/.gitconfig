@@ -1,0 +1,9 @@
+[user]
+  name = Adrian Trunzo
+  email = trunzoap@gmail.com
+[core]
+  editor = nvim
+[pull]
+  ff = only
+[submodule]
+  recurse = true
