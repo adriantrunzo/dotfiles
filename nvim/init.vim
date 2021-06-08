@@ -137,30 +137,31 @@ let g:maplocalleader = ','
 
 " Buffers
 nnoremap <leader>bd :bdelete<cr>
-nnoremap <leader>bf :bfirst<cr>
-nnoremap <leader>bl :blast<cr>
+nnoremap <leader>bl :ls<cr>:b<space>
 nnoremap <leader>bn :bnext<cr>
 nnoremap <leader>bp :bprevious<cr>
 
 " Code
 nmap <leader>cd <plug>(coc-definition)
-nnoremap <leader>cf <cmd>Rg<cr>
+nnoremap <leader>cf :Rg<cr>
 nmap <leader>ci <plug>(coc-implementation)
+nmap <leader>cn <plug>(coc-diagnostic-next)
+nmap <leader>cN <plug>(coc-diagnostic-prev)
 nmap <leader>cq <plug>(coc-fix-current)
 nmap <leader>cr <plug>(coc-rename)
 
 " Files
-nnoremap <leader>fc <cmd>edit $MYVIMRC<cr>
-nnoremap <leader>fe <cmd>CHADopen<cr>
-nnoremap <leader>ff <cmd>Files<cr>
-nnoremap <leader>fr <cmd>source $MYVIMRC<cr>
-nnoremap <leader>fs <cmd>update<cr>
+nnoremap <leader>fc :edit $MYVIMRC<cr>
+nnoremap <leader>fe :CHADopen<cr>
+nnoremap <leader>ff :Files<cr>
+nnoremap <leader>fr :source $MYVIMRC<cr>
+nnoremap <leader>fs :update<cr>
 
 " Git
-nnoremap <leader>gf <cmd>GFiles<cr>
-nnoremap <leader>gc <cmd>Git commit<cr>
-nnoremap <leader>gg <cmd>Git<cr>
-nnoremap <leader>gp <cmd>Git push<cr>
+nnoremap <leader>gf :GFiles<cr>
+nnoremap <leader>gc :Git commit<cr>
+nnoremap <leader>gg :Git<cr>
+nnoremap <leader>gp :Git push<cr>
 
 " Misc
 nnoremap <leader>q :quit<cr>
@@ -182,8 +183,9 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" let g:chadtree_settings = { "theme.text_colour_set": "solarized_dark_256" }
-let g:chadtree_settings = { "theme.discrete_colour_map": {
+let g:chadtree_settings = {}
+let g:chadtree_settings.theme = {}
+let g:chadtree_settings.theme.discrete_colour_map = {
       \ "black": "#21222c",
       \ "red": "#ff5555",
       \ "green": "#50fa7b",
@@ -200,35 +202,26 @@ let g:chadtree_settings = { "theme.discrete_colour_map": {
       \ "bright_magenta": "#ff92df",
       \ "bright_cyan": "#a4ffff",
       \ "bright_white": "#ffffff"
-\ }}
+      \ }
+
+let g:chadtree_settings.options = {}
+let g:chadtree_settings.options.close_on_open = v:true
 
 let g:airline_theme='dracula'
-let g:airline_left_sep=''
-let g:airline_left_alt_sep=''
-let g:airline_right_sep=''
-let g:airline_right_alt_sep=''
-let g:airline_powerline_fonts=1
-let g:airline#extensions#branch#displayed_head_limit = 10
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
+let g:airline_symbols_ascii = 1
+
+let g:airline_extensions = ['branch', 'coc']
+let g:airline#extensions#branch#format = 'CustomBranchName'
+
+function! CustomBranchName(name)
+  let story = matchstr(a:name, '\Wch\d\+\W')
+  
+  if (strlen(story) > 0)
+    return story[1:strlen(story) - 2]
+  endif
+
+  return a:name[:9]
+endfunction
 
 let g:vim_jsx_pretty_colorful_config = 1
 
-" Customize fzf colors to match your color scheme
-" - fzf#wrap translates this to a set of `--color` options
-let g:fzf_colors = {
-      \ 'fg':      ['fg', 'Normal'],
-      \ 'bg':      ['bg', 'Normal'],
-      \ 'hl':      ['fg', 'Comment'],
-      \ 'fg+':     ['fg', 'CursorLine', 'CursorColumn', 'Normal'],
-      \ 'bg+':     ['bg', 'CursorLine', 'CursorColumn'],
-      \ 'hl+':     ['fg', 'Statement'],
-      \ 'info':    ['fg', 'PreProc'],
-      \ 'border':  ['fg', 'Ignore'],
-      \ 'prompt':  ['fg', 'Conditional'],
-      \ 'pointer': ['fg', 'Exception'],
-      \ 'marker':  ['fg', 'Keyword'],
-      \ 'spinner': ['fg', 'Label'],
-      \ 'header':  ['fg', 'Comment']
-      \ }
