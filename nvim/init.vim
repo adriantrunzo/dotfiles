@@ -33,8 +33,6 @@ Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
 Plug 'ms-jpq/chadtree', { 'branch': 'chad', 'do': 'python3 -m chadtree deps' }
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'rrethy/vim-illuminate'
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
@@ -112,7 +110,7 @@ inoremap <down> <nop>
 inoremap <left> <nop>
 inoremap <right> <nop>
 
-" Use jk instead of escape for better ergonomics.
+" Use jj instead of escape for better ergonomics.
 inoremap jj <esc>
 inoremap <esc> <nop>
 
@@ -121,6 +119,8 @@ vnoremap v <esc>
 
 " Quickly move to the start and end of the line in normal mode.
 nnoremap H ^
+nnoremap J G
+nnoremap K gg
 nnoremap L $
 
 " Redo
@@ -129,21 +129,18 @@ nnoremap U <c-r>
 " Quick command mode
 nnoremap <cr> :
 
-" Yank to the end of line
-nnoremap Y y$
-
 let g:mapleader = "\<Space>"
 let g:maplocalleader = ','
 
 " Buffers
-nnoremap <leader>bd :bdelete<cr>
+nnoremap <leader>bd <cmd>bdelete<cr>
 nnoremap <leader>bl :ls<cr>:b<space>
-nnoremap <leader>bn :bnext<cr>
-nnoremap <leader>bp :bprevious<cr>
+nnoremap <leader>bn <cmd>bnext<cr>
+nnoremap <leader>bp <cmd>bprevious<cr>
 
 " Code
 nmap <leader>cd <plug>(coc-definition)
-nnoremap <leader>cf :Rg<cr>
+nnoremap <leader>cf <cmd>Rg<cr>
 nmap <leader>ci <plug>(coc-implementation)
 nmap <leader>cn <plug>(coc-diagnostic-next)
 nmap <leader>cN <plug>(coc-diagnostic-prev)
@@ -151,20 +148,22 @@ nmap <leader>cq <plug>(coc-fix-current)
 nmap <leader>cr <plug>(coc-rename)
 
 " Files
-nnoremap <leader>fc :edit $MYVIMRC<cr>
-nnoremap <leader>fe :CHADopen<cr>
-nnoremap <leader>ff :Files<cr>
-nnoremap <leader>fr :source $MYVIMRC<cr>
-nnoremap <leader>fs :update<cr>
+nnoremap <leader>fc <cmd>edit $MYVIMRC<cr>
+nnoremap <leader>fe <cmd>CHADopen<cr>
+nnoremap <leader>ff <cmd>Files<cr>
+nnoremap <leader>fr <cmd>source $MYVIMRC<cr>
+nnoremap <leader>fs <cmd>update<cr>
 
 " Git
-nnoremap <leader>gf :GFiles<cr>
-nnoremap <leader>gc :Git commit<cr>
-nnoremap <leader>gg :Git<cr>
-nnoremap <leader>gp :Git push<cr>
+nnoremap <leader>gf <cmd>GFiles<cr>
+nnoremap <leader>gc <cmd>Git commit<cr>
+nnoremap <leader>gg <cmd>Git<cr>
+nnoremap <leader>gp <cmd>Git push<cr>
 
 " Misc
-nnoremap <leader>q :quit<cr>
+nnoremap <leader>q <cmd>quit<cr>
+
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
 let g:coc_global_extensions = [
       \ "coc-css",
@@ -210,6 +209,12 @@ let g:chadtree_settings.options.close_on_open = v:true
 let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
 
+  if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+  endif
+
+let g:airline_symbols.linenr = 'ln:'
+
 let g:airline_extensions = ['branch', 'coc']
 let g:airline#extensions#branch#format = 'CustomBranchName'
 
@@ -222,6 +227,11 @@ function! CustomBranchName(name)
 
   return a:name[:9]
 endfunction
+
+  function! AirlineInit()
+    let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+  endfunction
+  autocmd User AirlineAfterInit call AirlineInit()
 
 let g:vim_jsx_pretty_colorful_config = 1
 
