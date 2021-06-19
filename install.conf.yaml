@@ -11,8 +11,7 @@
 
 - link:
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
-    ~/.config/nvim/coc-settings.json: nvim/coc-settings.json
-    ~/.config/nvim/init.vim: nvim/init.vim
+    ~/.config/nvim/init.lua: nvim/init.lua
     ~/.gitconfig: git/.gitconfig
     ~/.zshrc: zsh/.zshrc
 
