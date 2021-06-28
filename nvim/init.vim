@@ -11,6 +11,10 @@ endif
 " before the plugin is installed.
 let g:polyglot_disabled = ['sensible']
 
+" Set the leader before plugins might add their own mappings.
+let mapleader = ' '
+let maplocalleader = ' '
+
 " Install vim-plug if not found
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
 if empty(glob(data_dir . '/autoload/plug.vim'))
@@ -49,34 +53,32 @@ colorscheme dracula
 " Allow for hidden buffers. Necessary for some plugins.
 set hidden
 
-" coc.nvim recommends a lower updatetime.
+" coc.nvim recommends a lower updatetime, which is used by the highlight on
+" CursorHold feature.
 set updatetime=500
 
-" Don't pass messages to |ins-completion-menu|
+" Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved
+" diagnostics appear/become resolved.
 set signcolumn=yes
 
-" Don't show the mode as vim-airline will already display it for us
+" Don't show the mode as vim-airline will already display it for us.
 set noshowmode
 
-" Highlight the cursor
-set cursorline
-
-" Show line numbers and make them relative to cursor
+" Show line numbers and make them relative to cursor.
 set number
 set relativenumber
 
-" Always show lines above and below cursor when scrolling
+" Always show lines above and below cursor when scrolling.
 set scrolloff=3
 
-" Always put splits below or to the right
+" Always put splits below or to the right.
 set splitbelow
 set splitright
 
-" Set the title of the terminal window appropriately
+" Set the title of the terminal window appropriately.
 set title
 
 " Use two columns for tabs in insert mode and for reindent operations.
@@ -93,10 +95,10 @@ set colorcolumn=+1
 " Show a symbol for wrapped lines.
 set showbreak=↪
 
-" Resize splits when the window is resized
+" Resize splits when the window is resized.
 au VimResized * :wincmd =
 
-" Case insensitive, unless any caps are used
+" Case insensitive, unless any caps are used.
 set ignorecase
 set smartcase
 
@@ -112,15 +114,9 @@ inoremap <right> <nop>
 
 " Use jj instead of escape for better ergonomics.
 inoremap jj <esc>
-inoremap <esc> <nop>
-
-" Quit visual mode quickly.
-vnoremap v <esc>
 
 " Quickly move to the start and end of the line in normal mode.
 nnoremap H ^
-nnoremap J G
-nnoremap K gg
 nnoremap L $
 
 " Redo
@@ -129,42 +125,42 @@ nnoremap U <c-r>
 " Quick command mode
 nnoremap <cr> :
 
-let g:mapleader = "\<Space>"
-let g:maplocalleader = ','
-
-" Buffers
-nnoremap <leader>bd <cmd>bdelete<cr>
-nnoremap <leader>bl :ls<cr>:b<space>
-nnoremap <leader>bn <cmd>bnext<cr>
-nnoremap <leader>bp <cmd>bprevious<cr>
-
-" Code
-nmap <leader>cd <plug>(coc-definition)
-nnoremap <leader>cf <cmd>Rg<cr>
-nmap <leader>ci <plug>(coc-implementation)
-nmap <leader>cn <plug>(coc-diagnostic-next)
-nmap <leader>cN <plug>(coc-diagnostic-prev)
-nmap <leader>cq <plug>(coc-fix-current)
-nmap <leader>cr <plug>(coc-rename)
+" LSP
+xmap <leader>a <plug>(coc-codeaction-selected)
+nmap <leader>a <plug>(coc-codeaction-selected)
+nmap <leader>ac <Plug>(coc-codeaction)
+nmap <leader>d <plug>(coc-definition)
+nmap <leader>dn <plug>(coc-diagnostic-next)
+nmap <leader>dp <plug>(coc-diagnostic-prev)
+nmap <leader>fq <plug>(coc-fix-current)
+nmap <leader>i <plug>(coc-implementation)
+nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
+nmap <leader>rn <plug>(coc-rename)
+nmap <leader>rr <plug>(coc-references)
 
 " Files
-nnoremap <leader>fc <cmd>edit $MYVIMRC<cr>
+nnoremap <leader>fc <cmd>bdelete<cr>
 nnoremap <leader>fe <cmd>CHADopen<cr>
-nnoremap <leader>ff <cmd>Files<cr>
-nnoremap <leader>fr <cmd>source $MYVIMRC<cr>
+nnoremap <leader>fl :ls<cr>:b<space>
+nnoremap <leader>fn <cmd>bnext<cr>
+nnoremap <leader>fo <cmd>Files<cr>
+nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
 
 " Git
-nnoremap <leader>gf <cmd>GFiles<cr>
-nnoremap <leader>gc <cmd>Git commit<cr>
-nnoremap <leader>gg <cmd>Git<cr>
-nnoremap <leader>gp <cmd>Git push<cr>
+nnoremap <leader>g <cmd>Git<cr>
 
-" Misc
+" Quit
 nnoremap <leader>q <cmd>quit<cr>
+nnoremap <leader>Q <cmd>quit!<cr>
 
+" Vim configuration
+nnoremap <leader>v <cmd>edit $MYVIMRC<cr>
+
+" Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
+" CoC Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
       \ "coc-css",
       \ 'coc-cssmodules',
@@ -172,8 +168,20 @@ let g:coc_global_extensions = [
       \ 'coc-html',
       \ 'coc-json',
       \ 'coc-prettier',
-      \ 'coc-tsserver'
+      \ 'coc-tsserver',
+      \ 'coc-vimlsp'
       \ ]
+
+" Show documentation in preview window.
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
 
 " Trigger completions with enter.
 inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
@@ -182,56 +190,74 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-let g:chadtree_settings = {}
-let g:chadtree_settings.theme = {}
-let g:chadtree_settings.theme.discrete_colour_map = {
-      \ "black": "#21222c",
-      \ "red": "#ff5555",
-      \ "green": "#50fa7b",
-      \ "yellow": "#f1fa8c",
-      \ "blue": "#bd93f9",
-      \ "magenta": "#ff79c6",
-      \ "cyan": "#8be9fd",
-      \ "white": "#f8f8f2",
-      \ "bright_black": "#6272a4",
-      \ "bright_red": "#ff6e6e",
-      \ "bright_green": "#69ff94",
-      \ "bright_yellow": "#ffffa5",
-      \ "bright_blue": "#d6acff",
-      \ "bright_magenta": "#ff92df",
-      \ "bright_cyan": "#a4ffff",
-      \ "bright_white": "#ffffff"
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Use dracula in CHADTree. The close_on_open setting is nice because it prevents
+" us from accidentally opening a different buffer in that window, which leads to
+" odd settings for that buffer.
+let g:chadtree_settings = {
+      \ "theme": {
+        \ "discrete_colour_map": {
+          \ "black": g:dracula#palette.color_0,
+          \ "red": g:dracula#palette.color_1,
+          \ "green": g:dracula#palette.color_2,
+          \ "yellow": g:dracula#palette.color_3,
+          \ "blue": g:dracula#palette.color_4,
+          \ "magenta": g:dracula#palette.color_5,
+          \ "cyan": g:dracula#palette.color_6,
+          \ "white": g:dracula#palette.color_7,
+          \ "bright_black": g:dracula#palette.color_8,
+          \ "bright_red": g:dracula#palette.color_9,
+          \ "bright_green": g:dracula#palette.color_10,
+          \ "bright_yellow": g:dracula#palette.color_11,
+          \ "bright_blue": g:dracula#palette.color_12,
+          \ "bright_magenta": g:dracula#palette.color_13,
+          \ "bright_cyan": g:dracula#palette.color_14,
+          \ "bright_white": g:dracula#palette.color_15,
+          \ }
+        \ },
+        \ "options": {
+          \ "close_on_open": v:true
+          \ }
       \ }
 
-let g:chadtree_settings.options = {}
-let g:chadtree_settings.options.close_on_open = v:true
-
+" Use dracula and keep it simple.
 let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
 
-  if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-  endif
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
 
+" Remove the space before the line number prefix since we are removing the
+" percentage indicator (see below).
 let g:airline_symbols.linenr = 'ln:'
 
+" Disable most extensions by default.
 let g:airline_extensions = ['branch', 'coc']
-let g:airline#extensions#branch#format = 'CustomBranchName'
 
-function! CustomBranchName(name)
+" Use a custom function to get the git branch text.
+let g:airline#extensions#branch#format = 'GetGitBranch'
+
+function! GetGitBranch(name)
+  " Clubhouse git branches will contain the ticket identifier preceded by "ch".
   let story = matchstr(a:name, '\Wch\d\+\W')
   
+  " Use the "ch" identifier if we found one.
   if (strlen(story) > 0)
     return story[1:strlen(story) - 2]
   endif
 
+  " Otherwise the first ten characters.
   return a:name[:9]
 endfunction
 
-  function! AirlineInit()
-    let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
-  endfunction
-  autocmd User AirlineAfterInit call AirlineInit()
+" Remove the document percentage indicator.
+function! AirlineInit()
+  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
 
+" More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
-
