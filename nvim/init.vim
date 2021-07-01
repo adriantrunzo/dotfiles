@@ -35,6 +35,7 @@ Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'machakann/vim-sandwich'
 Plug 'ms-jpq/chadtree', { 'branch': 'chad', 'do': 'python3 -m chadtree deps' }
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
@@ -45,6 +46,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
+
+" Use vim-surround mappings to not conflict with vim-sneak.
+runtime macros/sandwich/keymap/surround.vim
 
 " Enable 24-bit colors, all of them.
 set termguicolors
@@ -141,6 +145,7 @@ nmap <leader>rr <plug>(coc-references)
 " Files
 nnoremap <leader>fc <cmd>bdelete<cr>
 nnoremap <leader>fe <cmd>CHADopen<cr>
+nnoremap <leader>ff <cmd>Rg<cr>
 nnoremap <leader>fl :ls<cr>:b<space>
 nnoremap <leader>fn <cmd>bnext<cr>
 nnoremap <leader>fo <cmd>Files<cr>
