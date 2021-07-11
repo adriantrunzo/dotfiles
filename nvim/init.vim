@@ -155,6 +155,9 @@ nnoremap <leader>fs <cmd>update<cr>
 " Git
 nnoremap <leader>g <cmd>Git<cr>
 
+" Quickly clear search highlighting.
+nnoremap <leader>n <cmd>noh<cr>
+
 " Quit
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>Q <cmd>quit!<cr>
@@ -247,11 +250,11 @@ let g:airline#extensions#branch#format = 'GetGitBranch'
 
 function! GetGitBranch(name)
   " Clubhouse git branches will contain the ticket identifier preceded by "ch".
-  let story = matchstr(a:name, '\Wch\d\+\W')
+  let story = matchstr(a:name, 'ch\d\+')
   
   " Use the "ch" identifier if we found one.
   if (strlen(story) > 0)
-    return story[1:strlen(story) - 2]
+    return story[:strlen(story) - 1]
   endif
 
   " Otherwise the first ten characters.
