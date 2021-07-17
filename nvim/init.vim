@@ -106,6 +106,9 @@ au VimResized * :wincmd =
 set ignorecase
 set smartcase
 
+" Persistent undo.
+set undofile
+
 " Disable the arrow keys now and forever...
 nnoremap <up> <nop>
 nnoremap <down> <nop>
@@ -119,10 +122,6 @@ inoremap <right> <nop>
 " Use jj instead of escape for better ergonomics.
 inoremap jj <esc>
 
-" Quickly move to the start and end of the line in normal mode.
-nnoremap H ^
-nnoremap L $
-
 " Redo
 nnoremap U <c-r>
 
@@ -130,14 +129,12 @@ nnoremap U <c-r>
 nnoremap <cr> :
 
 " LSP
-xmap <leader>a <plug>(coc-codeaction-selected)
-nmap <leader>a <plug>(coc-codeaction-selected)
-nmap <leader>ac <Plug>(coc-codeaction)
-nmap <leader>d <plug>(coc-definition)
+nmap <leader>ca <Plug>(coc-codeaction)
+nmap <leader>cd <plug>(coc-definition)
+nmap <leader>ci <plug>(coc-implementation)
 nmap <leader>dn <plug>(coc-diagnostic-next)
 nmap <leader>dp <plug>(coc-diagnostic-prev)
 nmap <leader>fq <plug>(coc-fix-current)
-nmap <leader>i <plug>(coc-implementation)
 nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
 nmap <leader>rn <plug>(coc-rename)
 nmap <leader>rr <plug>(coc-references)
@@ -151,19 +148,17 @@ nnoremap <leader>fn <cmd>bnext<cr>
 nnoremap <leader>fo <cmd>Files<cr>
 nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
+nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 
 " Git
 nnoremap <leader>g <cmd>Git<cr>
 
 " Quickly clear search highlighting.
-nnoremap <leader>n <cmd>noh<cr>
+nnoremap <leader>sn <cmd>noh<cr>
 
 " Quit
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>Q <cmd>quit!<cr>
-
-" Vim configuration
-nnoremap <leader>v <cmd>edit $MYVIMRC<cr>
 
 " Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
