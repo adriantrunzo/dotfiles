@@ -1,0 +1,292 @@
+" This .vimrc file is heavily commented due to my attempt to pull unused
+" options that had acumulated previously and understand every line in my
+" configuration without having to pull up the help menu.
+
+" No vi compatibility.
+set nocompatible
+
+if has('osx')
+  " Add path to fzf installed by Homebrew.
+  set rtp+=/usr/local/opt/fzf
+endif
+
+" vim-polyglot includes vim-sensible by default. It needs to be disabled
+" before the plugin is installed.
+let g:polyglot_disabled = ['sensible']
+
+" Set the leader before plugins might add their own mappings.
+let mapleader = ' '
+
+" Install vim-plug if not found
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs
+        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
+" Run PlugInstall if there are missing plugins
+autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
+      \| PlugInstall --sync | source $MYVIMRC
+      \| endif
+
+call plug#begin()
+
+Plug 'airblade/vim-gitgutter'
+Plug 'dracula/vim', { 'as': 'dracula' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
+Plug 'machakann/vim-sandwich'
+Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'preservim/nerdtree'
+Plug 'sheerun/vim-polyglot'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+
+call plug#end()
+
+" Use vim-surround mappings to not conflict with vim-sneak.
+runtime macros/sandwich/keymap/surround.vim
+
+" Enable filetype and indent detection.
+filetype plugin indent on
+
+" Enable syntax highlighting.
+syntax enable
+
+" Use the Dracula color scheme.
+colorscheme dracula
+
+" Create new lines at the same indentation level.
+set autoindent
+
+" Detect file changes outside of vim and reload those files if not changed.
+set autoread
+
+" Use colors suitable for a dark background. The colorscheme should also set
+" this value.
+set background=dark
+
+" Allow backspacing over everything in insert mode.
+set backspace=indent,eol,start
+
+" Don't put backup files in the current directory.
+set backupdir^=$HOME/.vim/backup//
+
+" Don't ring the bell.
+set belloff=all
+
+" Highlight the column after textwidth.
+set colorcolumn=+1
+
+" Don't put swap files in the current directory.
+set directory^=$HOME/.vim/swap//
+
+" Use utf-8 by default.
+set encoding=utf-8
+
+" Expand tabs to spaces in insert mode.
+set expandtab
+
+" Remove comment leader when joining lines.
+set formatoptions+=j
+
+" Allow for hidden buffers. Necessary for some plugins.
+set hidden
+
+" Highlight search results.
+set hlsearch
+
+" Ignore case when searching.
+set ignorecase
+
+" Show matches as search proceeds.
+set incsearch
+
+" Show line numbers.
+set number
+
+" Make the line numbers relative.
+set relativenumber
+
+" Always show lines above and below cursor when scrolling.
+set scrolloff=5
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Use two spaces when indenting.
+set shiftwidth=2
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Show a symbol for wrapped lines.
+set showbreak=↪
+
+" Show partial commands in the last line.
+set showcmd
+
+" Don't show the mode as vim-airline will already display it for us.
+set noshowmode
+
+" Make search case-sensitive if capital letters are used.
+set smartcase
+
+" Use two spaces for the tab key.
+set softtabstop=2
+
+" Put window splits below the current one.
+set splitbelow
+
+" Enable true color.
+set termguicolors
+
+" Break text after 80 characters.
+set textwidth=80
+
+" Set the title of the terminal window appropriately.
+set title
+
+" Don't put swap files in the current directory.
+set undodir^=$HOME/.vim/undo//
+
+" Persistent undo.
+set undofile
+
+" coc.nvim recommends a lower updatetime, which is used by the highlight on
+" CursorHold feature.
+set updatetime=500
+
+" Enable wildmenu (command-line completion).
+set wildmenu
+
+" List all matches and complete the first match.
+set wildmode=list:full
+
+" Wrap long lines.
+set wrap
+
+" Resize splits when the window is resized.
+au VimResized * :wincmd =
+
+" Use jj for quick escape.
+inoremap jj <esc>
+
+" Better redo.
+nnoremap U <c-r>
+
+" LSP
+nmap <leader>ca <Plug>(coc-codeaction)
+nmap <leader>cd <plug>(coc-definition)
+nmap <leader>ci <plug>(coc-implementation)
+nmap <leader>dn <plug>(coc-diagnostic-next)
+nmap <leader>dp <plug>(coc-diagnostic-prev)
+nmap <leader>fq <plug>(coc-fix-current)
+nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
+nmap <leader>rn <plug>(coc-rename)
+nmap <leader>rr <plug>(coc-references)
+
+"  Files
+nnoremap <leader>fc <cmd>bdelete<cr>
+nnoremap <leader>fe <cmd>NERDTreeToggle<cr>
+nnoremap <leader>ff <cmd>Rg<cr>
+nnoremap <leader>fl :ls<cr>:b<space>
+nnoremap <leader>fn <cmd>bnext<cr>
+nnoremap <leader>fo <cmd>Files<cr>
+nnoremap <leader>fp <cmd>bprevious<cr>
+nnoremap <leader>fs <cmd>update<cr>
+nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
+
+" Git
+nnoremap <leader>g <cmd>Git<cr>
+
+" Quickly clear search highlighting.
+nnoremap <leader>sn <cmd>noh<cr>
+
+" Quit
+nnoremap <leader>q <cmd>quit<cr>
+nnoremap <leader>Q <cmd>quit!<cr>
+
+" Make the fuzzy finder floating window bigger.
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+
+" CoC Extensions. These should be automatically installed by coc.nvim.
+let g:coc_global_extensions = [
+      \ "coc-css",
+      \ 'coc-cssmodules',
+      \ 'coc-eslint',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-prettier',
+      \ 'coc-tsserver',
+      \ 'coc-vimlsp'
+      \ ]
+
+" Show documentation in preview window.
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
+
+" Trigger completions with enter.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
+
+" Navigate completions with Tab.
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+let NERDTreeQuitOnOpen=3
+
+" Use dracula and keep it simple.
+let g:airline_theme='dracula'
+let g:airline_symbols_ascii = 1
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" Remove the space before the line number prefix since we are removing the
+" percentage indicator (see below).
+let g:airline_symbols.linenr = 'ln:'
+
+" Disable most extensions by default.
+let g:airline_extensions = ['branch', 'coc', 'nerdtree']
+
+" Use a custom function to get the git branch text.
+let g:airline#extensions#branch#format = 'GetGitBranch'
+
+function! GetGitBranch(name)
+  " Clubhouse git branches will contain the ticket identifier preceded by "ch".
+  let story = matchstr(a:name, 'ch\d\+')
+
+  " Use the "ch" identifier if we found one.
+  if (strlen(story) > 0)
+    return story[:strlen(story) - 1]
+  endif
+
+  " Otherwise the first ten characters.
+  return a:name[:9]
+endfunction
+
+" Remove the document percentage indicator.
+function! AirlineInit()
+  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+endfunction
+autocmd User AirlineAfterInit call AirlineInit()
+
+" More colorful JSX.
+let g:vim_jsx_pretty_colorful_config = 1

@@ -13,6 +13,13 @@
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/nvim/coc-settings.json: nvim/coc-settings.json
     ~/.config/nvim/init.vim: nvim/init.vim
+    ~/.vim/coc-settings.json: vim/coc-settings.json
+    ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.zshrc: zsh/.zshrc
+
+- create:
+    ~/.vim/backup:
+    ~/.vim/swap:
+    ~/.vim/undo:
 
