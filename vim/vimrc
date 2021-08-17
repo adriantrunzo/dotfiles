@@ -8,6 +8,12 @@ set nocompatible
 if has('osx')
   " Add path to fzf installed by Homebrew.
   set rtp+=/usr/local/opt/fzf
+
+  " Change the cursor shape depending upon the mode.
+  " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
+  let &t_SI.="\e[5 q" "SI = INSERT mode
+  let &t_SR.="\e[4 q" "SR = REPLACE mode
+  let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 endif
 
 " vim-polyglot includes vim-sensible by default. It needs to be disabled
@@ -153,7 +159,7 @@ set textwidth=80
 " Set the title of the terminal window appropriately.
 set title
 
-" Don't put swap files in the current directory.
+" Don't put undo files in the current directory.
 set undodir^=$HOME/.vim/undo//
 
 " Persistent undo.
@@ -264,7 +270,8 @@ endif
 let g:airline_symbols.linenr = 'ln:'
 
 " Disable most extensions by default.
-let g:airline_extensions = ['branch', 'coc', 'nerdtree']
+let g:airline_extensions = ['branch', 'coc']
+let g:airline#extensions#nerdtree_statusline = 1
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
