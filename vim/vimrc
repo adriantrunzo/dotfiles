@@ -2,9 +2,6 @@
 set nocompatible
 
 if has('osx')
-  " Add path to fzf installed by Homebrew.
-  set rtp+=/usr/local/opt/fzf
-
   " Change the cursor shape depending upon the mode.
   " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
   let &t_SI.="\e[5 q" "SI = INSERT mode
@@ -207,11 +204,9 @@ nmap <leader>rr <plug>(coc-references)
 
 "  Files
 nnoremap <leader>fc <cmd>bdelete<cr>
-nnoremap <leader>fe <cmd>Fern . -drawer -toggle -reveal=% -width=35<cr>
-nnoremap <leader>ff <cmd>Clap grep2<cr>
+nnoremap <leader>fe <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>fl :ls<cr>:b<space>
 nnoremap <leader>fn <cmd>bnext<cr>
-nnoremap <leader>fo <cmd>Clap files<cr>
 nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
@@ -220,6 +215,8 @@ nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>g <cmd>Git<cr>
 
 " Quickly clear search highlighting.
+nnoremap <leader>sf <cmd>Clap files<cr>
+nnoremap <leader>sg <cmd>Clap grep2<cr>
 nnoremap <leader>sn <cmd>noh<cr>
 
 " Quit
@@ -300,20 +297,15 @@ autocmd User AirlineAfterInit call AirlineInit()
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
 
-nnoremap <Plug>(fern-close-drawer) :<C-u>FernDo close -drawer -stay<CR>
 
 function! FernInit() abort
-  nmap <buffer><silent> <Plug>(fern-action-open-and-close)
-       \ <Plug>(fern-action-open:select)
-       \ <Plug>(fern-close-drawer)
-
   nmap <buffer><expr>
-        \ <Plug>(fern-my-open-expand-collapse)
-        \ fern#smart#leaf(
-        \   "\<Plug>(fern-action-open-and-close)",
-        \   "\<Plug>(fern-action-expand)",
-        \   "\<Plug>(fern-action-collapse)",
-        \ )
+      \ <Plug>(fern-my-open-expand-collapse)
+      \ fern#smart#leaf(
+      \   "\<Plug>(fern-action-open)",
+      \   "\<Plug>(fern-action-expand)",
+      \   "\<Plug>(fern-action-collapse)",
+      \ )
 
   nmap <buffer> <CR> <Plug>(fern-my-open-expand-collapse)
   " nmap <buffer> <2-LeftMouse> <Plug>(fern-my-open-expand-collapse)
