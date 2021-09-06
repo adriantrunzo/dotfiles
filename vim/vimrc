@@ -37,9 +37,8 @@ call plug#begin()
 Plug 'airblade/vim-gitgutter'
 Plug 'andymass/vim-matchup'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'lambdalisue/fern.vim'
+Plug 'liuchengxu/vim-clap', { 'do': ':Clap install-binary!' }
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
@@ -181,6 +180,12 @@ set wrap
 " Resize splits when the window is resized.
 au VimResized * :wincmd =
 
+augroup Typescript
+    autocmd!
+    " The .tsx extension isn't always used with react files.
+    autocmd BufNewFile,BufRead *.ts set filetype=typescriptreact
+augroup END
+
 " Use jj for quick escape.
 inoremap jj <esc>
 
@@ -203,10 +208,10 @@ nmap <leader>rr <plug>(coc-references)
 "  Files
 nnoremap <leader>fc <cmd>bdelete<cr>
 nnoremap <leader>fe <cmd>Fern . -drawer -toggle -reveal=% -width=35<cr>
-nnoremap <leader>ff <cmd>Rg<cr>
+nnoremap <leader>ff <cmd>Clap grep2<cr>
 nnoremap <leader>fl :ls<cr>:b<space>
 nnoremap <leader>fn <cmd>bnext<cr>
-nnoremap <leader>fo <cmd>Files<cr>
+nnoremap <leader>fo <cmd>Clap files<cr>
 nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
@@ -220,9 +225,6 @@ nnoremap <leader>sn <cmd>noh<cr>
 " Quit
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>Q <cmd>quit!<cr>
-
-" Make the fuzzy finder floating window bigger.
-let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
 " CoC Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
