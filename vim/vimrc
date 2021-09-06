@@ -327,3 +327,6 @@ augroup FernEvents
   autocmd!
   autocmd FileType fern call FernInit()
 augroup END
+
+" Alerting offscreen matches messes with airline.
+let g:matchup_matchparen_offscreen = {}
