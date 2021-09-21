@@ -205,8 +205,10 @@ nmap <leader>rr <plug>(coc-references)
 "  Files
 nnoremap <leader>fc <cmd>bdelete<cr>
 nnoremap <leader>fe <cmd>Fern . -reveal=%<cr>
+nnoremap <leader>ff <cmd>Clap grep2<cr>
 nnoremap <leader>fl :ls<cr>:b<space>
 nnoremap <leader>fn <cmd>bnext<cr>
+nnoremap <leader>fo <cmd>Clap files<cr>
 nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
@@ -215,8 +217,6 @@ nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>g <cmd>Git<cr>
 
 " Quickly clear search highlighting.
-nnoremap <leader>sf <cmd>Clap files<cr>
-nnoremap <leader>sg <cmd>Clap grep2<cr>
 nnoremap <leader>sn <cmd>noh<cr>
 
 " Quit
