@@ -280,10 +280,11 @@ let g:airline#extensions#nerdtree_statusline = 1
 let g:airline#extensions#branch#format = 'GetGitBranch'
 
 function! GetGitBranch(name)
-  " Clubhouse git branches will contain the ticket identifier preceded by "ch".
-  let story = matchstr(a:name, 'ch\d\+')
+  " Shortcut/Clubhouse git branches will contain the ticket identifier preceeded
+  " by either "ch" or "sc-".
+  let story = matchstr(a:name, '\(ch\|sc-\)\d\+')
 
-  " Use the "ch" identifier if we found one.
+  " Use the identifier segment if we found one.
   if (strlen(story) > 0)
     return story[:strlen(story) - 1]
   endif
@@ -300,7 +301,6 @@ autocmd User AirlineAfterInit call AirlineInit()
 
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
-
 
 function! FernInit() abort
   nmap <buffer><expr>
