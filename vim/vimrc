@@ -34,13 +34,15 @@ call plug#begin()
 Plug 'airblade/vim-gitgutter'
 Plug 'andymass/vim-matchup'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'christoomey/vim-sort-motion'
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sheerun/vim-polyglot'
+Plug 'stsewd/fzf-checkout.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-rhubarb'
@@ -190,6 +192,9 @@ inoremap jj <esc>
 " Better redo.
 nnoremap U <c-r>
 
+" Make Y behave as expected, though don't yank the trailing whitespace.
+nnoremap Y yg_
+
 " LSP
 nmap <leader>ca <Plug>(coc-codeaction)
 nmap <leader>cc <Plug>(coc-declaration)
@@ -215,12 +220,23 @@ nnoremap <leader>fs <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 
 " Git
-nnoremap <leader>g <cmd>Git<cr>
+nnoremap <leader>gc <cmd>GBranches<cr>
+nnoremap <leader>gg <cmd>Git<cr>
 
 " Quickly clear search highlighting.
 nnoremap <leader>sn <cmd>noh<cr>
 
-" Quit
+" System clipboard copy/paste.
+nnoremap <leader>cp "*y
+nnoremap <leader>cv "*gp
+vnoremap <leader>cp "*y
+vnoremap <leader>cv "*gp
+
+" Change word and use dot to repeat on next occurrence.
+nnoremap <leader>cn *``cgn
+nnoremap <leader>cN *``cgN
+
+" Miscellaneous
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>Q <cmd>quit!<cr>
 
