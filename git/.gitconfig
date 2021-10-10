@@ -2,11 +2,14 @@
   name = Adrian Trunzo
   email = trunzoap@gmail.com
 [core]
-  editor = nvim
+  editor = vim
 [pull]
   ff = only
 [submodule]
   recurse = true
+
+[alias]
+  fwitch = !sh -c \"git branch | fzf --print0 -m | tr -d '[:space:]*' | xargs -0 -t -o git switch\"
 
 [includeif "gitdir:~/slice/"]
   path = ~/slice/.gitconfig
