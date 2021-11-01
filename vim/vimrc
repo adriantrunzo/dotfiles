@@ -214,7 +214,7 @@ nnoremap <leader>fe <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>ff <cmd>Rg<cr>
 nnoremap <leader>fl :ls<cr>:b<space>
 nnoremap <leader>fn <cmd>bnext<cr>
-nnoremap <leader>fo <cmd>Files<cr>
+nnoremap <leader>fo <cmd>GFiles --exclude-standard --others --cached<cr>
 nnoremap <leader>fp <cmd>bprevious<cr>
 nnoremap <leader>fs <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
