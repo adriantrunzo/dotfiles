@@ -1,5 +1,5 @@
 # Add Homebrew's executable directory to the front of the PATH
-export PATH=/usr/local/bin:$PATH
+export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 export BAT_THEME=Dracula
 export CLICOLOR=1
 
