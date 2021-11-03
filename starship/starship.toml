@@ -1,0 +1,5 @@
+# ~/.config/starship.toml
+
+# Wait a bit longer than the default 500ms for commands to execute. Node and git
+# timeout rather frequently.
+command_timeout = 750
