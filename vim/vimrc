@@ -140,8 +140,10 @@ set smartcase
 " Use two spaces for the tab key.
 set softtabstop=2
 
-" Put window splits below the current one.
+" Open new splits in a more "natural" direction; below for horizontal splits and
+" to the right for vertical splits.
 set splitbelow
+set splitright
 
 " Enable true color.
 set termguicolors
