@@ -2,4 +2,4 @@
 
 # Wait a bit longer than the default 500ms for commands to execute. Node and git
 # timeout rather frequently.
-command_timeout = 1000
+command_timeout = 2000
