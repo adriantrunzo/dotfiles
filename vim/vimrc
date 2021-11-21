@@ -34,9 +34,9 @@ call plug#begin()
 Plug 'airblade/vim-gitgutter'
 Plug 'andymass/vim-matchup'
 Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'christoomey/vim-sort-motion'
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
@@ -45,7 +45,6 @@ Plug 'sheerun/vim-polyglot'
 Plug 'stsewd/fzf-checkout.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-rhubarb'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -197,36 +196,17 @@ nnoremap U <c-r>
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
 
-" LSP
-nmap <leader>ca <Plug>(coc-codeaction)
-nmap <leader>cc <Plug>(coc-declaration)
-nmap <leader>cd <plug>(coc-definition)
-nmap <leader>ci <plug>(coc-implementation)
-nmap <leader>ct <plug>(coc-type-definition)
-nmap <leader>dn <plug>(coc-diagnostic-next)
-nmap <leader>dp <plug>(coc-diagnostic-prev)
-nmap <leader>fq <plug>(coc-fix-current)
-nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
-nmap <leader>rn <plug>(coc-rename)
-nmap <leader>rr <plug>(coc-references)
+" Reselect visual selection after indenting.
+vnoremap < <gv
+vnoremap > >gv
 
-"  Files
-nnoremap <leader>fc <cmd>bdelete<cr>
-nnoremap <leader>fe <cmd>Fern . -reveal=%<cr>
-nnoremap <leader>ff <cmd>Rg<cr>
-nnoremap <leader>fl :ls<cr>:b<space>
-nnoremap <leader>fn <cmd>bnext<cr>
-nnoremap <leader>fo <cmd>GFiles --exclude-standard --others --cached<cr>
-nnoremap <leader>fp <cmd>bprevious<cr>
-nnoremap <leader>fs <cmd>update<cr>
-nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
+" Maintain the cursor position when yanking a visual selection.
+" http://ddrscott.github.io/blog/2016/yank-without-jank/
+vnoremap y myy`y
+vnoremap Y myY`y
 
-" Git
-nnoremap <leader>gc <cmd>GBranches<cr>
-nnoremap <leader>gg <cmd>Git<cr>
-
-" Quickly clear search highlighting.
-nnoremap <leader>sn <cmd>noh<cr>
+" Quickly list all available buffers.
+nnoremap gb :ls<cr>:b<space>
 
 " System clipboard copy/paste.
 nnoremap <leader>cp "*y
@@ -238,12 +218,56 @@ vnoremap <leader>cv "*gp
 nnoremap <leader>cn *``cgn
 nnoremap <leader>cN *``cgN
 
-" Miscellaneous
+" Quickly clear search highlighting.
+nnoremap <leader>k <cmd>noh<cr>
+
+" Easier quit.
 nnoremap <leader>q <cmd>quit<cr>
-nnoremap <leader>Q <cmd>quit!<cr>
+
+" Editing vim configuration.
+nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
+nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
+
+" Git
+nnoremap <leader>b <cmd>GBranches<cr>
+nnoremap <leader>g <cmd>Git<cr>
+
+" File explorer.
+nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
+
+" Fuzzy searching.
+nnoremap <leader>ff <cmd>Rg<cr>
+nnoremap <leader>fg <cmd>GFiles --exclude-standard --others --cached<cr>
+
+" Quick save (update only writes if there are changes).
+nnoremap <leader>s <cmd>update<cr>
+
+" LSP
+nmap <leader>ca <Plug>(coc-codeaction)
+nmap <leader>cc <Plug>(coc-declaration)
+nmap <leader>cd <plug>(coc-definition)
+xmap <leader>cf <plug>(coc-format-selected)
+nmap <leader>cf <plug>(coc-format-selected)
+nmap <leader>ci <plug>(coc-implementation)
+nmap <leader>ct <plug>(coc-type-definition)
+nmap <leader>dn <plug>(coc-diagnostic-next)
+nmap <leader>dp <plug>(coc-diagnostic-prev)
+nmap <leader>fq <plug>(coc-fix-current)
+nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
+nmap <leader>rn <plug>(coc-rename)
+nmap <leader>rr <plug>(coc-references)
+
+" Allow scrolling of the floating LSP windows with <c-f> and <c-b>.
+nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
 " Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS = '--layout=reverse --info=inline'
 
 " CoC Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
@@ -252,6 +276,7 @@ let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-html',
       \ 'coc-json',
+      \ 'coc-pairs',
       \ 'coc-prettier',
       \ 'coc-tsserver',
       \ 'coc-vimlsp'
@@ -269,7 +294,13 @@ function! s:show_documentation()
 endfunction
 
 " Trigger completions with enter.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+      \: "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
+" :h complete_CTRL-Y
+" :h i_CTRL-G_u
+" :h i_CTRL-R
+" :h index
 
 " Navigate completions with Tab.
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -352,3 +383,11 @@ augroup END
 
 " Alerting offscreen matches messes with airline.
 let g:matchup_matchparen_offscreen = {}
+
+nmap sf <plug>Sneak_s
+nmap sF <plug>Sneak_S
+xmap sf <plug>Sneak_s
+xmap sF <plug>Sneak_S
+omap sf <plug>Sneak_s
+omap sF <plug>Sneak_S
+
