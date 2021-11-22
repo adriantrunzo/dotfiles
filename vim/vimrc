@@ -33,10 +33,10 @@ call plug#begin()
 
 Plug 'airblade/vim-gitgutter'
 Plug 'andymass/vim-matchup'
+Plug 'antoinemadec/coc-fzf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
 Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
@@ -383,11 +383,4 @@ augroup END
 
 " Alerting offscreen matches messes with airline.
 let g:matchup_matchparen_offscreen = {}
-
-nmap sf <plug>Sneak_s
-nmap sF <plug>Sneak_S
-xmap sf <plug>Sneak_s
-xmap sF <plug>Sneak_S
-omap sf <plug>Sneak_s
-omap sF <plug>Sneak_S
 
