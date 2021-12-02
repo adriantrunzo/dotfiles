@@ -10,7 +10,7 @@ if has('osx')
 endif
 
 " vim-polyglot includes vim-sensible by default. It needs to be disabled
-" before the plugin is installed.
+" before the plugin is loaded.
 let g:polyglot_disabled = ['sensible']
 
 " Set the leader before plugins might add their own mappings.
@@ -37,6 +37,7 @@ Plug 'antoinemadec/coc-fzf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
@@ -49,6 +50,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
+
+" Use vim-surround mappings to not conflict with vim-sneak.
+runtime macros/sandwich/keymap/surround.vim
 
 " Enable filetype and indent detection.
 filetype plugin indent on
