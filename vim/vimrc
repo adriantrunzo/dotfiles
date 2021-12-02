@@ -287,7 +287,6 @@ let g:coc_global_extensions = [
       \ 'coc-eslint',
       \ 'coc-html',
       \ 'coc-json',
-      \ 'coc-pairs',
       \ 'coc-prettier',
       \ 'coc-tsserver',
       \ 'coc-vimlsp'
@@ -305,13 +304,7 @@ function! s:show_documentation()
 endfunction
 
 " Trigger completions with enter.
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-      \: "\<c-g>u\<cr>\<c-r>=coc#on_enter()\<cr>"
-" :h complete_CTRL-Y
-" :h i_CTRL-G_u
-" :h i_CTRL-R
-" :h index
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
 
 " Navigate completions with Tab.
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
