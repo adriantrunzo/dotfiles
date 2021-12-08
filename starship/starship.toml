@@ -4,5 +4,10 @@
 # timeout rather frequently.
 command_timeout = 5000
 
+[character]
+success_symbol = "[i❯](bold green) "
+error_symbol = "[i❯](bold red) "
+vicmd_symbol = "[n❯](bold green) "
+
 [nodejs]
 symbol = "⬢ " # https://github.com/starship/starship/issues/2546

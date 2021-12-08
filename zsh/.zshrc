@@ -15,4 +15,6 @@ if type brew &>/dev/null; then
   compinit
 fi
 
+bindkey -v
+
 eval "$(starship init zsh)"
