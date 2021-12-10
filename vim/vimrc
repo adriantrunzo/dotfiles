@@ -51,8 +51,10 @@ Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
-" Use vim-surround mappings to not conflict with vim-sneak.
+" Use vim-surround operator mappings to not conflict with vim-sneak, but keep
+" the default textobj mappings.
 runtime macros/sandwich/keymap/surround.vim
+unlet! g:textobj_sandwich_no_default_key_mappings
 
 " Enable filetype and indent detection.
 filetype plugin indent on
