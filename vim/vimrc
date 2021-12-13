@@ -214,10 +214,9 @@ vnoremap Y myY`y
 " Quickly list all available buffers.
 nnoremap gb :ls<cr>:b<space>
 
+" Easily move between buffers.
 nnoremap [f <cmd>bprevious<cr>
-nnoremap <left> <cmd>bprevious<cr>
 nnoremap ]f <cmd>bnext<cr>
-nnoremap <right> <cmd>bnext<cr>
 
 " System clipboard copy/paste.
 nnoremap <leader>cp "*y
