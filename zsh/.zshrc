@@ -15,6 +15,10 @@ if type brew &>/dev/null; then
   compinit
 fi
 
+# Use Vi bindings.
 bindkey -v
+
+# Load FZF completion. Must come after other bindkey calls.
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(starship init zsh)"
