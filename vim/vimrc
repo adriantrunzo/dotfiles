@@ -211,6 +211,17 @@ vnoremap > >gv
 vnoremap y myy`y
 vnoremap Y myY`y
 
+" Keep the cursor centered when going through search results.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Maintain the cursor position when joining lines.
+nnoremap J mzJ`z
+
+" Visually move lines up and down.
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " Quickly list all available buffers.
 nnoremap gb :ls<cr>:b<space>
 
