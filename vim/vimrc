@@ -7,6 +7,17 @@ if has('osx')
   let &t_SI.="\e[5 q" "SI = INSERT mode
   let &t_SR.="\e[4 q" "SR = REPLACE mode
   let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+
+  " By default, Mac terminals receive alt-key sequences as special characters.
+  " Kitty and other terminals can be configured to use option as meta, but vim
+  " ends up receiving escape sequences like ^]j. These escape sequences can have
+  " unintended effects in macros. It's easier just to map meta sequences to the
+  " special characters.
+  " https://stackoverflow.com/questions/7501092/can-i-map-alt-key-in-vim
+  set <m-h>=˙
+  set <m-j>=∆
+  set <m-k>=˚
+  set <m-l>=¬
 endif
 
 " vim-polyglot includes vim-sensible by default. It needs to be disabled
@@ -218,15 +229,13 @@ nnoremap N Nzzzv
 " Maintain the cursor position when joining lines.
 nnoremap J mzJ`z
 
-" Visually move lines up and down.
-" vnoremap J :m '>+1<CR>gv=gv
-" vnoremap K :m '<-2<CR>gv=gv
-nnoremap <a-j> :m .+1<cr>==
-nnoremap <a-k> :m .-2<cr>==
-inoremap <a-j> <esc>:m .+1<cr>==gi
-inoremap <a-k> <esc>:m .-2<cr>==gi
-vnoremap <a-j> :m '>+1<cr>gv=gv
-vnoremap <a-k> :m '<-2<cr>gv=gv
+" Move lines up and down.
+nnoremap <m-j> :m .+1<cr>==
+nnoremap <m-k> :m .-2<cr>==
+inoremap <m-j> <esc>:m .+1<cr>==gi
+inoremap <m-k> <esc>:m .-2<cr>==gi
+vnoremap <m-j> :m '>+1<cr>gv=gv
+vnoremap <m-k> :m '<-2<cr>gv=gv
 
 " Go to mappings.
 nnoremap gb :ls<cr>:b<space>
