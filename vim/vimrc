@@ -239,36 +239,36 @@ vnoremap <m-k> :m '<-2<cr>gv=gv
 
 " Go to mappings.
 nnoremap gb :ls<cr>:b<space>
-nnoremap gd <plug>(coc-definition)
-nnoremap gD <plug>(coc-declaration)
-nnoremap gm <plug>(coc-implementation)
-nnoremap gr <plug>(coc-references)
-nnoremap gt <plug>(coc-type-definition)
+nmap <silent> gd <plug>(coc-definition)
+nmap <silent> gD <plug>(coc-declaration)
+nmap <silent> gm <plug>(coc-implementation)
+nmap <silent> gr <plug>(coc-references)
+nmap <silent> gt <plug>(coc-type-definition)
 
 " Bracket movement mappings.
-nnoremap [d <plug>(coc-diagnostic-prev)
-nnoremap ]d <plug>(coc-diagnostic-next)
+nmap <silent> [d <plug>(coc-diagnostic-prev)
+nmap <silent> ]d <plug>(coc-diagnostic-next)
 nnoremap [f <cmd>bprevious<cr>
 nnoremap ]f <cmd>bnext<cr>
 nnoremap [q <cmd>cprevious<cr>
 nnoremap ]q <cmd>cnext<cr>
 
 " Leader mappings
-nnoremap <leader>a <plug>(coc-codeaction)
+nmap <leader>a <plug>(coc-codeaction)
 nnoremap <leader>b <cmd>GBranches<cr>
+nnoremap <leader>c *``cgn
+nnoremap <leader>C *``cgN
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>f <cmd>Rg<cr>
 nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>k <cmd>noh<cr>
 nnoremap <leader>l <cmd>bdelete<cr>
-nnoremap <leader>n *``cgn
-nnoremap <leader>N *``cgN
 nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
 nnoremap <leader>p "*gp
 vnoremap <leader>p "*gp
 nnoremap <leader>q <cmd>quit<cr>
-nnoremap <leader>rf <plug>(coc-refactor)
-nnoremap <leader>rn <plug>(coc-rename)
+nmap <leader>rf <plug>(coc-refactor)
+nmap <leader>rn <plug>(coc-rename)
 nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
