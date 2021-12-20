@@ -219,66 +219,54 @@ nnoremap N Nzzzv
 nnoremap J mzJ`z
 
 " Visually move lines up and down.
-vnoremap J :m '>+1<CR>gv=gv
-vnoremap K :m '<-2<CR>gv=gv
+" vnoremap J :m '>+1<CR>gv=gv
+" vnoremap K :m '<-2<CR>gv=gv
+nnoremap <a-j> :m .+1<cr>==
+nnoremap <a-k> :m .-2<cr>==
+inoremap <a-j> <esc>:m .+1<cr>==gi
+inoremap <a-k> <esc>:m .-2<cr>==gi
+vnoremap <a-j> :m '>+1<cr>gv=gv
+vnoremap <a-k> :m '<-2<cr>gv=gv
 
-" Quickly list all available buffers.
+" Go to mappings.
 nnoremap gb :ls<cr>:b<space>
+nnoremap gd <plug>(coc-definition)
+nnoremap gD <plug>(coc-declaration)
+nnoremap gm <plug>(coc-implementation)
+nnoremap gr <plug>(coc-references)
+nnoremap gt <plug>(coc-type-definition)
 
-" Easily move between buffers.
+" Bracket movement mappings.
+nnoremap [d <plug>(coc-diagnostic-prev)
+nnoremap ]d <plug>(coc-diagnostic-next)
 nnoremap [f <cmd>bprevious<cr>
 nnoremap ]f <cmd>bnext<cr>
+nnoremap [q <cmd>cprevious<cr>
+nnoremap ]q <cmd>cnext<cr>
 
-" System clipboard copy/paste.
-nnoremap <leader>cp "*y
-nnoremap <leader>cv "*gp
-vnoremap <leader>cp "*y
-vnoremap <leader>cv "*gp
-
-" Change word and use dot to repeat on next occurrence.
-nnoremap <leader>cn *``cgn
-nnoremap <leader>cN *``cgN
-
-" Quickly clear search highlighting.
+" Leader mappings
+nnoremap <leader>a <plug>(coc-codeaction)
+nnoremap <leader>b <cmd>GBranches<cr>
+nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
+nnoremap <leader>f <cmd>Rg<cr>
+nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>k <cmd>noh<cr>
-
-" Easier quit.
+nnoremap <leader>l <cmd>bdelete<cr>
+nnoremap <leader>n *``cgn
+nnoremap <leader>N *``cgN
+nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
+nnoremap <leader>p "*gp
+vnoremap <leader>p "*gp
 nnoremap <leader>q <cmd>quit<cr>
-
-" Editing vim configuration.
+nnoremap <leader>rf <plug>(coc-refactor)
+nnoremap <leader>rn <plug>(coc-rename)
+nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
+nnoremap <leader>y "*y
+vnoremap <leader>y "*y
 
-" Git
-nnoremap <leader>b <cmd>GBranches<cr>
-nnoremap <leader>g <cmd>Git<cr>
-
-" File explorer.
-nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
-
-" Fuzzy searching.
-nnoremap <leader>f <cmd>Rg<cr>
-nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
-
-" Quick save (update only writes if there are changes).
-nnoremap <leader>l <cmd>bdelete<cr>
-nnoremap <leader>s <cmd>update<cr>
- 
-" LSP
-nmap <leader>ca <Plug>(coc-codeaction)
-nmap <leader>cc <Plug>(coc-declaration)
-nmap <leader>cd <plug>(coc-definition)
-xmap <leader>cf <plug>(coc-format-selected)
-nmap <leader>cf <plug>(coc-format-selected)
-nmap <leader>ci <plug>(coc-implementation)
-nmap <leader>ct <plug>(coc-type-definition)
-nmap <leader>fq <plug>(coc-fix-current)
 nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
-nmap <leader>rn <plug>(coc-rename)
-nmap <leader>rr <plug>(coc-references)
-
-nmap ]d <plug>(coc-diagnostic-next)
-nmap [d <plug>(coc-diagnostic-prev)
 
 " Allow scrolling of the floating LSP windows with <c-f> and <c-b>.
 nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
