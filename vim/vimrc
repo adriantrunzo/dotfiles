@@ -335,8 +335,7 @@ endif
 let g:airline_symbols.linenr = 'ln:'
 
 " Disable most extensions by default.
-let g:airline_extensions = ['branch', 'coc']
-let g:airline#extensions#nerdtree_statusline = 1
+let g:airline_extensions = ['branch', 'coc', 'fern']
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
