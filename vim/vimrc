@@ -62,11 +62,6 @@ Plug 'vim-airline/vim-airline-themes'
 
 call plug#end()
 
-" Use vim-surround operator mappings to not conflict with vim-sneak, but keep
-" the default textobj mappings.
-runtime macros/sandwich/keymap/surround.vim
-unlet! g:textobj_sandwich_no_default_key_mappings
-
 " Enable filetype and indent detection.
 filetype plugin indent on
 
@@ -228,6 +223,14 @@ nnoremap N Nzzzv
 
 " Maintain the cursor position when joining lines.
 nnoremap J mzJ`z
+
+" Remap sneak operations so they don't conflict with vim-sandwich.
+nmap sf <Plug>Sneak_s
+omap sf <Plug>Sneak_s
+xmap sf <Plug>Sneak_s
+nmap sb <Plug>Sneak_S
+omap sb <Plug>Sneak_S
+xmap sb <Plug>Sneak_S
 
 " Move lines up and down.
 nnoremap <m-j> :m .+1<cr>==
@@ -396,3 +399,5 @@ augroup END
 " Alerting offscreen matches messes with airline.
 let g:matchup_matchparen_offscreen = {}
 
+" Use vim-sneak label mode.
+let g:sneak#label = 1
