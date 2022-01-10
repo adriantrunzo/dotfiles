@@ -238,18 +238,24 @@ inoremap <m-k> <esc>:m .-2<cr>==gi
 vnoremap <m-j> :m '>+1<cr>gv=gv
 vnoremap <m-k> :m '<-2<cr>gv=gv
 
-" System copy/paste.
+" C mappings. 
 nnoremap cp "*y
 vnoremap cp "*y
 nnoremap cv "*gp
 vnoremap cv "*gp
+nnoremap cx *``cgn
+nnoremap cX *``cgN
 
-" Go to mappings.
+" G mappings.
+nmap <silent> ga <plug>(coc-codeaction-selected)
+xmap <silent> ga <plug>(coc-codeaction-selected)
+nmap <silent> gA <plug>(coc-codeaction)
 nmap <silent> gd <plug>(coc-definition)
 nmap <silent> gD <plug>(coc-declaration)
 nmap <silent> gm <plug>(coc-implementation)
 nmap <silent> gr <plug>(coc-references)
 nmap <silent> gt <plug>(coc-type-definition)
+nmap <silent> gx <plug>(coc-fix-current)
 
 " Bracket movement mappings.
 nmap <silent> [d <plug>(coc-diagnostic-prev)
@@ -260,23 +266,19 @@ nnoremap [q <cmd>cprevious<cr>
 nnoremap ]q <cmd>cnext<cr>
 
 " Leader mappings
-nmap <silent> aa <plug>(coc-codeaction)
-nmap <silent> ac <plug>(coc-fix-current)
+nnoremap <leader>a <cmd>Files<cr>
+nnoremap <leader>b <cmd>GBranches<cr>
 nnoremap <leader>c <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
-nnoremap <leader>fa <cmd>Files<cr>
-nnoremap <leader>fb <cmd>Buffers<cr>
-nnoremap <leader>fc <cmd>GBranches<cr>
-nnoremap <leader>ff <cmd>GFiles --exclude-standard --others --cached<cr>
-nnoremap <leader>fg <cmd>Rg<cr>
+nnoremap <leader>f <cmd>Rg<cr>
 nnoremap <leader>g <cmd>Git<cr>
-nnoremap <leader>n <cmd>noh<cr>
+nnoremap <leader>k <cmd>noh<cr>
+nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
 nnoremap <leader>q <cmd>quit<cr>
 nmap <leader>rf <plug>(coc-refactor)
 nmap <leader>rn <plug>(coc-rename)
-nnoremap <leader>rw *``cgn
-nnoremap <leader>rW *``cgN
 nnoremap <leader>s <cmd>update<cr>
+nnoremap <leader>u <cmd>Buffers<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <leader>x <cmd>exit<cr>
