@@ -65,6 +65,7 @@ call plug#end()
 " Use vim-surround operator mappings to not conflict with vim-sneak, but keep
 " the default textobj mappings.
 runtime macros/sandwich/keymap/surround.vim
+unlet! g:sandwich_no_default_key_mappings
 unlet! g:textobj_sandwich_no_default_key_mappings
 
 " Enable filetype and indent detection.
@@ -396,3 +397,5 @@ augroup END
 " Alerting offscreen matches messes with airline.
 let g:matchup_matchparen_offscreen = {}
 
+" Use vim-sneak label mode.
+let g:sneak#label = 1
