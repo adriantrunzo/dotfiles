@@ -1,10 +1,16 @@
 [user]
   name = Adrian Trunzo
   email = trunzoap@gmail.com
+
 [core]
   editor = vim
+
 [pull]
   ff = only
+
+[push]
+  default = current
+
 [submodule]
   recurse = true
 
