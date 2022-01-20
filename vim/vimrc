@@ -43,7 +43,6 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 call plug#begin()
 
 Plug 'airblade/vim-gitgutter'
-Plug 'andymass/vim-matchup'
 Plug 'antoinemadec/coc-fzf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'fladson/vim-kitty'
@@ -58,8 +57,8 @@ Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
+Plug 'sgur/vim-textobj-parameter'
 Plug 'sheerun/vim-polyglot'
-Plug 'stsewd/fzf-checkout.vim'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
@@ -405,9 +404,6 @@ augroup FernEvents
   autocmd!
   autocmd FileType fern call FernInit()
 augroup END
-
-" Alerting offscreen matches messes with airline.
-let g:matchup_matchparen_offscreen = {}
 
 " Use vim-sneak label mode.
 let g:sneak#label = 1
