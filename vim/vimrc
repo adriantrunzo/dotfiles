@@ -242,24 +242,19 @@ inoremap <m-k> <esc>:m .-2<cr>==gi
 vnoremap <m-j> :m '>+1<cr>gv=gv
 vnoremap <m-k> :m '<-2<cr>gv=gv
 
-" C mappings. 
+" System clipboard.
 nnoremap cp "*y
 vnoremap cp "*y
 nnoremap cv "*gp
 vnoremap cv "*gp
-nnoremap cx *``cgn
-nnoremap cX *``cgN
 
-" G mappings.
+" Quick change the word under the cursor.
+nnoremap cu *``cgn
+nnoremap cU *``cgN
+
+" Apply a code action to a selection.
 nmap <silent> ga <plug>(coc-codeaction-selected)
 xmap <silent> ga <plug>(coc-codeaction-selected)
-nmap <silent> gA <plug>(coc-codeaction)
-nmap <silent> gd <plug>(coc-definition)
-nmap <silent> gD <plug>(coc-declaration)
-nmap <silent> gm <plug>(coc-implementation)
-nmap <silent> gr <plug>(coc-references)
-nmap <silent> gt <plug>(coc-type-definition)
-nmap <silent> gx <plug>(coc-fix-current)
 
 " Bracket movement mappings.
 nmap <silent> [d <plug>(coc-diagnostic-prev)
@@ -271,16 +266,21 @@ nnoremap ]q <cmd>cnext<cr>
 
 " Leader mappings
 nnoremap <leader>a <cmd>Files<cr>
-nnoremap <leader>b <cmd>GBranches<cr>
-nnoremap <leader>c <cmd>bdelete<cr>
+nmap <leader>ca <plug>(coc-codeaction)
+nmap <leader>cc <plug>(coc-fix-current)
+nmap <leader>cd <plug>(coc-definition)
+nmap <leader>cf <plug>(coc-refactor)
+nmap <leader>ci <plug>(coc-implementation)
+nmap <leader>cn <plug>(coc-rename)
+nmap <leader>cr <plug>(coc-references)
+nmap <leader>ct <plug>(coc-type-definition)
+nnoremap <leader>d <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>f <cmd>Rg<cr>
 nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>k <cmd>noh<cr>
 nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
 nnoremap <leader>q <cmd>quit<cr>
-nmap <leader>rf <plug>(coc-refactor)
-nmap <leader>rn <plug>(coc-rename)
 nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>u <cmd>Buffers<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
