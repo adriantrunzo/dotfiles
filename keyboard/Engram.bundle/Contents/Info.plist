@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleIdentifier</key>
+	<string>org.sil.ukelele.keyboardlayout.engram</string>
+	<key>CFBundleName</key>
+	<string>Engram</string>
+	<key>CFBundleVersion</key>
+	<string></string>
+	<key>KLInfo_Engram - Kinesis Advantage 2</key>
+	<dict>
+		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISInputSourceID</key>
+		<string>org.sil.ukelele.keyboardlayout.engram.engram-kinesisadvantage2</string>
+		<key>TISIntendedLanguage</key>
+		<string>en-US</string>
+	</dict>
+	<key>KLInfo_Engram - Standard</key>
+	<dict>
+		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISInputSourceID</key>
+		<string>org.sil.ukelele.keyboardlayout.engram.engram-standard</string>
+		<key>TISIntendedLanguage</key>
+		<string>en-US</string>
+	</dict>
+</dict>
+</plist>

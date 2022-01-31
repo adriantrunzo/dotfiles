@@ -43,7 +43,6 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 call plug#begin()
 
 Plug 'airblade/vim-gitgutter'
-Plug 'antoinemadec/coc-fzf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'fladson/vim-kitty'
 Plug 'junegunn/fzf'
@@ -209,9 +208,6 @@ augroup Typescript
     autocmd BufNewFile,BufRead *.ts set filetype=typescriptreact
 augroup END
 
-" Use jj for quick escape.
-inoremap jj <esc>
-
 " Better redo.
 nnoremap U <c-r>
 
@@ -242,27 +238,9 @@ inoremap <m-k> <esc>:m .-2<cr>==gi
 vnoremap <m-j> :m '>+1<cr>gv=gv
 vnoremap <m-k> :m '<-2<cr>gv=gv
 
-" System clipboard.
-nnoremap cp "*y
-vnoremap cp "*y
-nnoremap cv "*gp
-vnoremap cv "*gp
-
 " Quick change the word under the cursor.
 nnoremap cu *``cgn
 nnoremap cU *``cgN
-
-" Apply a code action to a selection.
-nmap <silent> ga <plug>(coc-codeaction-selected)
-xmap <silent> ga <plug>(coc-codeaction-selected)
-
-" Bracket movement mappings.
-nmap <silent> [d <plug>(coc-diagnostic-prev)
-nmap <silent> ]d <plug>(coc-diagnostic-next)
-nnoremap [f <cmd>bprevious<cr>
-nnoremap ]f <cmd>bnext<cr>
-nnoremap [q <cmd>cprevious<cr>
-nnoremap ]q <cmd>cnext<cr>
 
 " Leader mappings
 nnoremap <leader>a <cmd>Files<cr>
@@ -271,21 +249,30 @@ nmap <leader>cc <plug>(coc-fix-current)
 nmap <leader>cd <plug>(coc-definition)
 nmap <leader>cf <plug>(coc-refactor)
 nmap <leader>ci <plug>(coc-implementation)
-nmap <leader>cn <plug>(coc-rename)
+nmap <leader>cl <plug>(coc-codelens-action)
+nmap <leader>cm <plug>(coc-rename)
+nmap <leader>cn <plug>(coc-diagnostic-next)
+nmap <leader>cp <plug>(coc-diagnostic-prev)
 nmap <leader>cr <plug>(coc-references)
+nmap <leader>cs <plug>(coc-codeaction-selected)
+xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>d <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
-nnoremap <leader>f <cmd>Rg<cr>
 nnoremap <leader>g <cmd>Git<cr>
-nnoremap <leader>k <cmd>noh<cr>
+nnoremap <leader>i <cmd>Rg<cr>
+nnoremap <leader>n <cmd>noh<cr>
 nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
+nnoremap <leader>p "*gp
+vnoremap <leader>p "*gp
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>u <cmd>Buffers<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <leader>x <cmd>exit<cr>
+nnoremap <leader>y "*y
+vnoremap <leader>y "*y
 
 nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
 
@@ -313,6 +300,18 @@ let g:coc_global_extensions = [
       \ 'coc-vimlsp'
       \ ]
 
+augroup CocEvents
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup end
+
 " Show documentation in preview window.
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
@@ -330,9 +329,6 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
 " Navigate completions with Tab.
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Use dracula and keep it simple.
 let g:airline_theme='dracula'
