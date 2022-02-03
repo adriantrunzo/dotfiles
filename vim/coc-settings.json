@@ -1,13 +1,14 @@
 {
-  "coc.preferences.formatOnType": true,
   "coc.preferences.formatOnSaveFiletypes": [
     "css",
+    "html",
     "javascript",
     "javascriptreact",
     "json",
+    "scss",
     "typescript",
-    "typescriptreact",
-    "html"
+    "typescriptreact"
   ],
+  "coc.preferences.formatOnType": true,
   "prettier.eslintIntegration": true
 }
