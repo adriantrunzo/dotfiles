@@ -230,6 +230,21 @@ nnoremap N Nzzzv
 " Maintain the cursor position when joining lines.
 nnoremap J mzJ`z
 
+" Quickly clear search highlighting.
+nnoremap <cr> <cmd>noh<cr>
+
+" System clipboard.
+nmap cp "*y
+nmap cP "*Y
+xmap cp "*y
+nmap cv "*p
+nmap cV "*P
+xmap cv "*p
+
+" Quick change the word under the cursor.
+nmap cu *``cgn
+nmap cU *``cgN
+
 " Move lines up and down.
 nnoremap <m-j> :m .+1<cr>==
 nnoremap <m-k> :m .-2<cr>==
@@ -238,21 +253,19 @@ inoremap <m-k> <esc>:m .-2<cr>==gi
 vnoremap <m-j> :m '>+1<cr>gv=gv
 vnoremap <m-k> :m '<-2<cr>gv=gv
 
-" Quick change the word under the cursor.
-nnoremap cu *``cgn
-nnoremap cU *``cgN
+nnoremap <nul> <cmd>GFiles --exclude-standard --others --cached<cr>
+nnoremap <c-b> <cmd>Buffers<cr>
+nnoremap <c-f> <cmd>Files<cr>
+nnoremap <c-s> <cmd>Rg<cr>
 
 " Leader mappings
-nnoremap <leader>a <cmd>Files<cr>
 nmap <leader>ca <plug>(coc-codeaction)
 nmap <leader>cc <plug>(coc-fix-current)
 nmap <leader>cd <plug>(coc-definition)
 nmap <leader>cf <plug>(coc-refactor)
 nmap <leader>ci <plug>(coc-implementation)
 nmap <leader>cl <plug>(coc-codelens-action)
-nmap <leader>cm <plug>(coc-rename)
-nmap <leader>cn <plug>(coc-diagnostic-next)
-nmap <leader>cp <plug>(coc-diagnostic-prev)
+nmap <leader>cn <plug>(coc-rename)
 nmap <leader>cr <plug>(coc-references)
 nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
@@ -260,29 +273,27 @@ nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>d <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>g <cmd>Git<cr>
-nnoremap <leader>i <cmd>Rg<cr>
-nnoremap <leader>n <cmd>noh<cr>
-nnoremap <leader>o <cmd>GFiles --exclude-standard --others --cached<cr>
-nnoremap <leader>p "*gp
-vnoremap <leader>p "*gp
+nnoremap <leader>nb <cmd>bnext<cr>
+nnoremap <leader>nc <cmd>cnext<cr>
+nmap <leader>nd <plug>(coc-diagnostic-next)<cr>
+nnoremap <leader>pb <cmd>bprevious<cr>
+nnoremap <leader>pc <cmd>cprevious<cr>
+nmap <leader>pd <plug>(coc-diagnostic-prev)
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>s <cmd>update<cr>
-nnoremap <leader>u <cmd>Buffers<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <leader>x <cmd>exit<cr>
-nnoremap <leader>y "*y
-vnoremap <leader>y "*y
 
 nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
 
 " Allow scrolling of the floating LSP windows with <c-f> and <c-b>.
-nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+" inoremap <silen><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+" inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+" vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+" vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
 " Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
