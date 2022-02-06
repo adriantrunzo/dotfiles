@@ -230,17 +230,6 @@ nnoremap N Nzzzv
 " Maintain the cursor position when joining lines.
 nnoremap J mzJ`z
 
-" Quickly clear search highlighting.
-nnoremap <cr> <cmd>noh<cr>
-
-" System clipboard.
-nmap cp "*y
-nmap cP "*Y
-xmap cp "*y
-nmap cv "*p
-nmap cV "*P
-xmap cv "*p
-
 " Quick change the word under the cursor.
 nmap cu *``cgn
 nmap cU *``cgN
@@ -253,10 +242,15 @@ inoremap <m-k> <esc>:m .-2<cr>==gi
 vnoremap <m-j> :m '>+1<cr>gv=gv
 vnoremap <m-k> :m '<-2<cr>gv=gv
 
-nnoremap <nul> <cmd>GFiles --exclude-standard --others --cached<cr>
-nnoremap <c-b> <cmd>Buffers<cr>
-nnoremap <c-f> <cmd>Files<cr>
-nnoremap <c-s> <cmd>Rg<cr>
+nnoremap [b <cmd>bprevious<cr>
+nnoremap ]b <cmd>bnext<cr>
+nmap <silent> [d <plug>(coc-diagnostic-prev)
+nmap <silent> ]d <plug>(coc-diagnostic-next)
+nnoremap [q <cmd>cprevious<cr>
+nnoremap ]q <cmd>cnext<cr>
+
+nnoremap <leader><space> <cmd>Files<cr>
+nnoremap <nul> <cmd>Rg<cr>
 
 " Leader mappings
 nmap <leader>ca <plug>(coc-codeaction)
@@ -273,17 +267,20 @@ nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>d <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>g <cmd>Git<cr>
-nnoremap <leader>nb <cmd>bnext<cr>
-nnoremap <leader>nc <cmd>cnext<cr>
-nmap <leader>nd <plug>(coc-diagnostic-next)<cr>
-nnoremap <leader>pb <cmd>bprevious<cr>
-nnoremap <leader>pc <cmd>cprevious<cr>
-nmap <leader>pd <plug>(coc-diagnostic-prev)
+nnoremap <leader>n <cmd>noh<cr>
+nnoremap <leader>o <cmd>call AddEmptyLineBelow()<cr>
+nnoremap <leader>O <cmd>call AddEmptyLineAbove()<cr>
+nnoremap <leader>p "*p
+nnoremap <leader>P "*P
+xnoremap <leader>p "*p
 nnoremap <leader>q <cmd>quit<cr>
 nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <leader>x <cmd>exit<cr>
+nnoremap <leader>y "*y
+nnoremap <leader>Y "*Y
+xnoremap <leader>y "*y
 
 nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
 
@@ -401,3 +398,18 @@ augroup END
 
 " Use vim-sneak label mode.
 let g:sneak#label = 1
+
+function! AddEmptyLineBelow() abort
+  call append(line("."), "")
+endfunction
+
+function! AddEmptyLineAbove() abort
+  let l:scrolloffsave = &scrolloff
+  " Avoid jerky scrolling with ^E at top of window
+  set scrolloff=0
+  call append(line(".") - 1, "")
+  if winline() != winheight(0)
+    silent normal! <C-e>
+  end
+  let &scrolloff = l:scrolloffsave
+endfunction
