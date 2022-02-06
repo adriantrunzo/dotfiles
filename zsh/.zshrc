@@ -2,6 +2,8 @@
 export PATH=/usr/local/lib/ruby/gems/3.0.0/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:$PATH
 export BAT_THEME=Dracula
 export CLICOLOR=1
+export FZF_DEFAULT_COMMAND='fd -H --exclude .git --type file'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 # Load node version manager
 eval "$(fnm env)"
