@@ -1,6 +1,3 @@
-" No vi compatibility.
-set nocompatible
-
 if has('osx')
   " Change the cursor shape depending upon the mode.
   " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
@@ -213,7 +210,7 @@ nnoremap N Nzzzv
 nnoremap J mzJ`z
 
 " Integrate LSP into keyword lookup.
-nnoremap K <cmd>call <sid>show_documentation()<cr>
+nnoremap K <cmd>call ShowDocumentation()<cr>
 
 " Quick change the word under the cursor.
 nmap cu *``cgn
@@ -242,7 +239,7 @@ nmap <silent> ]d <plug>(coc-diagnostic-next)
 nnoremap [q <cmd>cprevious<cr>
 nnoremap ]q <cmd>cnext<cr>
 
-" FZF
+" Search mappings.
 nnoremap <leader><space> <cmd>Files<cr>
 nnoremap <nul> <cmd>Rg<cr>
 
@@ -284,10 +281,13 @@ xnoremap <leader>y "*y
 " vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
+" Use vim-sneak label mode.
+let g:sneak#label = 1
+
 " Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
 
-" CoC Extensions. These should be automatically installed by coc.nvim.
+" Coc Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
       \ "coc-css",
       \ 'coc-cssmodules',
@@ -300,30 +300,10 @@ let g:coc_global_extensions = [
       \ 'coc-vimlsp'
       \ ]
 
-augroup CocEvents
-  autocmd!
-  " Setup formatexpr specified filetype(s).
-  autocmd FileType javascript,javascriptreact,json,typescript,typescriptreact setl formatexpr=CocAction('formatSelected')
+" More colorful JSX.
+let g:vim_jsx_pretty_colorful_config = 1
 
-  " Update signature help on jump placeholder.
-  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-  " Highlight the symbol and its references when holding the cursor.
-  autocmd CursorHold * silent call CocActionAsync('highlight')
-augroup end
-
-" Show documentation in preview window.
-function! s:show_documentation()
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
-    call CocActionAsync('doHover')
-  else
-    execute '!' . &keywordprg . " " . expand('<cword>')
-  endif
-endfunction
-
-" Use dracula and keep it simple.
+" Use dracula in airline and remove all of the symbols.
 let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
 
@@ -341,27 +321,33 @@ let g:airline_extensions = ['branch', 'coc', 'fern']
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
 
-function! GetGitBranch(name) abort
-  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-  let story = matchstr(a:name, 'sc-\d\+')
+augroup CocEvents
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType javascript,javascriptreact,json,typescript,typescriptreact
+        \ setl formatexpr=CocAction('formatSelected')
 
-  " Use the identifier segment if we found one.
-  if (strlen(story) > 0)
-    return story[:strlen(story) - 1]
-  endif
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-  " Otherwise the first ten characters.
-  return a:name[:9]
-endfunction
+  " Highlight the symbol and its references when holding the cursor.
+  autocmd CursorHold * silent call CocActionAsync('highlight')
+augroup end
+
+augroup FernEvents
+  autocmd!
+  autocmd FileType fern call FernInit()
+augroup end
+
+augroup AirlineEvents
+  autocmd!
+  autocmd User AirlineAfterInit call AirlineInit()
+augroup end
 
 " Remove the document percentage indicator.
 function! AirlineInit() abort
   let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
 endfunction
-autocmd User AirlineAfterInit call AirlineInit()
-
-" More colorful JSX.
-let g:vim_jsx_pretty_colorful_config = 1
 
 function! FernInit() abort
   nmap <buffer><expr>
@@ -375,10 +361,26 @@ function! FernInit() abort
   nmap <buffer> <cr> <plug>(fern-smart-enter)
 endfunction
 
-augroup FernEvents
-  autocmd!
-  autocmd FileType fern call FernInit()
-augroup END
+function! GetGitBranch(name) abort
+  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
+  let story = matchstr(a:name, 'sc-\d\+')
 
-" Use vim-sneak label mode.
-let g:sneak#label = 1
+  " Use the identifier segment if we found one.
+  if (strlen(story) > 0)
+    return story[:strlen(story) - 1]
+  endif
+
+  " Otherwise the first ten characters.
+  return a:name[:9]
+endfunction
+
+" Show documentation in preview window.
+function! ShowDocumentation() abort
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  elseif (coc#rpc#ready())
+    call CocActionAsync('doHover')
+  else
+    execute '!' . &keywordprg . " " . expand('<cword>')
+  endif
+endfunction
