@@ -7,17 +7,6 @@ if has('osx')
   let &t_SI.="\e[5 q" "SI = INSERT mode
   let &t_SR.="\e[4 q" "SR = REPLACE mode
   let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
-
-  " By default, Mac terminals receive alt-key sequences as special characters.
-  " Kitty and other terminals can be configured to use option as meta, but vim
-  " ends up receiving escape sequences like ^]j. These escape sequences can have
-  " unintended effects in macros. It's easier just to map meta sequences to the
-  " special characters.
-  " https://stackoverflow.com/questions/7501092/can-i-map-alt-key-in-vim
-  set <m-h>=˙
-  set <m-j>=∆
-  set <m-k>=˚
-  set <m-l>=¬
 endif
 
 " vim-polyglot includes vim-sensible by default. It needs to be disabled
@@ -51,7 +40,6 @@ Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
-Plug 'knubie/vim-kitty-navigator', {'do': 'cp ./*.py ~/.config/kitty/'}
 Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
@@ -202,12 +190,6 @@ set wrap
 " Resize splits when the window is resized.
 au VimResized * :wincmd =
 
-augroup Typescript
-    autocmd!
-    " The .tsx extension isn't always used with react files.
-    autocmd BufNewFile,BufRead *.ts set filetype=typescriptreact
-augroup END
-
 " Better redo.
 nnoremap U <c-r>
 
@@ -230,18 +212,29 @@ nnoremap N Nzzzv
 " Maintain the cursor position when joining lines.
 nnoremap J mzJ`z
 
+" Integrate LSP into keyword lookup.
+nnoremap K <cmd>call <sid>show_documentation()<cr>
+
 " Quick change the word under the cursor.
 nmap cu *``cgn
 nmap cU *``cgN
 
 " Move lines up and down.
-nnoremap <m-j> :m .+1<cr>==
-nnoremap <m-k> :m .-2<cr>==
-inoremap <m-j> <esc>:m .+1<cr>==gi
-inoremap <m-k> <esc>:m .-2<cr>==gi
-vnoremap <m-j> :m '>+1<cr>gv=gv
-vnoremap <m-k> :m '<-2<cr>gv=gv
+nnoremap <c-j> :m .+1<cr>==
+nnoremap <c-k> :m .-2<cr>==
+inoremap <c-j> <esc>:m .+1<cr>==gi
+inoremap <c-k> <esc>:m .-2<cr>==gi
+vnoremap <c-j> :m '>+1<cr>gv=gv
+vnoremap <c-k> :m '<-2<cr>gv=gv
 
+" Trigger completions with enter.
+inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+
+" Navigate completions with Tab.
+inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
+inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+
+" Bracket movements.
 nnoremap [b <cmd>bprevious<cr>
 nnoremap ]b <cmd>bnext<cr>
 nmap <silent> [d <plug>(coc-diagnostic-prev)
@@ -249,6 +242,7 @@ nmap <silent> ]d <plug>(coc-diagnostic-next)
 nnoremap [q <cmd>cprevious<cr>
 nnoremap ]q <cmd>cnext<cr>
 
+" FZF
 nnoremap <leader><space> <cmd>Files<cr>
 nnoremap <nul> <cmd>Rg<cr>
 
@@ -268,8 +262,8 @@ nnoremap <leader>d <cmd>bdelete<cr>
 nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
 nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>n <cmd>noh<cr>
-nnoremap <leader>o <cmd>call AddEmptyLineBelow()<cr>
-nnoremap <leader>O <cmd>call AddEmptyLineAbove()<cr>
+nnoremap <leader>o <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
+nnoremap <leader>O <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
 nnoremap <leader>p "*p
 nnoremap <leader>P "*P
 xnoremap <leader>p "*p
@@ -282,8 +276,6 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
-nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
-
 " Allow scrolling of the floating LSP windows with <c-f> and <c-b>.
 " nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
@@ -294,7 +286,6 @@ nnoremap <silent> K <cmd>call <sid>show_documentation()<cr>
 
 " Make the fuzzy finder floating window bigger.
 let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
-let $FZF_DEFAULT_OPTS = '--info=inline'
 
 " CoC Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
@@ -312,7 +303,7 @@ let g:coc_global_extensions = [
 augroup CocEvents
   autocmd!
   " Setup formatexpr specified filetype(s).
-  autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+  autocmd FileType javascript,javascriptreact,json,typescript,typescriptreact setl formatexpr=CocAction('formatSelected')
 
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
@@ -331,13 +322,6 @@ function! s:show_documentation()
     execute '!' . &keywordprg . " " . expand('<cword>')
   endif
 endfunction
-
-" Trigger completions with enter.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<cr>"
-
-" Navigate completions with Tab.
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Use dracula and keep it simple.
 let g:airline_theme='dracula'
@@ -398,18 +382,3 @@ augroup END
 
 " Use vim-sneak label mode.
 let g:sneak#label = 1
-
-function! AddEmptyLineBelow() abort
-  call append(line("."), "")
-endfunction
-
-function! AddEmptyLineAbove() abort
-  let l:scrolloffsave = &scrolloff
-  " Avoid jerky scrolling with ^E at top of window
-  set scrolloff=0
-  call append(line(".") - 1, "")
-  if winline() != winheight(0)
-    silent normal! <C-e>
-  end
-  let &scrolloff = l:scrolloffsave
-endfunction
