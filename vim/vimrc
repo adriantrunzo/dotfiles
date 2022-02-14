@@ -29,6 +29,7 @@ autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
 call plug#begin()
 
 Plug 'airblade/vim-gitgutter'
+Plug 'antoinemadec/coc-fzf'
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'fladson/vim-kitty'
 Plug 'junegunn/fzf'
@@ -45,6 +46,7 @@ Plug 'sgur/vim-textobj-parameter'
 Plug 'sheerun/vim-polyglot'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-fugitive'
+Plug 'unblevable/quick-scope'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -320,6 +322,9 @@ let g:airline_extensions = ['branch', 'coc', 'fern']
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
+
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 augroup CocEvents
   autocmd!

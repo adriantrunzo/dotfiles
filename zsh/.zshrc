@@ -34,4 +34,7 @@ bindkey -v
 # Load FZF completion. Must come after other bindkey calls.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+alias g="git"
+alias v="vim"
+
 eval "$(starship init zsh)"
