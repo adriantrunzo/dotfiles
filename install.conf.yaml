@@ -12,8 +12,6 @@
 - link:
     ~/.config/kitty/dracula.conf: kitty/dracula.conf
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
-    ~/.config/nvim/coc-settings.json: nvim/coc-settings.json
-    ~/.config/nvim/init.vim: nvim/init.vim
     ~/.config/starship.toml: starship/starship.toml
     ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/vimrc: vim/vimrc
