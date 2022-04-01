@@ -38,9 +38,10 @@ Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
-Plug 'lambdalisue/fern.vim'
+" Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
+Plug 'mcchrish/nnn.vim'
 Plug 'neoclide/coc.nvim', { 'branch': 'release' }
 Plug 'sgur/vim-textobj-parameter'
 Plug 'sheerun/vim-polyglot'
@@ -258,7 +259,7 @@ nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>d <cmd>bdelete<cr>
-nnoremap <leader>e <cmd>Fern . -reveal=%<cr>
+nnoremap <leader>e <cmd>NnnPicker %:p:h<CR>
 nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>n <cmd>noh<cr>
 nnoremap <leader>o <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
@@ -282,6 +283,9 @@ xnoremap <leader>y "*y
 " inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
 " vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 " vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+
+let g:nnn#set_default_mappings = 0
+let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
 
 " Use vim-sneak label mode.
 let g:sneak#label = 1
@@ -318,7 +322,8 @@ endif
 let g:airline_symbols.linenr = 'ln:'
 
 " Disable most extensions by default.
-let g:airline_extensions = ['branch', 'coc', 'fern']
+let g:airline_extensions = ['branch', 'coc']
+" let g:airline_extensions = ['branch', 'coc', 'fern']
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
@@ -339,10 +344,10 @@ augroup CocEvents
   autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
-augroup FernEvents
-  autocmd!
-  autocmd FileType fern call FernInit()
-augroup end
+" augroup FernEvents
+"   autocmd!
+"   autocmd FileType fern call FernInit()
+" augroup end
 
 augroup AirlineEvents
   autocmd!
@@ -354,17 +359,17 @@ function! AirlineInit() abort
   let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
 endfunction
 
-function! FernInit() abort
-  nmap <buffer><expr>
-      \ <Plug>(fern-smart-enter)
-      \ fern#smart#leaf(
-      \   "\<Plug>(fern-action-open)",
-      \   "\<Plug>(fern-action-expand)",
-      \   "\<Plug>(fern-action-collapse)",
-      \ )
+" function! FernInit() abort
+"   nmap <buffer><expr>
+"       \ <Plug>(fern-smart-enter)
+"       \ fern#smart#leaf(
+"       \   "\<Plug>(fern-action-open)",
+"       \   "\<Plug>(fern-action-expand)",
+"       \   "\<Plug>(fern-action-collapse)",
+"       \ )
 
-  nmap <buffer> <cr> <plug>(fern-smart-enter)
-endfunction
+"   nmap <buffer> <cr> <plug>(fern-smart-enter)
+" endfunction
 
 function! GetGitBranch(name) abort
   " Shortcut git branches contain the ticket identifier preceeded by "sc-".
