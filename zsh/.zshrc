@@ -2,11 +2,13 @@
 export PATH=/usr/local/lib/ruby/gems/3.0.0/bin:/usr/local/opt/ruby/bin:/usr/local/bin:/usr/local/sbin:$PATH
 export BAT_THEME=Dracula
 export CLICOLOR=1
+
+# fzf configuration.
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--border --info=inline'
 
-export NNN_FIFO='/tmp/nnn.fifo'
+# nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
 export NNN_PLUG='d:fzcd;o:fzopen'
 export NNN_TRASH=1
 

@@ -38,7 +38,6 @@ Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-entire'
 Plug 'kana/vim-textobj-indent'
-" Plug 'lambdalisue/fern.vim'
 Plug 'machakann/vim-highlightedyank'
 Plug 'machakann/vim-sandwich'
 Plug 'mcchrish/nnn.vim'
@@ -276,14 +275,6 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
-" Allow scrolling of the floating LSP windows with <c-f> and <c-b>.
-" nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-" nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-" inoremap <silen><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-" inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-" vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
-" vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
-
 let g:nnn#set_default_mappings = 0
 let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
 
@@ -344,11 +335,6 @@ augroup CocEvents
   autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
-" augroup FernEvents
-"   autocmd!
-"   autocmd FileType fern call FernInit()
-" augroup end
-
 augroup AirlineEvents
   autocmd!
   autocmd User AirlineAfterInit call AirlineInit()
@@ -358,18 +344,6 @@ augroup end
 function! AirlineInit() abort
   let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
 endfunction
-
-" function! FernInit() abort
-"   nmap <buffer><expr>
-"       \ <Plug>(fern-smart-enter)
-"       \ fern#smart#leaf(
-"       \   "\<Plug>(fern-action-open)",
-"       \   "\<Plug>(fern-action-expand)",
-"       \   "\<Plug>(fern-action-collapse)",
-"       \ )
-
-"   nmap <buffer> <cr> <plug>(fern-smart-enter)
-" endfunction
 
 function! GetGitBranch(name) abort
   " Shortcut git branches contain the ticket identifier preceeded by "sc-".
