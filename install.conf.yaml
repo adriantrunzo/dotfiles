@@ -14,6 +14,9 @@
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/starship.toml: starship/starship.toml
     ~/.vim/coc-settings.json: vim/coc-settings.json
+    ~/.vim/pack/adriantrunzo/start:
+      create: true
+      path: vim/plugins
     ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.zshrc: zsh/.zshrc

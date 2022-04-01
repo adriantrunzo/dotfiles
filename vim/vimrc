@@ -4,53 +4,10 @@ if has('osx')
   let &t_SI.="\e[5 q" "SI = INSERT mode
   let &t_SR.="\e[4 q" "SR = REPLACE mode
   let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+
+  " Load the fzf plugin included with the homebrew install.
+  set rtp+=/usr/local/opt/fzf
 endif
-
-" vim-polyglot includes vim-sensible by default. It needs to be disabled
-" before the plugin is loaded.
-let g:polyglot_disabled = ['sensible']
-
-" Set the leader before plugins might add their own mappings.
-let mapleader = ' '
-
-" Install vim-plug if not found
-let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
-  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs
-        \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
-endif
-
-" Run PlugInstall if there are missing plugins
-autocmd VimEnter * if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-      \| PlugInstall --sync | source $MYVIMRC
-      \| endif
-
-call plug#begin()
-
-Plug 'airblade/vim-gitgutter'
-Plug 'antoinemadec/coc-fzf'
-Plug 'dracula/vim', { 'as': 'dracula' }
-Plug 'fladson/vim-kitty'
-Plug 'junegunn/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'kana/vim-textobj-user'
-Plug 'kana/vim-textobj-entire'
-Plug 'kana/vim-textobj-indent'
-Plug 'machakann/vim-highlightedyank'
-Plug 'machakann/vim-sandwich'
-Plug 'mcchrish/nnn.vim'
-Plug 'neoclide/coc.nvim', { 'branch': 'release' }
-Plug 'sgur/vim-textobj-parameter'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-fugitive'
-Plug 'unblevable/quick-scope'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-call plug#end()
 
 " Use vim-surround operator mappings to not conflict with vim-sneak, but keep
 " the default textobj mappings.
@@ -241,6 +198,9 @@ nmap <silent> ]d <plug>(coc-diagnostic-next)
 nnoremap [q <cmd>cprevious<cr>
 nnoremap ]q <cmd>cnext<cr>
 
+" Use space for leader. 
+let mapleader = ' '
+
 " Search mappings.
 nnoremap <leader><space> <cmd>Files<cr>
 nnoremap <nul> <cmd>Rg<cr>
@@ -275,6 +235,7 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
+" Use floating window for nnn.
 let g:nnn#set_default_mappings = 0
 let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
 
