@@ -10,7 +10,7 @@ export FZF_DEFAULT_OPTS='--border --info=inline'
 
 # nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
 export NNN_PLUG='d:fzcd;o:fzopen'
-export NNN_TRASH=1
+# export NNN_TRASH=1
 
 # Use fd to generate the list for file completion.
 _fzf_compgen_path() {
