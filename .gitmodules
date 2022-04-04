@@ -60,3 +60,12 @@
 	path = vim/plugins/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
 	branch = release
+[submodule "vim/plugins/vim-javascript"]
+	path = vim/plugins/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/plugins/vim-jsx-pretty"]
+	path = vim/plugins/vim-jsx-pretty
+	url = https://github.com/MaxMEllon/vim-jsx-pretty.git
+[submodule "vim/plugins/yats.vim"]
+	path = vim/plugins/yats.vim
+	url = https://github.com/HerringtonDarkholme/yats.vim.git
