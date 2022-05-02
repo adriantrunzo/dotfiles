@@ -32,9 +32,6 @@
 [submodule "vim/plugins/nnn.vim"]
 	path = vim/plugins/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
-[submodule "vim/plugins/vim-textobj-parameter"]
-	path = vim/plugins/vim-textobj-parameter
-	url = https://github.com/sgur/vim-textobj-parameter.git
 [submodule "vim/plugins/vim-commentary"]
 	path = vim/plugins/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
@@ -66,3 +63,6 @@
 [submodule "vim/plugins/yats.vim"]
 	path = vim/plugins/yats.vim
 	url = https://github.com/HerringtonDarkholme/yats.vim.git
+[submodule "vim/plugins/vim-swap"]
+	path = vim/plugins/vim-swap
+	url = https://github.com/machakann/vim-swap.git
