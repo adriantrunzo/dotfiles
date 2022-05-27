@@ -8,6 +8,7 @@
 [submodule "vim/plugins/coc-fzf"]
 	path = vim/plugins/coc-fzf
 	url = https://github.com/antoinemadec/coc-fzf.git
+	ignore = untracked
 [submodule "vim/plugins/dracula"]
 	path = vim/plugins/dracula
 	url = https://github.com/dracula/vim.git
@@ -20,9 +21,11 @@
 [submodule "vim/plugins/vim-textobj-entire"]
 	path = vim/plugins/vim-textobj-entire
 	url = https://github.com/kana/vim-textobj-entire.git
+	ignore = untracked
 [submodule "vim/plugins/vim-textobj-indent"]
 	path = vim/plugins/vim-textobj-indent
 	url = https://github.com/kana/vim-textobj-indent.git
+	ignore = untracked
 [submodule "vim/plugins/vim-highlightedyank"]
 	path = vim/plugins/vim-highlightedyank
 	url = https://github.com/machakann/vim-highlightedyank.git
