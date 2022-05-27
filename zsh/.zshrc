@@ -9,8 +9,7 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--border --info=inline'
 
 # nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
-export NNN_PLUG='d:fzcd;o:fzopen'
-# export NNN_TRASH=1
+export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
 
 # Use fd to generate the list for file completion.
 _fzf_compgen_path() {
@@ -37,4 +36,16 @@ bindkey -v
 # Load FZF completion. Must come after other bindkey calls.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-eval "$(starship init zsh)"
+# Helpful commands for finishing the setup of a new machine.
+alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
+alias install-kitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
+alias install-nnn-plugins='curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh'
+alias install-tools='brew install bat fd fzf git nnn ripgrep starship vim'
+
+# Miscellaneous maintenance.
+alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
+alias update-vim-helptags='vim -u NONE -c "helptags ALL" -c q'
+
+if type starship &>/dev/null; then
+  eval "$(starship init zsh)"
+fi
