@@ -66,3 +66,6 @@
 [submodule "vim/plugins/vim-swap"]
 	path = vim/plugins/vim-swap
 	url = https://github.com/machakann/vim-swap.git
+[submodule "vim/plugins/vim-terraform"]
+	path = vim/plugins/vim-terraform
+	url = https://github.com/hashivim/vim-terraform.git
