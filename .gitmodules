@@ -72,3 +72,6 @@
 [submodule "vim/plugins/vim-terraform"]
 	path = vim/plugins/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
+[submodule "vim/plugins/vim-sneak"]
+	path = vim/plugins/vim-sneak
+	url = https://github.com/justinmk/vim-sneak.git

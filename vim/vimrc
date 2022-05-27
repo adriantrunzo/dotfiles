@@ -140,6 +140,9 @@ set wrap
 " Resize splits when the window is resized.
 au VimResized * :wincmd =
 
+let g:nnn#set_default_mappings = 0
+let g:sandwich_no_default_key_mappings = 1
+
 " Better redo.
 nnoremap U <c-r>
 
@@ -168,6 +171,22 @@ nnoremap K <cmd>call ShowDocumentation()<cr>
 " Quick change the word under the cursor.
 nmap cu *``cgn
 nmap cU *``cgN
+
+" Overwrite default z-mappings for sneak.
+omap s <Plug>Sneak_s
+omap S <Plug>Sneak_S
+xmap S <Plug>Sneak_S
+
+" Use z-mappings for sandwich to not conflict with sneak.
+nmap za <Plug>(sandwich-add)
+xmap za <Plug>(sandwich-add)
+omap za <Plug>(sandwich-add)
+nmap zd <Plug>(sandwich-delete)
+xmap zd <Plug>(sandwich-delete)
+nmap zdb <Plug>(sandwich-delete-auto)
+nmap zr <Plug>(sandwich-replace)
+xmap zr <Plug>(sandwich-replace)
+nmap zrb <Plug>(sandwich-replace-auto)
 
 " Move lines up and down.
 nnoremap <c-j> :m .+1<cr>==
@@ -203,6 +222,17 @@ xmap i, <Plug>(swap-textobject-i)
 omap i, <Plug>(swap-textobject-i)
 xmap a, <Plug>(swap-textobject-a)
 omap a, <Plug>(swap-textobject-a)
+
+" Sandwich text objects. The auto text objects are much better than the default
+" ib/ab provided by vim, though they do not seek forward.
+omap ib <Plug>(textobj-sandwich-auto-i)
+xmap ib <Plug>(textobj-sandwich-auto-i)
+omap ab <Plug>(textobj-sandwich-auto-a)
+xmap ab <Plug>(textobj-sandwich-auto-a)
+omap is <Plug>(textobj-sandwich-query-i)
+xmap is <Plug>(textobj-sandwich-query-i)
+omap as <Plug>(textobj-sandwich-query-a)
+xmap as <Plug>(textobj-sandwich-query-a)
 
 " Use space for leader. 
 let mapleader = ' '
@@ -241,8 +271,10 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
+" Use the sneak label mode for faster jumping.
+let g:sneak#label = 1
+
 " Use floating window for nnn.
-let g:nnn#set_default_mappings = 0
 let g:nnn#layout = { 'window': { 'width': 0.8, 'height': 0.8, 'highlight': 'Comment' } }
 
 " Make the fuzzy finder floating window bigger.
@@ -253,6 +285,7 @@ let g:coc_global_extensions = [
       \ "coc-css",
       \ 'coc-cssmodules',
       \ 'coc-eslint',
+      \ 'coc-go',
       \ 'coc-html',
       \ 'coc-json',
       \ 'coc-prettier',
@@ -318,13 +351,11 @@ function! GetGitBranch(name) abort
 endfunction
 
 " Show documentation in preview window.
-function! ShowDocumentation() abort
-  if (index(['vim','help'], &filetype) >= 0)
-    execute 'h '.expand('<cword>')
-  elseif (coc#rpc#ready())
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
-    execute '!' . &keywordprg . " " . expand('<cword>')
+    call feedkeys('K', 'in')
   endif
 endfunction
 

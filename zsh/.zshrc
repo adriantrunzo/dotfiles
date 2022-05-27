@@ -44,7 +44,6 @@ alias install-tools='brew install bat fd fzf git nnn ripgrep starship vim'
 
 # Miscellaneous maintenance.
 alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
-alias update-vim-helptags='vim -u NONE -c "helptags ALL" -c q'
 
 if type starship &>/dev/null; then
   eval "$(starship init zsh)"
