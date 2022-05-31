@@ -6,7 +6,7 @@ export CLICOLOR=1
 # fzf configuration.
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--border --info=inline'
+export FZF_DEFAULT_OPTS='--border --layout=reverse --info=inline --bind=ctrl-j:toggle+down,ctrl-k:toggle+up,tab:down,shift-tab:up'
 
 # nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
 export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
