@@ -143,6 +143,10 @@ au VimResized * :wincmd =
 let g:nnn#set_default_mappings = 0
 let g:sandwich_no_default_key_mappings = 1
 
+" Move vertically by visual line with wrapping enabled.
+nnoremap j gj
+nnoremap k gk
+
 " Better redo.
 nnoremap U <c-r>
 
@@ -197,11 +201,11 @@ vnoremap <c-j> :m '>+1<cr>gv=gv
 vnoremap <c-k> :m '<-2<cr>gv=gv
 
 " Trigger completions with enter.
-inoremap <expr> <cr> pumvisible() ? "\<c-y>" : "\<c-g>u\<cr>"
+inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<cr>"
 
 " Navigate completions with Tab.
-inoremap <expr> <tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr> <s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
+inoremap <expr> <tab> coc#pum#visible() ? coc#pum#next(1) : "\<tab>"
+inoremap <expr> <s-tab> coc#pum#visible() ? coc#pum#prev(1) : "\<s-tab>"
 
 " Bracket movements.
 nnoremap [b <cmd>bprevious<cr>
@@ -351,7 +355,7 @@ function! GetGitBranch(name) abort
 endfunction
 
 " Show documentation in preview window.
-function! ShowDocumentation()
+function! ShowDocumentation() abort
   if CocAction('hasProvider', 'hover')
     call CocActionAsync('doHover')
   else
