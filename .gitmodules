@@ -84,3 +84,6 @@
 [submodule "vim/plugins/vim-matchup"]
 	path = vim/plugins/vim-matchup
 	url = https://github.com/andymass/vim-matchup.git
+[submodule "zshrc/fzf-tab"]
+	path = zsh/fzf-tab
+	url = https://github.com/Aloxaf/fzf-tab.git

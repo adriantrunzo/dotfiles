@@ -36,6 +36,9 @@ bindkey -v
 # Load FZF completion. Must come after other bindkey calls.
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
+# Load fzf-tab.
+[ -d ~/.config/zsh/fzf-tab ] && source ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
+
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-kitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
