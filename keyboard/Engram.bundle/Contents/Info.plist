@@ -5,12 +5,14 @@
 	<key>CFBundleIdentifier</key>
 	<string>org.sil.ukelele.keyboardlayout.engram</string>
 	<key>CFBundleName</key>
-	<string>Engram Mac</string>
+	<string>Engram</string>
 	<key>CFBundleVersion</key>
-	<string></string>
+	<string>2.0</string>
 	<key>KLInfo_Engram - Kinesis Advantage 2</key>
 	<dict>
 		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISIconIsTemplate</key>
 		<false/>
 		<key>TISInputSourceID</key>
 		<string>org.sil.ukelele.keyboardlayout.engram.engram-kinesisadvantage2</string>
@@ -20,6 +22,8 @@
 	<key>KLInfo_Engram - Standard</key>
 	<dict>
 		<key>TICapsLockLanguageSwitchCapable</key>
+		<false/>
+		<key>TISIconIsTemplate</key>
 		<false/>
 		<key>TISInputSourceID</key>
 		<string>org.sil.ukelele.keyboardlayout.engram.engram-standard</string>
