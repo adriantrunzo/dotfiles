@@ -7,6 +7,12 @@ if has('osx')
 
   " Load the fzf plugin included with the homebrew install.
   set rtp+=/usr/local/opt/fzf
+
+  " Enable meta+number mappings.
+  for c in range(10)
+    exec "map \e".c." <M-".c.">"
+    exec "map! \e".c." <M-".c.">"
+  endfor
 endif
 
 " Enable filetype and indent detection.
@@ -157,15 +163,42 @@ omap i, <plug>(swap-textobject-i)
 xmap a, <plug>(swap-textobject-a)
 omap a, <plug>(swap-textobject-a)
 
+" Use tab for indenting, reselecting in visual mode.
+nnoremap <tab> >
+nnoremap <s-tab> <
+nnoremap <tab><tab> >>
+nnoremap <s-tab> <
+nnoremap <s-tab><s-tab> <<
+vnoremap <tab> >gv
+vnoremap <s-tab> <gv
+
+" Quick change the word under the cursor.
+nmap cn *``cgn
+nmap cN *``cgN
+
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
 nnoremap k gk
+nnoremap J <c-d>
+nnoremap K <c-u>
+nnoremap <c-j> G
+nnoremap <c-k> gg
 
 " Maintain the cursor position when joining lines.
-nnoremap J mzJ`z
+nnoremap <m-j> mzJ`z
 
 " Integrate LSP into keyword lookup.
-nnoremap K <cmd>call ShowDocumentation()<cr>
+nnoremap ? <cmd>call ShowDocumentation()<cr>
+
+" Move lines up and down.
+nnoremap m :m .+1<cr>==
+nnoremap M :m .-2<cr>==
+vnoremap m :m '>+1<cr>gv=gv
+vnoremap M :m '<-2<cr>gv=gv
+
+" Keep the cursor centered when going through search results.
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -177,28 +210,10 @@ nnoremap U <C-r>
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
 
-" Reselect visual selection after indenting.
-vnoremap < <gv
-vnoremap > >gv
-
 " Maintain the cursor position when yanking a visual selection.
 " http://ddrscott.github.io/blog/2016/yank-without-jank/
 vnoremap y myy`y
 vnoremap Y myY`y
-
-" Keep the cursor centered when going through search results.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
-" Quick change the word under the cursor.
-nmap cu *``cgn
-nmap cU *``cgN
-
-" Move lines up and down.
-nnoremap <c-j> :m .+1<cr>==
-nnoremap <c-k> :m .-2<cr>==
-vnoremap <c-j> :m '>+1<cr>gv=gv
-vnoremap <c-k> :m '<-2<cr>gv=gv
 
 " Autocompletion: Use enter to trigger completions and tab to cycle options.
 inoremap <expr> <cr> coc#pum#visible() ? coc#_select_confirm() : "\<C-g>u\<cr>"
@@ -237,15 +252,19 @@ nnoremap ]Q <cmd>clast<cr>
 nnoremap [w <c-w>W
 nnoremap ]w <c-w>w
 
+" Backspace and delete are big buttons on the Advantage thumb cluster.
+nmap <backspace> [
+nmap <delete> ]
+
+" Fast window switching.
+for i in range(1, 9)
+  exec "nnoremap <m-".i."> <c-w>".i."w"
+endfor
+
 " Use space for leader. 
 let mapleader = ' '
 
-" Fuzzy open files quickly.
 nnoremap <leader><space> <cmd>Files<cr>
-
-" Use a big button for saving!
-nnoremap <leader><cr> <cmd>update<cr>
-
 nnoremap <leader>b <cmd>Buffers<cr>
 nnoremap <leader>d <cmd>bdelete<cr>
 nmap <leader>ca <plug>(coc-codeaction)
@@ -259,35 +278,21 @@ nmap <leader>cr <plug>(coc-references)
 nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
-nnoremap <leader>e <cmd>NnnPicker %:p:h<cr>
+nnoremap <leader>e <cmd>Explore<cr>
 nnoremap <leader>g <cmd>Git<cr>
+nnoremap <leader>m <cmd>Marks<cr>
 nnoremap <leader>n <cmd>noh<cr>
 nnoremap <leader>p "*p
 nnoremap <leader>P "*P
 xnoremap <leader>p "*p
-nnorema <leader>q <cmd>quit<cr>
-nmap <leader>se <plug>CtrlSFCwordPath
-vmap <leader>se <plug>CtrlSFVwordPath
-nmap <leader>sp <plug>CtrlSFPrompt
-nmap <leader>ss <plug>CtrlSFCwordExec
-vmap <leader>ss <plug>CtrlSFVwordExec
-nnoremap <leader>st <cmd>CtrlSFToggle<cr>
-nnoremap <leader>su <cmd>CtrlSFUpdate<cr>
+nnoremap <leader>q <cmd>quit<cr>
+nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
-nnoremap <leader>w1 <c-w>1w
-nnoremap <leader>w2 <c-w>2w
-nnoremap <leader>w3 <c-w>3w
-nnoremap <leader>w4 <c-w>4w
-nnoremap <leader>w5 <c-w>5w
-nnoremap <leader>w6 <c-w>6w
-nnoremap <leader>w7 <c-w>7w
-nnoremap <leader>w8 <c-w>8w
-nnoremap <leader>wn <c-w>w
-nnoremap <leader>wp <c-w>W
-nnoremap <leader>ws <c-w>s
+nnoremap <leader>wc <c-w>c
+nnoremap <leader>wh <c-w>s
+nnoremap <leader>wn <c-w>n
 nnoremap <leader>wv <c-w>v
-nnoremap <leader>ww <c-w>n
 nnoremap <leader>x <cmd>exit<cr>
 nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
