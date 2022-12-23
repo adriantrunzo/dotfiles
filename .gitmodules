@@ -88,3 +88,6 @@
 [submodule "zshrc/fzf-tab"]
 	path = zsh/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab.git
+[submodule "kitty/dracula"]
+	path = kitty/dracula
+	url = https://github.com/dracula/kitty.git
