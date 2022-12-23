@@ -43,10 +43,14 @@ bindkey -v
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-kitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 alias install-nnn-plugins='curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh'
-alias install-tools='brew install bat fd fzf git nnn ripgrep starship vim'
+alias install-tools='brew install bat fd fnm fzf git nnn ripgrep starship vim'
 
 # Miscellaneous maintenance.
 alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
+
+if type fnm &>/dev/null; then
+  eval "$(fnm env --use-on-cd)"
+fi
 
 if type starship &>/dev/null; then
   eval "$(starship init zsh)"
