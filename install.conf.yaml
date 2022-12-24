@@ -13,7 +13,8 @@
     ~/.config/kitty/dracula.conf: kitty/dracula/dracula.conf
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/starship.toml: starship/starship.toml
-    ~/.config/zsh/fzf-tab: zsh/fzf-tab
+    ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
+    ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting
     ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/pack/adriantrunzo/start:
       create: true

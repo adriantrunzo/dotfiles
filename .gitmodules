@@ -76,18 +76,18 @@
 [submodule "vim/plugins/vim-sneak"]
 	path = vim/plugins/vim-sneak
 	url = https://github.com/justinmk/vim-sneak.git
-[submodule "vim/plugins/ctrlsf.vim"]
-	path = vim/plugins/ctrlsf.vim
-	url = https://github.com/dyng/ctrlsf.vim.git
 [submodule "vim/plugins/vim-ruby"]
 	path = vim/plugins/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
 [submodule "vim/plugins/vim-matchup"]
 	path = vim/plugins/vim-matchup
 	url = https://github.com/andymass/vim-matchup.git
-[submodule "zshrc/fzf-tab"]
-	path = zsh/fzf-tab
-	url = https://github.com/Aloxaf/fzf-tab.git
 [submodule "kitty/dracula"]
 	path = kitty/dracula
 	url = https://github.com/dracula/kitty.git
+[submodule "zsh/zsh-syntax-highlighting"]
+	path = zsh/zsh-syntax-highlighting
+	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+[submodule "zsh/zsh-autosuggestions"]
+	path = zsh/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions.git
