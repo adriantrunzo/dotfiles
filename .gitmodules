@@ -91,3 +91,6 @@
 [submodule "zsh/zsh-autosuggestions"]
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+[submodule "vim/plugins/command-t"]
+	path = vim/plugins/command-t
+	url = https://github.com/wincent/command-t.git
