@@ -5,9 +5,6 @@ if has('osx')
   let &t_SR.="\e[4 q" "SR = REPLACE mode
   let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
 
-  " Load the fzf plugin included with the homebrew install.
-  set rtp+=/usr/local/opt/fzf
-
   " Enable meta+number mappings.
   for c in range(10)
     exec "map \e".c." <M-".c.">"
@@ -151,6 +148,12 @@ runtime START macros/sandwich/keymap/surround.vim
 xmap <nop> <plug>(matchup-z%)
 omap <nop> <plug>(matchup-z%)
 
+" Text objects for git chunks.
+omap ig <Plug>(coc-git-chunk-inner)
+xmap ig <Plug>(coc-git-chunk-inner)
+omap ag <Plug>(coc-git-chunk-outer)
+xmap ag <Plug>(coc-git-chunk-outer)
+
 " Text objects to select the nearest surrounded text automatically.
 xmap iss <plug>(textobj-sandwich-auto-i)
 xmap ass <plug>(textobj-sandwich-auto-a)
@@ -163,14 +166,14 @@ omap i, <plug>(swap-textobject-i)
 xmap a, <plug>(swap-textobject-a)
 omap a, <plug>(swap-textobject-a)
 
-" Use tab for indenting, reselecting in visual mode.
-nnoremap <tab> >
-nnoremap <s-tab> <
-nnoremap <tab><tab> >>
-nnoremap <s-tab> <
-nnoremap <s-tab><s-tab> <<
-vnoremap <tab> >gv
-vnoremap <s-tab> <gv
+nnoremap <c-d> <c-d>zz
+nnoremap <c-u> <c-u>zz
+nnoremap <s-down> <c-d>zz
+nnoremap <s-up> <c-u>zz
+
+" Reselect visual selection after indenting.
+vnoremap < <gv
+vnoremap > >gv
 
 " Quick change the word under the cursor.
 nmap cn *``cgn
@@ -179,16 +182,12 @@ nmap cN *``cgN
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
 nnoremap k gk
-nnoremap J <c-d>
-nnoremap K <c-u>
-nnoremap <c-j> G
-nnoremap <c-k> gg
 
 " Maintain the cursor position when joining lines.
-nnoremap <m-j> mzJ`z
+nnoremap J mzJ`z
 
 " Integrate LSP into keyword lookup.
-nnoremap ? <cmd>call ShowDocumentation()<cr>
+nnoremap K <cmd>call ShowDocumentation()<cr>
 
 " Move lines up and down.
 nnoremap m :m .+1<cr>==
@@ -233,16 +232,14 @@ nnoremap [<space> <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
 nnoremap ]<space> <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
 nnoremap [b <cmd>bprevious<cr>
 nnoremap ]b <cmd>bnext<cr>
-nnoremap [B <cmd>bfirst<cr>
-nnoremap ]B <cmd>blast<cr>
+nmap [c <plug>(coc-git-prevconflict)
+nmap ]c <plug>(coc-git-nextconflict)
 nmap [d <plug>(coc-diagnostic-prev)
 nmap ]d <plug>(coc-diagnostic-next)
-nmap [D <cmd>0<bar>call CocActionAsync('diagnosticNext')<cr>
-nmap ]D <cmd>$<bar>call CocActionAsync('diagnosticPrevious')<cr>
 nmap [e <plug>(coc-diagnostic-prev-error)
 nmap ]e <plug>(coc-diagnostic-next-error)
-nmap [E <cmd>0<bar>call CocActionAsync('diagnosticNext', 'error')<cr>
-nmap ]E <cmd>$<bar>call CocActionAsync('diagnosticPrevious', 'error')<cr>
+nmap [g <plug>(coc-git-prevchunk)
+nmap ]g <plug>(coc-git-nextchunk)
 nnoremap [t gt
 nnoremap ]t gT
 nnoremap [q <cmd>cprevious<cr>
@@ -264,15 +261,16 @@ endfor
 " Use space for leader. 
 let mapleader = ' '
 
-nmap <silent> <Leader><space> <Plug>(CommandT)
-nmap <silent> <Leader>b <Plug>(CommandTBuffer)
+nnoremap <leader><space> <cmd>CocList files<cr>
+nnoremap <Leader>b <cmd>CocList buffers<cr>
 nnoremap <leader>d <cmd>bdelete<cr>
 nmap <leader>ca <plug>(coc-codeaction)
 nmap <leader>cc <plug>(coc-fix-current)
 nmap <leader>cd <plug>(coc-definition)
 nmap <leader>cf <plug>(coc-refactor)
+nmap <leader>ch <Plug>(coc-git-chunkinfo)
 nmap <leader>ci <plug>(coc-implementation)
-nmap <leader>cl <plug>(coc-codelens-action)
+nmap <leader>cl <cmd>CocList diagnostics<cr>
 nmap <leader>cn <plug>(coc-rename)
 nmap <leader>cr <plug>(coc-references)
 nmap <leader>cs <plug>(coc-codeaction-selected)
@@ -303,16 +301,17 @@ let g:matchup_matchparen_offscreen = {}
 " Use the sneak label mode for faster jumping.
 let g:sneak#label = 1
 
-let g:CommandTFileScanner = 'find'
-
 " Coc Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
-      \ "coc-css",
+      \ 'coc-css',
       \ 'coc-cssmodules',
+      \ 'coc-docker',
       \ 'coc-eslint',
+      \ 'coc-git',
       \ 'coc-go',
       \ 'coc-html',
       \ 'coc-json',
+      \ 'coc-lists',
       \ 'coc-prettier',
       \ 'coc-solargraph',
       \ 'coc-tsserver',
@@ -356,6 +355,13 @@ augroup AirlineEvents
   autocmd!
   autocmd User AirlineAfterInit call AirlineInit()
 augroup end
+
+augroup JsonEvents
+  autocmd!
+  autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
+  autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
+  autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
+augroup END
 
 " Remove the document percentage indicator.
 function! AirlineInit() abort
