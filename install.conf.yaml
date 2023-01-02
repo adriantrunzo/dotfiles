@@ -10,6 +10,7 @@
       recursive: true
 
 - link:
+    ~/.config/helix/config.toml: helix/config.toml
     ~/.config/kitty/dracula.conf: kitty/dracula/dracula.conf
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/starship.toml: starship/starship.toml

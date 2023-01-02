@@ -1,0 +1,16 @@
+theme = "dracula"
+
+[editor]
+line-number = "relative"
+mouse = false
+rulers = [80]
+scrolloff = 8
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[keys.normal]
+S-down = "page_down"
+S-up = "page_up"
