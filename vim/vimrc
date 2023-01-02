@@ -166,10 +166,10 @@ omap i, <plug>(swap-textobject-i)
 xmap a, <plug>(swap-textobject-a)
 omap a, <plug>(swap-textobject-a)
 
-nnoremap <c-d> <c-d>zz
-nnoremap <c-u> <c-u>zz
-nnoremap <s-down> <c-d>zz
-nnoremap <s-up> <c-u>zz
+nnoremap <pagedown> <c-d>
+nnoremap <pageup> <c-u>
+nnoremap <s-down> <c-d>
+nnoremap <s-up> <c-u>
 
 " Reselect visual selection after indenting.
 vnoremap < <gv
@@ -277,6 +277,8 @@ nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>e <cmd>Explore<cr>
+vnoremap <leader>f :<c-u>call GrepFromSelected(visualmode())<CR>
+nnoremap <leader>f :<c-u>set operatorfunc=GrepFromSelected<CR>g@
 nnoremap <leader>g <cmd>Git<cr>
 nnoremap <leader>n <cmd>noh<cr>
 nnoremap <leader>p "*p
@@ -339,9 +341,6 @@ let g:airline_extensions = ['branch', 'coc', 'quickfix']
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
 
-" Trigger a highlight in the appropriate direction when pressing these keys:
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
 augroup CocEvents
   autocmd!
   " Update signature help on jump placeholder.
@@ -388,6 +387,21 @@ function! ShowDocumentation() abort
   else
     call feedkeys('K', 'in')
   endif
+endfunction
+
+function! GrepFromSelected(type) abort
+  let saved_unnamed_register = @@
+  if a:type ==# 'v'
+    normal! `<v`>y
+  elseif a:type ==# 'char'
+    normal! `[v`]y
+  else
+    return
+  endif
+  let word = substitute(@@, '\n$', '', 'g')
+  let word = escape(word, '| ')
+  let @@ = saved_unnamed_register
+  execute 'CocList grep '.word
 endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
