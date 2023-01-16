@@ -166,11 +166,6 @@ omap i, <plug>(swap-textobject-i)
 xmap a, <plug>(swap-textobject-a)
 omap a, <plug>(swap-textobject-a)
 
-nnoremap <pagedown> <c-d>
-nnoremap <pageup> <c-u>
-nnoremap <s-down> <c-d>
-nnoremap <s-up> <c-u>
-
 " Reselect visual selection after indenting.
 vnoremap < <gv
 vnoremap > >gv
@@ -248,10 +243,6 @@ nnoremap [Q <cmd>cfirst<cr>
 nnoremap ]Q <cmd>clast<cr>
 nnoremap [w <c-w>W
 nnoremap ]w <c-w>w
-
-" Backspace and delete are big buttons on the Advantage thumb cluster.
-nmap <backspace> [
-nmap <delete> ]
 
 " Fast window switching.
 for i in range(1, 9)
