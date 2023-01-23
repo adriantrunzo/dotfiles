@@ -58,15 +58,6 @@ set formatoptions+=j
 " Allow for hidden buffers. Necessary for some plugins.
 set hidden
 
-" Highlight search results.
-set hlsearch
-
-" Ignore case when searching.
-set ignorecase
-
-" Show matches as search proceeds.
-set incsearch
-
 " Show line numbers.
 set number
 
@@ -94,9 +85,6 @@ set showcmd
 
 " Don't show the mode as vim-airline will already display it for us.
 set noshowmode
-
-" Make search case-sensitive if capital letters are used.
-set smartcase
 
 " Use two spaces for the tab key.
 set softtabstop=2
@@ -190,10 +178,6 @@ nnoremap M :m .-2<cr>==
 vnoremap m :m '>+1<cr>gv=gv
 vnoremap M :m '<-2<cr>gv=gv
 
-" Keep the cursor centered when going through search results.
-nnoremap n nzzzv
-nnoremap N Nzzzv
-
 " Ex mode is rarely useful.
 nnoremap q @
 nnoremap Q q
@@ -268,10 +252,12 @@ nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
 nnoremap <leader>e <cmd>Explore<cr>
-vnoremap <leader>f :<c-u>call GrepFromSelected(visualmode())<CR>
-nnoremap <leader>f :<c-u>set operatorfunc=GrepFromSelected<CR>g@
+nmap <leader>fa <Plug>(FerretAck)
+nmap <leader>ff <Plug>(FerretAckWord)
+nmap <leader>fl <Plug>(FerretLack)
+nmap <leader>fq <Plug>(FerretQuack)
+nmap <leader>fr <Plug>(FerretAcks)
 nnoremap <leader>g <cmd>Git<cr>
-nnoremap <leader>n <cmd>noh<cr>
 nnoremap <leader>p "*p
 nnoremap <leader>P "*P
 xnoremap <leader>p "*p
@@ -287,6 +273,9 @@ nnoremap <leader>x <cmd>exit<cr>
 nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
+
+" Suppress default ferret mappings.
+let g:FerretMap=0
 
 " Don't show offscreen matches.
 let g:matchup_matchparen_offscreen = {}
