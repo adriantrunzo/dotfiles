@@ -81,3 +81,9 @@
 [submodule "vim/plugins/loupe"]
 	path = vim/plugins/loupe
 	url = https://github.com/wincent/loupe.git
+[submodule "vim/plugins/command-t"]
+	path = vim/plugins/command-t
+	url = https://github.com/wincent/command-t.git
+[submodule "vim/plugins/vim-gitgutter"]
+	path = vim/plugins/vim-gitgutter
+	url = https://github.com/airblade/vim-gitgutter.git
