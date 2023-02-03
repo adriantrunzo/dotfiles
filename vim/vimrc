@@ -1,25 +1,61 @@
-if has('osx')
-  " Change the cursor shape depending upon the mode.
-  " https://vim.fandom.com/wiki/Change_cursor_shape_in_different_modes
-  let &t_SI.="\e[5 q" "SI = INSERT mode
-  let &t_SR.="\e[4 q" "SR = REPLACE mode
-  let &t_EI.="\e[1 q" "EI = NORMAL mode (ELSE)
+" Manually set terminal features in Kitty until vim terminal feature detection
+" is improved.
+" https://sw.kovidgoyal.net/kitty/faq/#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
+if &term == 'xterm-kitty'
+  " Mouse support
+  set mouse=a
+  set ttymouse=sgr
+  set balloonevalterm
 
-  " Enable meta+number mappings.
-  for c in range(10)
-    exec "map \e".c." <M-".c.">"
-    exec "map! \e".c." <M-".c.">"
-  endfor
+  " Styled and colored underline support
+  let &t_AU = "\e[58:5:%dm"
+  let &t_8u = "\e[58:2:%lu:%lu:%lum"
+  let &t_Us = "\e[4:2m"
+  let &t_Cs = "\e[4:3m"
+  let &t_ds = "\e[4:4m"
+  let &t_Ds = "\e[4:5m"
+  let &t_Ce = "\e[4:0m"
 
-  " Enable meta+letter mappings.
-  for i in range(65,90) + range(97,122)
-    let c = nr2char(i)
-    exec "map \e".c." <M-".c.">"
-    exec "map! \e".c." <M-".c.">"
-  endfor
+  " Strikethrough
+  let &t_Ts = "\e[9m"
+  let &t_Te = "\e[29m"
 
-  map \e<Space> <M-Space>
-  map \e<Backspace> <M-Backspace>
+  " Truecolor support
+  let &t_8f = "\e[38:2:%lu:%lu:%lum"
+  let &t_8b = "\e[48:2:%lu:%lu:%lum"
+  let &t_RF = "\e]10;?\e\\"
+  let &t_RB = "\e]11;?\e\\"
+
+  " Bracketed paste
+  let &t_BE = "\e[?2004h"
+  let &t_BD = "\e[?2004l"
+  let &t_PS = "\e[200~"
+  let &t_PE = "\e[201~"
+
+  " Cursor control
+  let &t_RC = "\e[?12$p"
+  let &t_SH = "\e[%d q"
+  let &t_RS = "\eP$q q\e\\"
+  let &t_SI = "\e[5 q"
+  let &t_SR = "\e[3 q"
+  let &t_EI = "\e[1 q"
+  let &t_VS = "\e[?12l"
+
+  " Focus tracking
+  let &t_fe = "\e[?1004h"
+  let &t_fd = "\e[?1004l"
+  execute "set <FocusGained>=\<Esc>[I"
+  execute "set <FocusLost>=\<Esc>[O"
+
+  " Window title
+  let &t_ST = "\e[22;2t"
+  let &t_RT = "\e[23;2t"
+
+  " vim hardcodes background color erase even if the terminfo file does
+  " not contain bce. This causes incorrect background rendering when
+  " using a color theme with a background color in terminals such as
+  " kitty that do not support background color erase.
+  let &t_ut=''
 endif
 
 " Enable filetype and indent detection.
@@ -99,9 +135,10 @@ set noshowmode
 " Use two spaces for the tab key.
 set softtabstop=2
 
-" Open new splits in a more "natural" direction; below for horizontal splits and
-" to the right for vertical splits.
+" Open horizontal splits below.
 set splitbelow
+
+" Open vertical splits to the right.
 set splitright
 
 " Enable true color.
@@ -183,10 +220,10 @@ nnoremap J mzJ`z
 nnoremap K <cmd>call ShowDocumentation()<cr>
 
 " Move lines up and down.
-nnoremap <CR> :m .+1<cr>==
-nnoremap <BS> :m .-2<cr>==
-vnoremap <CR> :m '>+1<cr>gv=gv
-vnoremap <BS> :m '<-2<cr>gv=gv
+nnoremap m :m .+1<cr>==
+nnoremap M :m .-2<cr>==
+vnoremap m :m '>+1<cr>gv=gv
+vnoremap M :m '<-2<cr>gv=gv
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -217,14 +254,10 @@ vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
 " Previous/next.
-nnoremap [<space> <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
 nnoremap ]<space> <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
-nnoremap <M-Backspace> <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
-nnoremap <M-Space> <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
+nnoremap [<space> <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
 nnoremap [b <cmd>bprevious<cr>
 nnoremap ]b <cmd>bnext<cr>
-nnoremap <Esc>B <cmd>bprevious<cr>
-nnoremap <Esc>b <cmd>bnext<cr>
 nmap [d <plug>(coc-diagnostic-prev)
 nmap ]d <plug>(coc-diagnostic-next)
 nmap [e <plug>(coc-diagnostic-prev-error)
@@ -287,14 +320,17 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
+" Use the git file scanner, which falls back to find when not in a repository.
+" Please show untracked files, though. The debounce is nice in larger
+" repositories and otherwise not noticeable.
 let g:CommandTFileScanner = 'git'
-let g:CommandTInputDebounce = 50
+let g:CommandTInputDebounce = 100
 let g:CommandTGitIncludeUntracked = 1
 
 " Suppress default ferret mappings.
 let g:FerretMap = 0
 
-" Don't show offscreen matches.
+" Don't show offscreen matches as they cause odd statusline issues.
 let g:matchup_matchparen_offscreen = {}
 
 " Use the sneak label mode for faster jumping.
@@ -358,17 +394,12 @@ augroup JsonEvents
   autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 augroup END
 
-augroup UnmapEnterEvents
-  autocmd!
-  autocmd BufReadPost * if !empty(&bt) | call s:disable_enter_mapping() | endif
-  autocmd CmdWinEnter * call s:disable_enter_mapping()
-  autocmd FileType qf call s:disable_enter_mapping()
-augroup END
-
-augroup HelpEvents
-  autocmd!
-  autocmd FileType help nnoremap <buffer> <CR> <C-]>
-augroup END
+" augroup UnmapEnterEvents
+"   autocmd!
+"   autocmd BufReadPost * if !empty(&bt) | call s:disable_enter_mapping() | endif
+"   autocmd CmdWinEnter * call s:disable_enter_mapping()
+"   autocmd FileType qf call s:disable_enter_mapping()
+" augroup END
 
 " Remove the document percentage indicator.
 function! AirlineInit() abort
@@ -397,9 +428,9 @@ function! ShowDocumentation() abort
   endif
 endfunction
 
-function! s:disable_enter_mapping() abort
-  nnoremap <buffer> <CR> <CR>
-endfunction
+" function! s:disable_enter_mapping() abort
+"   nnoremap <buffer> <CR> <CR>
+" endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
 let s:RE_ATTR_NAME = '\%([a-zA-Z0-9\-_:@.]\+\)'
