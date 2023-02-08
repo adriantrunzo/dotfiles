@@ -87,3 +87,6 @@
 [submodule "vim/plugins/vim-gitgutter"]
 	path = vim/plugins/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
+[submodule "vim/plugins/nnn.vim"]
+	path = vim/plugins/nnn.vim
+	url = https://github.com/mcchrish/nnn.vim.git
