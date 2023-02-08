@@ -294,7 +294,7 @@ nmap <leader>cr <plug>(coc-references)
 nmap <leader>cs <plug>(coc-codeaction-selected)
 xmap <leader>cs <plug>(coc-codeaction-selected)
 nmap <leader>ct <plug>(coc-type-definition)
-nnoremap <leader>e <cmd>Explore<cr>
+nnoremap <leader>e <cmd>NnnPicker %:p:h<CR>
 nmap <leader>fa <Plug>(FerretAck)
 nmap <leader>ff <Plug>(FerretAckWord)
 nmap <leader>fl <Plug>(FerretLack)
@@ -319,6 +319,15 @@ nnoremap <leader>x <cmd>exit<cr>
 nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
+
+" Don't use default n³ mappings.
+let g:nnn#set_default_mappings = 0
+
+" Opens the n³ window in the same window like netrw.
+let g:nnn#layout = 'enew'
+
+" Use n³ when opening directories instead of netrw.
+let g:nnn#replace_netrw = 1
 
 " Use the git file scanner, which falls back to find when not in a repository.
 " Please show untracked files, though. The debounce is nice in larger
