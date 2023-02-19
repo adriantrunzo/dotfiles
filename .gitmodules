@@ -32,12 +32,6 @@
 [submodule "vim/plugins/vim-fugitive"]
 	path = vim/plugins/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule "vim/plugins/vim-airline"]
-	path = vim/plugins/vim-airline
-	url = https://github.com/vim-airline/vim-airline.git
-[submodule "vim/plugins/vim-airline-themes"]
-	path = vim/plugins/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
 [submodule "vim/plugins/coc.nvim"]
 	path = vim/plugins/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
@@ -90,3 +84,6 @@
 [submodule "vim/plugins/nnn.vim"]
 	path = vim/plugins/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
+[submodule "vim/plugins/vim-move"]
+	path = vim/plugins/vim-move
+	url = https://github.com/matze/vim-move.git

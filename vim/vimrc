@@ -104,6 +104,18 @@ set formatoptions+=j
 " Allow for hidden buffers. Necessary for some plugins.
 set hidden
 
+" Highlight search results.
+set hlsearch
+
+" Ignore case when searching.
+set ignorecase
+
+" Show matches as search proceeds.
+set incsearch
+
+" Always show the status line.
+set laststatus=2
+
 " Show line numbers.
 set number
 
@@ -129,8 +141,8 @@ set showbreak=↪
 " Show partial commands in the last line.
 set showcmd
 
-" Don't show the mode as vim-airline will already display it for us.
-set noshowmode
+" Make search case-sensitive if capital letters are used.
+set smartcase
 
 " Use two spaces for the tab key.
 set softtabstop=2
@@ -140,6 +152,17 @@ set splitbelow
 
 " Open vertical splits to the right.
 set splitright
+
+" Statusline with useful information.
+set statusline=
+set statusline+=%{GetGitBranch()}
+set statusline+=\ %f%m%r%q
+set statusline+=%=
+set statusline+=\ %y
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+set statusline+=\[%{&fileformat}\]
+set statusline+=\ %l:%L
+set statusline+=\ %c
 
 " Enable true color.
 set termguicolors
@@ -219,11 +242,9 @@ nnoremap J mzJ`z
 " Integrate LSP into keyword lookup.
 nnoremap K <cmd>call ShowDocumentation()<cr>
 
-" Move lines up and down.
-nnoremap m :m .+1<cr>==
-nnoremap M :m .-2<cr>==
-vnoremap m :m '>+1<cr>gv=gv
-vnoremap M :m '<-2<cr>gv=gv
+" Keep the cursor centered when going through search results.
+nnoremap n nzzzv
+nnoremap N Nzzzv
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -273,10 +294,33 @@ nnoremap ]Q <cmd>clast<cr>
 nnoremap [w <c-w>W
 nnoremap ]w <c-w>w
 
+nnoremap <CR> o
+nnoremap <S-CR> O
+nnoremap <A-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <A-S-CR> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+nnoremap <A-B> <Cmd>bprevious<CR>
+nnoremap <A-b> <Cmd>bnext<CR>
+
 " Fast window switching.
-for i in range(1, 9)
-  exec "nnoremap <m-".i."> <c-w>".i."w"
-endfor
+nnoremap <A-1> <C-W>1w
+nnoremap <A-2> <C-W>2w
+nnoremap <A-3> <C-W>3w
+nnoremap <A-4> <C-W>4w
+nnoremap <A-5> <C-W>5w
+nnoremap <A-6> <C-W>6w
+nnoremap <A-7> <C-W>7w
+nnoremap <A-8> <C-W>8w
+nnoremap <A-9> <C-W>9w
+
+" Move text in all directions.
+nmap <A-Down> <Plug>MoveLineDown
+nmap <A-Up> <Plug>MoveLineUp
+nmap <A-Left> <Plug>MoveCharLeft
+nmap <A-Right> <Plug>MoveCharRight
+vmap <A-Down> <Plug>MoveBlockDown
+vmap <A-Up> <Plug>MoveBlockUp
+vmap <A-Left> <Plug>MoveBlockLeft
+vmap <A-Right> <Plug>MoveBlockRight
 
 " Use space for leader. 
 let mapleader = ' '
@@ -336,6 +380,9 @@ let g:CommandTFileScanner = 'git'
 let g:CommandTInputDebounce = 100
 let g:CommandTGitIncludeUntracked = 1
 
+" Use custom mappings for vim-move.
+let g:move_map_keys = 0
+
 " Suppress default ferret mappings.
 let g:FerretMap = 0
 
@@ -364,24 +411,6 @@ let g:coc_global_extensions = [
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
 
-" Use dracula in airline and remove all of the symbols.
-let g:airline_theme='dracula'
-let g:airline_symbols_ascii = 1
-
-if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
-endif
-
-" Remove the space before the line number prefix since we are removing the
-" percentage indicator (see below).
-let g:airline_symbols.linenr = 'ln:'
-
-" Disable most extensions by default.
-let g:airline_extensions = ['branch', 'coc', 'commandt', 'quickfix']
-
-" Use a custom function to get the git branch text.
-let g:airline#extensions#branch#format = 'GetGitBranch'
-
 augroup CocEvents
   autocmd!
   " Update signature help on jump placeholder.
@@ -391,11 +420,6 @@ augroup CocEvents
   autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
-augroup AirlineEvents
-  autocmd!
-  autocmd User AirlineAfterInit call AirlineInit()
-augroup end
-
 augroup JsonEvents
   autocmd!
   autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
@@ -403,29 +427,40 @@ augroup JsonEvents
   autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 augroup END
 
-" augroup UnmapEnterEvents
-"   autocmd!
-"   autocmd BufReadPost * if !empty(&bt) | call s:disable_enter_mapping() | endif
-"   autocmd CmdWinEnter * call s:disable_enter_mapping()
-"   autocmd FileType qf call s:disable_enter_mapping()
-" augroup END
+augroup UnmapEnterEvents
+  autocmd!
+  autocmd BufReadPost * if !empty(&bt) | call DisableEnderMapping() | endif
+  autocmd CmdWinEnter * call DisableEnderMapping()
+  autocmd FileType qf call DisableEnderMapping()
+augroup END
 
-" Remove the document percentage indicator.
-function! AirlineInit() abort
-  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
-endfunction
+function! GetGitBranch() abort
+  let fugitive = FugitiveStatusline()
 
-function! GetGitBranch(name) abort
+  " This file is not in a git directory.
+  if (strlen(fugitive) == 0)
+    return ''
+  endif
+
+  let matches = matchlist(fugitive, '^\[Git(\(.\+\))\]$')
+
+  " Could not parse the fugitive output for some reason.
+  if (len(matches) == 0)
+    return ''
+  endif
+
+  let branch = matches[1]
+
   " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-  let story = matchstr(a:name, 'sc-\d\+')
+  let story = matchstr(branch, 'sc-\d\+')
 
   " Use the identifier segment if we found one.
   if (strlen(story) > 0)
-    return story[:strlen(story) - 1]
+    return '[' . story[:strlen(story) - 1] . ']'
   endif
 
   " Otherwise the first ten characters.
-  return a:name[:9]
+  return '[' . branch[:9] . ']'
 endfunction
 
 " Show documentation in preview window.
@@ -437,9 +472,9 @@ function! ShowDocumentation() abort
   endif
 endfunction
 
-" function! s:disable_enter_mapping() abort
-"   nnoremap <buffer> <CR> <CR>
-" endfunction
+function! DisableEnderMapping() abort
+  nnoremap <buffer> <CR> <CR>
+endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
 let s:RE_ATTR_NAME = '\%([a-zA-Z0-9\-_:@.]\+\)'
