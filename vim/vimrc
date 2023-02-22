@@ -158,6 +158,7 @@ set statusline=
 set statusline+=%{GetGitBranch()}
 set statusline+=\ %f%m%r%q
 set statusline+=%=
+set statusline+=%{GetDiagnosticStatus()}
 set statusline+=\ %y
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\[%{&fileformat}\]
@@ -198,31 +199,47 @@ set wildoptions=fuzzy,pum
 " Wrap long lines.
 set wrap
 
-" Leave s for sneak.
-" https://github.com/machakann/vim-sandwich/wiki/Introduce-vim-surround-keymappings
-runtime START macros/sandwich/keymap/surround.vim
+" Disable default mappings in the following plugins.
+let g:FerretMap = 0
+let g:gitgutter_map_keys = 0
+let g:move_map_keys = 0
+let g:nnn#set_default_mappings = 0
+let g:sandwich_no_default_key_mappings = 1
+let g:swap_no_default_key_mappings = 1
 
-" The matchup-z% motion conflicts with sneak.
-xmap <nop> <plug>(matchup-z%)
-omap <nop> <plug>(matchup-z%)
-
-" Text objects for git chunks.
-omap ih <Plug>(GitGutterTextObjectInnerPending)
-omap ah <Plug>(GitGutterTextObjectOuterPending)
-xmap ih <Plug>(GitGutterTextObjectInnerVisual)
-xmap ah <Plug>(GitGutterTextObjectOuterVisual)
+" Use bars for git signs as they are easier to read at a glance.
+let g:gitgutter_sign_added = '|'
+let g:gitgutter_sign_modified = '|'
+let g:gitgutter_sign_removed = '|'
+let g:gitgutter_sign_removed_first_line = '|'
+let g:gitgutter_sign_removed_above_and_below = '|'
+let g:gitgutter_sign_modified_removed = '|'
 
 " Text objects to select the nearest surrounded text automatically.
-xmap iss <plug>(textobj-sandwich-auto-i)
-xmap ass <plug>(textobj-sandwich-auto-a)
-omap iss <plug>(textobj-sandwich-auto-i)
-omap ass <plug>(textobj-sandwich-auto-a)
+xmap im <Plug>(textobj-sandwich-auto-i)
+omap im <Plug>(textobj-sandwich-auto-i)
+xmap am <Plug>(textobj-sandwich-auto-a)
+omap am <Plug>(textobj-sandwich-auto-a)
 
 " Swappable (eg arguments) text objects.
-xmap i, <plug>(swap-textobject-i)
-omap i, <plug>(swap-textobject-i)
-xmap a, <plug>(swap-textobject-a)
-omap a, <plug>(swap-textobject-a)
+xmap i, <Plug>(swap-textobject-i)
+omap i, <Plug>(swap-textobject-i)
+xmap a, <Plug>(swap-textobject-a)
+omap a, <Plug>(swap-textobject-a)
+
+" Use tab for switching windows. Using a count goes to that window.
+nnoremap <Tab> <C-W>w
+nnoremap <S-Tab> <C-W>W
+
+" Just type enter to insert below. Shift enter above.
+nnoremap <CR> o
+nnoremap <S-CR> O
+xnoremap <CR> o
+xnoremap <S-CR> O
+
+" Alt-enter to insert blank lines above and below.
+nnoremap <A-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <A-S-CR> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
 " Reselect visual selection after indenting.
 vnoremap < <gv
@@ -240,15 +257,42 @@ nnoremap k gk
 nnoremap J mzJ`z
 
 " Integrate LSP into keyword lookup.
-nnoremap K <cmd>call ShowDocumentation()<cr>
+nnoremap K <Cmd>call ShowDocumentation()<CR>
+
+" Unmap default m behavior.
+map m <Nop>
+
+" Use m for "match" mappings.
+nmap ma <Plug>(sandwich-add)
+xmap ma <Plug>(sandwich-add)
+omap ma <Plug>(sandwich-add)
+nmap md <Plug>(sandwich-delete)
+xmap md <Plug>(sandwich-delete)
+nmap mdd <Plug>(sandwich-delete-auto)
+nmap mr <Plug>(sandwich-replace)
+xmap mr <Plug>(sandwich-replace)
+nmap mrr <Plug>(sandwich-replace-auto)
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
+" Use o for controlling comments.
+xmap o <Plug>Commentary
+nmap o <Plug>Commentary
+omap o <Plug>Commentary
+nmap oo <Plug>CommentaryLine
+" Ideally this mapping could comment from cursor to line end.
+map O <Nop>
+
 " Ex mode is rarely useful.
 nnoremap q @
 nnoremap Q q
+
+" Use s/S for sneak everywhere since it won't confict with surround mappings.
+omap s <Plug>Sneak_s
+omap S <Plug>Sneak_S
+xmap S <Plug>Sneak_S
 
 " Better redo.
 nnoremap U <C-r>
@@ -274,43 +318,18 @@ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<C-r>=coc#float
 vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
-" Previous/next.
-nnoremap ]<space> <cmd>put=repeat([''],v:count)<bar>'[-1<cr>
-nnoremap [<space> <cmd>put!=repeat([''],v:count)<bar>']+1<cr>
-nnoremap [b <cmd>bprevious<cr>
-nnoremap ]b <cmd>bnext<cr>
-nmap [d <plug>(coc-diagnostic-prev)
-nmap ]d <plug>(coc-diagnostic-next)
-nmap [e <plug>(coc-diagnostic-prev-error)
-nmap ]e <plug>(coc-diagnostic-next-error)
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [h <Plug>(GitGutterPrevHunk)
-nnoremap [t gt
-nnoremap ]t gT
-nnoremap [q <cmd>cprevious<cr>
-nnoremap ]q <cmd>cnext<cr>
-nnoremap [Q <cmd>cfirst<cr>
-nnoremap ]Q <cmd>clast<cr>
-nnoremap [w <c-w>W
-nnoremap ]w <c-w>w
-
-nnoremap <CR> o
-nnoremap <S-CR> O
-nnoremap <A-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap <A-S-CR> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 nnoremap <A-B> <Cmd>bprevious<CR>
 nnoremap <A-b> <Cmd>bnext<CR>
-
-" Fast window switching.
-nnoremap <A-1> <C-W>1w
-nnoremap <A-2> <C-W>2w
-nnoremap <A-3> <C-W>3w
-nnoremap <A-4> <C-W>4w
-nnoremap <A-5> <C-W>5w
-nnoremap <A-6> <C-W>6w
-nnoremap <A-7> <C-W>7w
-nnoremap <A-8> <C-W>8w
-nnoremap <A-9> <C-W>9w
+nmap <A-D> <plug>(coc-diagnostic-prev)
+nmap <A-d> <plug>(coc-diagnostic-next)
+nmap <A-E> <plug>(coc-diagnostic-prev-error)
+nmap <A-e> <plug>(coc-diagnostic-next-error)
+nmap <A-H> <Plug>(GitGutterPrevHunk)
+nmap <A-h> <Plug>(GitGutterNextHunk)
+nnoremap <A-T> gT
+nnoremap <A-t> gt
+nnoremap <A-Q> <cmd>cprevious<cr>
+nnoremap <A-q> <cmd>cnext<cr>
 
 " Move text in all directions.
 nmap <A-Down> <Plug>MoveLineDown
@@ -348,6 +367,7 @@ nnoremap <leader>g <cmd>Git<cr>
 nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
 nmap <Leader>hs <Plug>(GitGutterStageHunk)
 nmap <Leader>hu <Plug>(GitGutterUndoHunk)
+nnoremap <Leader>m <Cmd>make<CR>
 nnoremap <leader>p "*p
 nnoremap <leader>P "*P
 xnoremap <leader>p "*p
@@ -364,9 +384,6 @@ nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
-" Don't use default n³ mappings.
-let g:nnn#set_default_mappings = 0
-
 " Opens the n³ window in the same window like netrw.
 let g:nnn#layout = 'enew'
 
@@ -379,12 +396,6 @@ let g:nnn#replace_netrw = 1
 let g:CommandTFileScanner = 'git'
 let g:CommandTInputDebounce = 100
 let g:CommandTGitIncludeUntracked = 1
-
-" Use custom mappings for vim-move.
-let g:move_map_keys = 0
-
-" Suppress default ferret mappings.
-let g:FerretMap = 0
 
 " Don't show offscreen matches as they cause odd statusline issues.
 let g:matchup_matchparen_offscreen = {}
@@ -411,8 +422,23 @@ let g:coc_global_extensions = [
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
 
-augroup CocEvents
+augroup Config
   autocmd!
+  " TODO: Comment here.
+  " autocmd VimEnter * runtime $VIMRUNTIME/compiler/eslint.vim
+
+  " In certain buffers, mapping <CR> can be problematic.
+  autocmd BufReadPost * if !empty(&bt) | call DisableEnderMapping() | endif
+  autocmd CmdWinEnter * call DisableEnderMapping()
+  autocmd FileType qf call DisableEnderMapping()
+
+  " These files should be treated as JSONC.
+  autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
+  autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
+
+  autocmd FileType javascript,javascriptreact call ConfigureJavaScript()
+  autocmd FileType typescript,typescriptreact call ConfigureTypeScript()
+
   " Update signature help on jump placeholder.
   autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
@@ -420,19 +446,39 @@ augroup CocEvents
   autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
-augroup JsonEvents
-  autocmd!
-  autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
-  autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
-  autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
-augroup END
+function! ConfigureJavaScript() abort
+  setlocal makeprg=npx\ eslint\ --fix\ --format\ compact\ %
+  setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
+  setlocal formatprg=npx\ prettier\ --loglevel\ silent\ --stdin-filepath\ %
+endfunction
 
-augroup UnmapEnterEvents
-  autocmd!
-  autocmd BufReadPost * if !empty(&bt) | call DisableEnderMapping() | endif
-  autocmd CmdWinEnter * call DisableEnderMapping()
-  autocmd FileType qf call DisableEnderMapping()
-augroup END
+function! ConfigureTypeScript() abort
+  setlocal formatexpr&
+  call ConfigureJavaScript()
+endfunction
+
+function! GetDiagnosticStatus() abort
+  let diagnostics = get(b:, 'coc_diagnostic_info', {})
+
+  if (empty(diagnostics))
+    return ''
+  endif
+
+  let errorCount = get(diagnostics, 'error', 0)
+  let warnCount = get(diagnostics, 'warning', 0)
+
+  let statuses = []
+
+  if (!empty(warnCount))
+    call add(statuses, 'W:' . warnCount)
+  endif
+
+  if (!empty(errorCount))
+    call add(statuses, 'E:' . errorCount)
+  endif
+
+  return join(statuses, ',')
+endfunction
 
 function! GetGitBranch() abort
   let fugitive = FugitiveStatusline()
@@ -473,7 +519,7 @@ function! ShowDocumentation() abort
 endfunction
 
 function! DisableEnderMapping() abort
-  nnoremap <buffer> <CR> <CR>
+  noremap <buffer> <CR> <CR>
 endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
