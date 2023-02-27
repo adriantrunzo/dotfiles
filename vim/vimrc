@@ -199,13 +199,22 @@ set wildoptions=fuzzy,pum
 " Wrap long lines.
 set wrap
 
+" Use space for leader. 
+let mapleader = ' '
+
 " Disable default mappings in the following plugins.
 let g:FerretMap = 0
 let g:gitgutter_map_keys = 0
-let g:move_map_keys = 0
 let g:nnn#set_default_mappings = 0
 let g:sandwich_no_default_key_mappings = 1
 let g:swap_no_default_key_mappings = 1
+
+" Use the git file scanner, which falls back to find when not in a repository.
+" Please show untracked files, though. The debounce is nice in larger
+" repositories and otherwise not noticeable.
+let g:CommandTFileScanner = 'git'
+let g:CommandTInputDebounce = 100
+let g:CommandTGitIncludeUntracked = 1
 
 " Use bars for git signs as they are easier to read at a glance.
 let g:gitgutter_sign_added = '|'
@@ -215,31 +224,45 @@ let g:gitgutter_sign_removed_first_line = '|'
 let g:gitgutter_sign_removed_above_and_below = '|'
 let g:gitgutter_sign_modified_removed = '|'
 
-" Text objects to select the nearest surrounded text automatically.
-xmap im <Plug>(textobj-sandwich-auto-i)
-omap im <Plug>(textobj-sandwich-auto-i)
-xmap am <Plug>(textobj-sandwich-auto-a)
-omap am <Plug>(textobj-sandwich-auto-a)
+" More colorful JSX.
+let g:vim_jsx_pretty_colorful_config = 1
+
+" Don't show offscreen matches as they cause odd statusline issues.
+let g:matchup_matchparen_offscreen = {}
+
+" Opens the n³ window in the same window like netrw.
+let g:nnn#layout = 'enew'
+
+" Use n³ when opening directories instead of netrw.
+let g:nnn#replace_netrw = 1
+
+" Use the sneak label mode for faster jumping.
+let g:sneak#label = 1
+
+" Use tab for switching buffers and tabs. Use Ctrl-W for windows.
+nnoremap <Tab> <Cmd>bprevious<CR>
+nnoremap <S-Tab> <Cmd>bnext<CR>
+nnoremap <A-Tab> gt
+nnoremap <A-S-Tab> gT
+
+" Use enter and backspace to do line operations and generally free up "o". Enter
+" to start insert mode on a new line is more intuitive.
+nnoremap <CR> o
+vnoremap <CR> o
+nnoremap <S-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <A-CR> :m .+1<cr>==
+vnoremap <A-CR> :m '>+1<cr>gv=gv
+nnoremap <Backspace> O
+vnoremap <Backspace> O
+nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+nnoremap <A-Backspace> :m .-2<cr>==
+vnoremap <A-Backspace> :m '<-2<cr>gv=gv
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
 omap i, <Plug>(swap-textobject-i)
 xmap a, <Plug>(swap-textobject-a)
 omap a, <Plug>(swap-textobject-a)
-
-" Use tab for switching windows. Using a count goes to that window.
-nnoremap <Tab> <C-W>w
-nnoremap <S-Tab> <C-W>W
-
-" Just type enter to insert below. Shift enter above.
-nnoremap <CR> o
-nnoremap <S-CR> O
-xnoremap <CR> o
-xnoremap <S-CR> O
-
-" Alt-enter to insert blank lines above and below.
-nnoremap <A-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap <A-S-CR> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
 " Reselect visual selection after indenting.
 vnoremap < <gv
@@ -248,6 +271,20 @@ vnoremap > >gv
 " Quick change the word under the cursor.
 nmap cn *``cgn
 nmap cN *``cgN
+
+" Use multiline "f" from sneak.
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+
+" Use g for "goto" mode.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gm <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
@@ -259,31 +296,32 @@ nnoremap J mzJ`z
 " Integrate LSP into keyword lookup.
 nnoremap K <Cmd>call ShowDocumentation()<CR>
 
-" Unmap default m behavior.
+" Use m for "match" mode using vim-sandwich.
 map m <Nop>
-
-" Use m for "match" mappings.
 nmap ma <Plug>(sandwich-add)
 xmap ma <Plug>(sandwich-add)
 omap ma <Plug>(sandwich-add)
 nmap md <Plug>(sandwich-delete)
 xmap md <Plug>(sandwich-delete)
 nmap mdd <Plug>(sandwich-delete-auto)
-nmap mr <Plug>(sandwich-replace)
-xmap mr <Plug>(sandwich-replace)
-nmap mrr <Plug>(sandwich-replace-auto)
+nmap mc <Plug>(sandwich-replace)
+xmap mc <Plug>(sandwich-replace)
+nmap mcc <Plug>(sandwich-replace-auto)
+xmap im <Plug>(textobj-sandwich-auto-i)
+omap im <Plug>(textobj-sandwich-auto-i)
+xmap am <Plug>(textobj-sandwich-auto-a)
+omap am <Plug>(textobj-sandwich-auto-a)
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" Use o for controlling comments.
+" Use "o" for controlling comments.
 xmap o <Plug>Commentary
 nmap o <Plug>Commentary
 omap o <Plug>Commentary
 nmap oo <Plug>CommentaryLine
-" Ideally this mapping could comment from cursor to line end.
-map O <Nop>
+nmap O <Plug>Commentary<Plug>Commentary
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -294,8 +332,21 @@ omap s <Plug>Sneak_s
 omap S <Plug>Sneak_S
 xmap S <Plug>Sneak_S
 
+" Use multiline "t" from sneak.
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
+
 " Better redo.
 nnoremap U <C-r>
+
+" All "x" mappings are easily peformed with "d" so use wildfire instead.
+map x <Plug>(wildfire-fuel)
+nmap X <Plug>(wildfire-quick-select)
+vmap X <Plug>(wildfire-water)
 
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
@@ -318,33 +369,19 @@ inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<C-r>=coc#float
 vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
 vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 
-nnoremap <A-B> <Cmd>bprevious<CR>
-nnoremap <A-b> <Cmd>bnext<CR>
 nmap <A-D> <plug>(coc-diagnostic-prev)
 nmap <A-d> <plug>(coc-diagnostic-next)
 nmap <A-E> <plug>(coc-diagnostic-prev-error)
 nmap <A-e> <plug>(coc-diagnostic-next-error)
 nmap <A-H> <Plug>(GitGutterPrevHunk)
 nmap <A-h> <Plug>(GitGutterNextHunk)
-nnoremap <A-T> gT
-nnoremap <A-t> gt
 nnoremap <A-Q> <cmd>cprevious<cr>
 nnoremap <A-q> <cmd>cnext<cr>
 
-" Move text in all directions.
-nmap <A-Down> <Plug>MoveLineDown
-nmap <A-Up> <Plug>MoveLineUp
-nmap <A-Left> <Plug>MoveCharLeft
-nmap <A-Right> <Plug>MoveCharRight
-vmap <A-Down> <Plug>MoveBlockDown
-vmap <A-Up> <Plug>MoveBlockUp
-vmap <A-Left> <Plug>MoveBlockLeft
-vmap <A-Right> <Plug>MoveBlockRight
-
-" Use space for leader. 
-let mapleader = ' '
-
 nmap <silent> <Leader><Space> <Plug>(CommandT)
+nnoremap <Leader><CR> <Cmd>update<CR>
+nnoremap <leader><Backspace> <Cmd>quit<CR>
+nmap <silent> <Leader>b <Plug>(CommandTBuffer)
 nnoremap <leader>d <cmd>bdelete<cr>
 nmap <leader>ca <plug>(coc-codeaction)
 nmap <leader>cc <plug>(coc-fix-current)
@@ -371,37 +408,12 @@ nnoremap <Leader>m <Cmd>make<CR>
 nnoremap <leader>p "*p
 nnoremap <leader>P "*P
 xnoremap <leader>p "*p
-nnoremap <leader>q <cmd>quit<cr>
-nnoremap <leader>s <cmd>update<cr>
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
-nnoremap <leader>wc <c-w>c
-nnoremap <leader>wh <c-w>s
-nnoremap <leader>wn <c-w>n
-nnoremap <leader>wv <c-w>v
 nnoremap <leader>x <cmd>exit<cr>
 nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
-
-" Opens the n³ window in the same window like netrw.
-let g:nnn#layout = 'enew'
-
-" Use n³ when opening directories instead of netrw.
-let g:nnn#replace_netrw = 1
-
-" Use the git file scanner, which falls back to find when not in a repository.
-" Please show untracked files, though. The debounce is nice in larger
-" repositories and otherwise not noticeable.
-let g:CommandTFileScanner = 'git'
-let g:CommandTInputDebounce = 100
-let g:CommandTGitIncludeUntracked = 1
-
-" Don't show offscreen matches as they cause odd statusline issues.
-let g:matchup_matchparen_offscreen = {}
-
-" Use the sneak label mode for faster jumping.
-let g:sneak#label = 1
 
 " Coc Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
@@ -419,18 +431,15 @@ let g:coc_global_extensions = [
       \ 'coc-vimlsp'
       \ ]
 
-" More colorful JSX.
-let g:vim_jsx_pretty_colorful_config = 1
-
 augroup Config
   autocmd!
   " TODO: Comment here.
   " autocmd VimEnter * runtime $VIMRUNTIME/compiler/eslint.vim
 
   " In certain buffers, mapping <CR> can be problematic.
-  autocmd BufReadPost * if !empty(&bt) | call DisableEnderMapping() | endif
-  autocmd CmdWinEnter * call DisableEnderMapping()
-  autocmd FileType qf call DisableEnderMapping()
+  autocmd BufReadPost * if !empty(&bt) | call DisableEnterMapping() | endif
+  autocmd CmdWinEnter * call DisableEnterMapping()
+  autocmd FileType qf call DisableEnterMapping()
 
   " These files should be treated as JSONC.
   autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
@@ -518,7 +527,7 @@ function! ShowDocumentation() abort
   endif
 endfunction
 
-function! DisableEnderMapping() abort
+function! DisableEnterMapping() abort
   noremap <buffer> <CR> <CR>
 endfunction
 
@@ -543,3 +552,10 @@ call textobj#user#plugin('tagattr', {
 \     'select': 'ax',
 \   },
 \ })
+
+function! SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc

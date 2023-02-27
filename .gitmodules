@@ -84,6 +84,6 @@
 [submodule "vim/plugins/nnn.vim"]
 	path = vim/plugins/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
-[submodule "vim/plugins/vim-move"]
-	path = vim/plugins/vim-move
-	url = https://github.com/matze/vim-move.git
+[submodule "vim/plugins/wildfire.vim"]
+	path = vim/plugins/wildfire.vim
+	url = https://github.com/gcmt/wildfire.vim.git

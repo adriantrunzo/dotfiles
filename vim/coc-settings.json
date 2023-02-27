@@ -13,5 +13,6 @@
   "coc.preferences.formatOnType": true,
   "list.source.files.args": ["--hidden", "--files"],
   "prettier.eslintIntegration": true,
+  "prettier.requireConfig": true,
   "eslint.autoFixOnSave": true
 }
