@@ -3,62 +3,58 @@
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
 [submodule "vim/plugins/dracula"]
-	path = vim/plugins/dracula
+	path = vim/start/dracula
 	url = https://github.com/dracula/vim.git
 [submodule "vim/plugins/vim-kitty"]
-	path = vim/plugins/vim-kitty
+	path = vim/start/vim-kitty
 	url = https://github.com/fladson/vim-kitty.git
         branch = main
 [submodule "vim/plugins/vim-textobj-user"]
-	path = vim/plugins/vim-textobj-user
+	path = vim/start/vim-textobj-user
 	url = https://github.com/kana/vim-textobj-user.git
 [submodule "vim/plugins/vim-textobj-entire"]
-	path = vim/plugins/vim-textobj-entire
+	path = vim/start/vim-textobj-entire
 	url = https://github.com/kana/vim-textobj-entire.git
 	ignore = untracked
 [submodule "vim/plugins/vim-textobj-indent"]
-	path = vim/plugins/vim-textobj-indent
+	path = vim/start/vim-textobj-indent
 	url = https://github.com/kana/vim-textobj-indent.git
 	ignore = untracked
 [submodule "vim/plugins/vim-highlightedyank"]
-	path = vim/plugins/vim-highlightedyank
+	path = vim/start/vim-highlightedyank
 	url = https://github.com/machakann/vim-highlightedyank.git
 [submodule "vim/plugins/vim-sandwich"]
-	path = vim/plugins/vim-sandwich
+	path = vim/start/vim-sandwich
 	url = https://github.com/machakann/vim-sandwich.git
 [submodule "vim/plugins/vim-commentary"]
-	path = vim/plugins/vim-commentary
+	path = vim/start/vim-commentary
 	url = https://github.com/tpope/vim-commentary.git
 [submodule "vim/plugins/vim-fugitive"]
-	path = vim/plugins/vim-fugitive
+	path = vim/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule "vim/plugins/coc.nvim"]
-	path = vim/plugins/coc.nvim
-	url = https://github.com/neoclide/coc.nvim.git
-	branch = release
 [submodule "vim/plugins/vim-javascript"]
-	path = vim/plugins/vim-javascript
+	path = vim/start/vim-javascript
 	url = https://github.com/pangloss/vim-javascript.git
 [submodule "vim/plugins/vim-jsx-pretty"]
-	path = vim/plugins/vim-jsx-pretty
+	path = vim/start/vim-jsx-pretty
 	url = https://github.com/MaxMEllon/vim-jsx-pretty.git
 [submodule "vim/plugins/yats.vim"]
-	path = vim/plugins/yats.vim
+	path = vim/start/yats.vim
 	url = https://github.com/HerringtonDarkholme/yats.vim.git
 [submodule "vim/plugins/vim-swap"]
-	path = vim/plugins/vim-swap
+	path = vim/start/vim-swap
 	url = https://github.com/machakann/vim-swap.git
 [submodule "vim/plugins/vim-terraform"]
-	path = vim/plugins/vim-terraform
+	path = vim/start/vim-terraform
 	url = https://github.com/hashivim/vim-terraform.git
 [submodule "vim/plugins/vim-sneak"]
-	path = vim/plugins/vim-sneak
+	path = vim/start/vim-sneak
 	url = https://github.com/justinmk/vim-sneak.git
 [submodule "vim/plugins/vim-ruby"]
-	path = vim/plugins/vim-ruby
+	path = vim/start/vim-ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
 [submodule "vim/plugins/vim-matchup"]
-	path = vim/plugins/vim-matchup
+	path = vim/start/vim-matchup
 	url = https://github.com/andymass/vim-matchup.git
 [submodule "kitty/dracula"]
 	path = kitty/dracula
@@ -70,20 +66,29 @@
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 [submodule "vim/plugins/ferret"]
-	path = vim/plugins/ferret
+	path = vim/start/ferret
 	url = https://github.com/wincent/ferret.git
 [submodule "vim/plugins/loupe"]
-	path = vim/plugins/loupe
+	path = vim/start/loupe
 	url = https://github.com/wincent/loupe.git
 [submodule "vim/plugins/command-t"]
-	path = vim/plugins/command-t
+	path = vim/start/command-t
 	url = https://github.com/wincent/command-t.git
 [submodule "vim/plugins/vim-gitgutter"]
-	path = vim/plugins/vim-gitgutter
+	path = vim/start/vim-gitgutter
 	url = https://github.com/airblade/vim-gitgutter.git
 [submodule "vim/plugins/nnn.vim"]
-	path = vim/plugins/nnn.vim
+	path = vim/start/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
 [submodule "vim/plugins/wildfire.vim"]
-	path = vim/plugins/wildfire.vim
+	path = vim/start/wildfire.vim
 	url = https://github.com/gcmt/wildfire.vim.git
+[submodule "vim/plugins/lsp"]
+	path = vim/opt/lsp
+	url = https://github.com/yegappan/lsp.git
+[submodule "vim/start/vim-vsnip"]
+	path = vim/start/vim-vsnip
+	url = https://github.com/hrsh7th/vim-vsnip.git
+[submodule "vim/start/vim-vsnip-integ"]
+	path = vim/start/vim-vsnip-integ
+	url = https://github.com/hrsh7th/vim-vsnip-integ.git

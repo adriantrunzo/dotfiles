@@ -10,16 +10,17 @@
       recursive: true
 
 - link:
-    ~/.config/helix/config.toml: helix/config.toml
     ~/.config/kitty/dracula.conf: kitty/dracula/dracula.conf
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
     ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting
-    ~/.vim/coc-settings.json: vim/coc-settings.json
-    ~/.vim/pack/adriantrunzo/start:
+    ~/.vim/pack/plugins/start:
       create: true
-      path: vim/plugins
+      path: vim/start
+    ~/.vim/pack/plugins/opt:
+      create: true
+      path: vim/opt
     ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.zshrc: zsh/.zshrc
