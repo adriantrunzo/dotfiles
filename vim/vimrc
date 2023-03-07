@@ -129,8 +129,8 @@ set scrolloff=8
 " diagnostics appear/become resolved.
 set signcolumn=yes
 
-" Use four spaces when indenting.
-set shiftwidth=4
+" Use two spaces when indenting.
+set shiftwidth=2
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -144,7 +144,7 @@ set showcmd
 " Make search case-sensitive if capital letters are used.
 set smartcase
 
-" Use four spaces for the tab key.
+" Use two spaces for the tab key.
 set softtabstop=4
 
 " Open horizontal splits below.
@@ -157,8 +157,10 @@ set splitright
 set statusline=
 set statusline+=%{GetStatuslineGit()}
 set statusline+=\ %f%m%r%q
-set statusline+=%=
+set statusline+=%=\ 
+set statusline+=%#ErrorMsg#
 set statusline+=%{GetStatuslineLsp()}
+set statusline+=%*
 set statusline+=\ %y
 set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
 set statusline+=\[%{&fileformat}\]
@@ -291,13 +293,23 @@ if len(servers) > 0
 
     call LspAddServer(servers)
     call LspOptionsSet({
-        \ 'autoHighlight': v:true,
         \ 'showDiagOnStatusLine': v:true,
-        \ 'showInlayHints': v:true,
         \ 'snippetSupport': v:true,
         \ 'usePopupInCodeAction': v:true
         \ })
 endif
+
+" Swappable (eg arguments) text objects.
+xmap i, <Plug>(swap-textobject-i)
+omap i, <Plug>(swap-textobject-i)
+xmap a, <Plug>(swap-textobject-a)
+omap a, <Plug>(swap-textobject-a)
+
+" Sandwich text-object for "m"atching characters.
+xmap im <Plug>(textobj-sandwich-auto-i)
+omap im <Plug>(textobj-sandwich-auto-i)
+xmap am <Plug>(textobj-sandwich-auto-a)
+omap am <Plug>(textobj-sandwich-auto-a)
 
 " Use tab for cycling through completion entries in insert mode.
 " inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -312,15 +324,13 @@ nnoremap <Backspace> O
 vnoremap <Backspace> O
 nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
-" Swappable (eg arguments) text objects.
-xmap i, <Plug>(swap-textobject-i)
-omap i, <Plug>(swap-textobject-i)
-xmap a, <Plug>(swap-textobject-a)
-omap a, <Plug>(swap-textobject-a)
-
 " Reselect visual selection after indenting.
 vnoremap < <gv
 vnoremap > >gv
+
+" Change matching characters.
+nmap cm <Plug>(sandwich-replace)
+nmap cmm <Plug>(sandwich-replace-auto)
 
 " Quick change the word under the cursor.
 nmap cn *``cgn
@@ -348,21 +358,9 @@ vnoremap K H
 nnoremap L g_
 vnoremap L g_
 
-" Use m for "match" mode using vim-sandwich.
-map m <Nop>
-nmap ma <Plug>(sandwich-add)
-xmap ma <Plug>(sandwich-add)
-omap ma <Plug>(sandwich-add)
-nmap md <Plug>(sandwich-delete)
-xmap md <Plug>(sandwich-delete)
-nmap mdd <Plug>(sandwich-delete-auto)
-nmap mc <Plug>(sandwich-replace)
-xmap mc <Plug>(sandwich-replace)
-nmap mcc <Plug>(sandwich-replace-auto)
-xmap im <Plug>(textobj-sandwich-auto-i)
-omap im <Plug>(textobj-sandwich-auto-i)
-xmap am <Plug>(textobj-sandwich-auto-a)
-omap am <Plug>(textobj-sandwich-auto-a)
+nmap ym <Plug>(sandwich-add)
+nmap dm <Plug>(sandwich-delete)
+nmap dmm <Plug>(sandwich-delete-auto)
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
@@ -432,6 +430,7 @@ nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
 nnoremap <Leader><S-Backspace> <Cmd>quit<CR>
 nnoremap <Leader>b <Cmd>CommandTBuffer<CR>
 nnoremap <Leader>ca <Cmd>LspCodeAction<CR>
+nnoremap <Leader>cc <Cmd>LspDiagCurrent<CR>
 nnoremap <Leader>cd <Cmd>LspGotoDefinition<CR>
 nnoremap <Leader>cf <Cmd>LspFormat<CR>
 nnoremap <leader>ch <Cmd>LspDiagShow<CR>
@@ -453,8 +452,8 @@ nmap <Leader>hs <Plug>(GitGutterStageHunk)
 nmap <Leader>hu <Plug>(GitGutterUndoHunk)
 nnoremap <Leader>j J
 xnoremap <Leader>j J
-nnoremap <Leader>m<Space> :make<Space>
-nnoremap <Leader>mm <Cmd>make %<CR>
+nnoremap <Leader>m m
+" nnoremap <Leader>mm <Cmd>make %<CR>
 nnoremap <Leader>p "*p
 nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
@@ -488,14 +487,10 @@ augroup Config
 augroup end
 
 function! s:reset_cr_mappings() abort
-  noremap <buffer> <CR> <CR>
+    noremap <buffer> <CR> <CR>
 endfunction
 
 function! s:handle_ft_javascript() abort
-    " Use 2-spaces for indendation rather than the default 4.
-    setlocal shiftwidth=2
-    setlocal softtabstop=2
-
     " Use eslint for the make command.
     setlocal makeprg=npx\ eslint\ --fix\ --format\ compact
     setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
@@ -512,52 +507,58 @@ function! s:handle_ft_typescript() abort
     call s:handle_ft_javascript()
 endfunction
 
+function! s:handle_ft_vim() abort
+    " Use 4 spaces for indendation rather than the default 2.
+    setlocal shiftwidth=4
+    setlocal softtabstop=4
+endfunction
+
 " Global statusline function to show LSP diagnostic counts.
 function! GetStatuslineLsp() abort
-  let errorCount = get(lsp#lsp#ErrorCount(), 'Error', 0)
-  let warnCount = get(lsp#lsp#ErrorCount(), 'Warn', 0)
+    let errorCount = get(lsp#lsp#ErrorCount(), 'Error', 0)
+    let warnCount = get(lsp#lsp#ErrorCount(), 'Warn', 0)
 
-  let statuses = []
+    let statuses = []
 
-  if (!empty(warnCount))
-    call add(statuses, 'W:' . warnCount)
-  endif
+    if (!empty(warnCount))
+        call add(statuses, 'W:' . warnCount)
+    endif
 
-  if (!empty(errorCount))
-    call add(statuses, 'E:' . errorCount)
-  endif
+    if (!empty(errorCount))
+        call add(statuses, 'E:' . errorCount)
+    endif
 
-  return join(statuses, ',')
+    return join(statuses, ',')
 endfunction
 
 " Global statusline function to show the Git branch. 
 function! GetStatuslineGit() abort
-  let fugitive = FugitiveStatusline()
+    let fugitive = FugitiveStatusline()
 
-  " This file is not in a git directory.
-  if (strlen(fugitive) == 0)
-    return ''
-  endif
+    " This file is not in a git directory.
+    if (strlen(fugitive) == 0)
+        return ''
+    endif
 
-  let matches = matchlist(fugitive, '^\[Git(\(.\+\))\]$')
+    let matches = matchlist(fugitive, '^\[Git(\(.\+\))\]$')
 
-  " Could not parse the fugitive output for some reason.
-  if (len(matches) == 0)
-    return ''
-  endif
+    " Could not parse the fugitive output for some reason.
+    if (len(matches) == 0)
+        return ''
+    endif
 
-  let branch = matches[1]
+    let branch = matches[1]
 
-  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-  let story = matchstr(branch, 'sc-\d\+')
+    " Shortcut git branches contain the ticket identifier preceeded by "sc-".
+    let story = matchstr(branch, 'sc-\d\+')
 
-  " Use the identifier segment if we found one.
-  if (strlen(story) > 0)
-    return '[' . story[:strlen(story) - 1] . ']'
-  endif
+    " Use the identifier segment if we found one.
+    if (strlen(story) > 0)
+        return '[' . story[:strlen(story) - 1] . ']'
+    endif
 
-  " Otherwise the first ten characters.
-  return '[' . branch[:9] . ']'
+    " Otherwise the first ten characters.
+    return '[' . branch[:9] . ']'
 endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
