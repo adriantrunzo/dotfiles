@@ -65,30 +65,12 @@
 [submodule "zsh/zsh-autosuggestions"]
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
-[submodule "vim/plugins/ferret"]
-	path = vim/start/ferret
-	url = https://github.com/wincent/ferret.git
-[submodule "vim/plugins/loupe"]
-	path = vim/start/loupe
-	url = https://github.com/wincent/loupe.git
-[submodule "vim/plugins/command-t"]
-	path = vim/start/command-t
-	url = https://github.com/wincent/command-t.git
-[submodule "vim/plugins/vim-gitgutter"]
-	path = vim/start/vim-gitgutter
-	url = https://github.com/airblade/vim-gitgutter.git
 [submodule "vim/plugins/nnn.vim"]
 	path = vim/start/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
 [submodule "vim/plugins/wildfire.vim"]
 	path = vim/start/wildfire.vim
 	url = https://github.com/gcmt/wildfire.vim.git
-[submodule "vim/plugins/lsp"]
-	path = vim/opt/lsp
-	url = https://github.com/yegappan/lsp.git
-[submodule "vim/start/vim-vsnip"]
-	path = vim/start/vim-vsnip
-	url = https://github.com/hrsh7th/vim-vsnip.git
-[submodule "vim/start/vim-vsnip-integ"]
-	path = vim/start/vim-vsnip-integ
-	url = https://github.com/hrsh7th/vim-vsnip-integ.git
+[submodule "vim/start/coc.nvim"]
+	path = vim/start/coc.nvim
+	url = https://github.com/neoclide/coc.nvim.git

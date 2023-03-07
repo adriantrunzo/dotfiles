@@ -211,29 +211,9 @@ let g:vim_indent = #{
     \ }
 
 " Disable default mappings in the following plugins.
-let g:FerretMap = 0
-let g:gitgutter_map_keys = 0
 let g:nnn#set_default_mappings = 0
 let g:sandwich_no_default_key_mappings = 1
 let g:swap_no_default_key_mappings = 1
-
-" Use the git file scanner, which falls back to find when not in a repository.
-" Please show untracked files, though. The debounce is nice in larger
-" repositories and otherwise not noticeable.
-let g:CommandTFileScanner = 'git'
-let g:CommandTInputDebounce = 100
-let g:CommandTGitIncludeUntracked = 1
-
-" Use bars for git signs as they are easier to read at a glance.
-let g:gitgutter_sign_added = '|'
-let g:gitgutter_sign_modified = '|'
-let g:gitgutter_sign_removed = '|'
-let g:gitgutter_sign_removed_first_line = '|'
-let g:gitgutter_sign_removed_above_and_below = '|'
-let g:gitgutter_sign_modified_removed = '|'
-
-" GitGutter signs take priority over LSP signs by default.
-let g:gitgutter_sign_priority = 5
 
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
@@ -250,54 +230,18 @@ let g:nnn#replace_netrw = 1
 " Use the sneak label mode for faster jumping.
 let g:sneak#label = 1
 
-" Configure available language servers.
-let servers = []
-
-if executable('vscode-css-language-server')
-    call add(servers, #{
-        \ filetype: ['css', 'scss'],
-        \ path: system('which vscode-css-language-server')[:-2],
-        \ args: ['--stdio']
-        \ })
-endif
-
-if executable('vscode-html-language-server')
-    call add(servers, #{
-        \ filetype: ['html'],
-        \ path: system('which vscode-html-language-server')[:-2],
-        \ args: ['--stdio']
-        \ })
-endif
-
-if executable('typescript-language-server')
-    call add(servers, #{
-        \ filetype: [
-        \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
-        \ ],
-        \ path: system('which typescript-language-server')[:-2],
-        \ args: ['--stdio']
-        \ })
-endif
-
-if executable('vim-language-server')
-    call add(servers, #{
-        \ filetype: ['vim'],
-        \ path: system('which vim-language-server')[:-2],
-        \ args: ['--stdio']
-        \ })
-endif
-
-if len(servers) > 0
-    " Load the lsp plugin so we can call its commands.
-    packadd lsp
-
-    call LspAddServer(servers)
-    call LspOptionsSet({
-        \ 'showDiagOnStatusLine': v:true,
-        \ 'snippetSupport': v:true,
-        \ 'usePopupInCodeAction': v:true
-        \ })
-endif
+" Coc Extensions. These should be automatically installed by coc.nvim.
+let g:coc_global_extensions = [
+      \ 'coc-css',
+      \ 'coc-cssmodules',
+      \ 'coc-eslint',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-lists',
+      \ 'coc-prettier',
+      \ 'coc-tsserver',
+      \ 'coc-vimlsp'
+      \ ]
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
@@ -447,9 +391,6 @@ nnoremap <Leader>f gq
 xnoremap <Leader>f gq
 nnoremap <Leader>ff gqq
 nnoremap <Leader>g <Cmd>Git<CR>
-nmap <Leader>hp <Plug>(GitGutterPreviewHunk)
-nmap <Leader>hs <Plug>(GitGutterStageHunk)
-nmap <Leader>hu <Plug>(GitGutterUndoHunk)
 nnoremap <Leader>j J
 xnoremap <Leader>j J
 nnoremap <Leader>m m
@@ -479,32 +420,46 @@ augroup Config
     autocmd FileType qf call s:reset_cr_mappings()
 
     " These files should be treated as JSONC.
+    autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
     autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
     autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 
+    autocmd FileType css,scss call s:handle_ft_css()
+    autocmd FileType html call s:handle_ft_html()
+    autocmd FileType json call s:handle_ft_json()
     autocmd FileType javascript,javascriptreact call s:handle_ft_javascript()
     autocmd FileType typescript,typescriptreact call s:handle_ft_typescript()
+    autocmd FileType vim call s:handle_ft_vim()
+
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+
+    " Highlight the symbol and its references when holding the cursor.
+    autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
 function! s:reset_cr_mappings() abort
     noremap <buffer> <CR> <CR>
 endfunction
 
-function! s:handle_ft_javascript() abort
-    " Use eslint for the make command.
-    setlocal makeprg=npx\ eslint\ --fix\ --format\ compact
-    setlocal errorformat=%f:\ line\ %l\\,\ col\ %c\\,\ %m,%-G%.%#
+function! s:handle_ft_css() abort
+  setlocal formatexpr=CocAction('formatSelected')
+endfunction
 
-    " Prettier.
-    setlocal formatprg=npx\ prettier\ --loglevel\ silent\ --stdin-filepath\ %
+function! s:handle_ft_javascript() abort
+  setlocal formatexpr=CocAction('formatSelected')
+endfunction
+
+function! s:handle_ft_json() abort
+  setlocal formatexpr=CocAction('formatSelected')
+endfunction
+
+function! s:handle_ft_javascript() abort
+  setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_typescript() abort
-    " The yats.vim plugin sets a custom formatexpr that doesn't work well.
-    setlocal formatexpr&
-
-    " Settings are otherwise the same as for JS.
-    call s:handle_ft_javascript()
+  setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_vim() abort
@@ -582,10 +537,3 @@ call textobj#user#plugin('tagattr', {
 \     'select': 'ax',
 \   },
 \ })
-
-function! SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
