@@ -1,0 +1,12 @@
+{
+  "coc.preferences.formatOnType": true,
+  "eslint.autoFixOnSave": true,
+  "list.source.files.args": ["--hidden", "--files"],
+  "prettier.requireConfig": true,
+  "[html][css][scss][markdown][json]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[javascript][typescript][javascriptreact][typescriptreact]": {
+    "coc.preferences.formatOnSave": true
+  }
+}

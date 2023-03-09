@@ -15,12 +15,10 @@
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
     ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting
+    ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/pack/plugins/start:
       create: true
-      path: vim/start
-    ~/.vim/pack/plugins/opt:
-      create: true
-      path: vim/opt
+      path: vim/plugins
     ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.zshrc: zsh/.zshrc

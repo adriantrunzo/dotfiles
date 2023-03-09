@@ -145,27 +145,13 @@ set showcmd
 set smartcase
 
 " Use two spaces for the tab key.
-set softtabstop=4
+set softtabstop=2
 
 " Open horizontal splits below.
 set splitbelow
 
 " Open vertical splits to the right.
 set splitright
-
-" Statusline with useful information.
-set statusline=
-set statusline+=%{GetStatuslineGit()}
-set statusline+=\ %f%m%r%q
-set statusline+=%=\ 
-set statusline+=%#ErrorMsg#
-set statusline+=%{GetStatuslineLsp()}
-set statusline+=%*
-set statusline+=\ %y
-set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
-set statusline+=\[%{&fileformat}\]
-set statusline+=\ %l:%L
-set statusline+=\ %c
 
 " Enable true color.
 set termguicolors
@@ -202,6 +188,24 @@ set wrap
 
 " Use space for leader. 
 let mapleader = ' '
+
+" Use dracula in airline and remove all of the symbols.
+let g:airline_theme='dracula'
+let g:airline_symbols_ascii = 1
+
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+" Remove the space before the line number prefix since we are removing the
+" percentage indicator (see below).
+let g:airline_symbols.linenr = 'ln:'
+
+" Disable most extensions by default.
+let g:airline_extensions = ['branch', 'coc', 'quickfix']
+
+" Use a custom function to get the git branch text.
+let g:airline#extensions#branch#format = 'GetGitBranch'
 
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
@@ -256,7 +260,7 @@ xmap am <Plug>(textobj-sandwich-auto-a)
 omap am <Plug>(textobj-sandwich-auto-a)
 
 " Use tab for cycling through completion entries in insert mode.
-" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
@@ -280,6 +284,10 @@ nmap cmm <Plug>(sandwich-replace-auto)
 nmap cn *``cgn
 nmap cN *``cgN
 
+" Delete matching characters.
+nmap dm <Plug>(sandwich-delete)
+nmap dmm <Plug>(sandwich-delete-auto)
+
 " Use multiline "f" from sneak.
 nmap f <Plug>Sneak_f
 nmap F <Plug>Sneak_F
@@ -301,10 +309,6 @@ nnoremap K H
 vnoremap K H
 nnoremap L g_
 vnoremap L g_
-
-nmap ym <Plug>(sandwich-add)
-nmap dm <Plug>(sandwich-delete)
-nmap dmm <Plug>(sandwich-delete-auto)
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
@@ -342,6 +346,9 @@ map x <Plug>(wildfire-fuel)
 nmap X <Plug>(wildfire-quick-select)
 xmap X <Plug>(wildfire-water)
 
+" ym to add matching characters.
+nmap ym <Plug>(sandwich-add)
+
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
 
@@ -357,35 +364,30 @@ nnoremap <A-Backspace> :m .-2<cr>==
 vnoremap <A-Backspace> :m '<-2<cr>gv=gv
 nnoremap <A-B> <Cmd>bprevious<CR>
 nnoremap <A-b> <Cmd>bnext<CR>
-nnoremap <A-D> <Cmd>LspDiagPrev<CR>
-nnoremap <A-d> <Cmd>LspDiagNext<CR>
+nmap <A-D> <Plug>(coc-diagnostic-prev)
+nmap <A-d> <Plug>(coc-diagnostic-next)
 nnoremap <A-L> <Cmd>lprevious<CR>
 nnoremap <A-l> <Cmd>lnext<CR>
 nnoremap <A-Q> <Cmd>cprevious<CR>
 nnoremap <A-q> <Cmd>cnext<CR>
-xnoremap <A-X> <Cmd>LspSelectionShrink<CR>
-nnoremap <A-x> <Cmd>LspSelectionExpand<CR>
-xnoremap <A-x> <Cmd>LspSelectionExpand<CR>
+xmap <A-X> <Plug>(coc-range-select-backward)
+nmap <A-x> <Plug>(coc-range-select)
+xmap <A-x> <Plug>(coc-range-select)
 
-nnoremap <Leader><Space> <Cmd>CommandT<CR>
+nmap <Leader><Space> <Cmd>CocList --reverse files<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
 nnoremap <Leader><S-CR> <Cmd>exit<CR>
 nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
 nnoremap <Leader><S-Backspace> <Cmd>quit<CR>
-nnoremap <Leader>b <Cmd>CommandTBuffer<CR>
-nnoremap <Leader>ca <Cmd>LspCodeAction<CR>
-nnoremap <Leader>cc <Cmd>LspDiagCurrent<CR>
-nnoremap <Leader>cd <Cmd>LspGotoDefinition<CR>
-nnoremap <Leader>cf <Cmd>LspFormat<CR>
-nnoremap <leader>ch <Cmd>LspDiagShow<CR>
-nnoremap <Leader>ci <Cmd>LspIncomingCalls<CR>
-nnoremap <Leader>cl <Cmd>LspOutline<CR>
-nnoremap <Leader>cm <Cmd>LspGotoImpl<CR>
-nnoremap <Leader>cn <Cmd>LspRename<CR>
-nnoremap <Leader>co <Cmd>LspOutgoingCalls<CR>
-nnoremap <Leader>cr <Cmd>LspShowReferences<CR>
-nnoremap <Leader>cs <Cmd>LspSymbolSearch<CR>
-nnoremap <Leader>ct <Cmd>LspGotoTypeDef<CR>
+nmap <Leader>b <Cmd>CocList buffers<CR>
+nmap <Leader>ca <Plug>(coc-codeaction-selected)
+nmap <Leader>cd <Plug>(coc-definition)
+nmap <Leader>cf <Plug>(coc-format)
+nmap <Leader>cl <Plug>(coc-declaration)
+nmap <Leader>cm <Plug>(coc-implementation)
+nmap <Leader>cn <Plug>(coc-rename)
+nmap <Leader>cr <Plug>(coc-references)
+nmap <Leader>ct <Plug>(coc-type-definition)
 nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>f gq
 xnoremap <Leader>f gq
@@ -394,15 +396,10 @@ nnoremap <Leader>g <Cmd>Git<CR>
 nnoremap <Leader>j J
 xnoremap <Leader>j J
 nnoremap <Leader>m m
-" nnoremap <Leader>mm <Cmd>make %<CR>
+nnoremap <Leader>n <Cmd>nohlsearch<CR>
 nnoremap <Leader>p "*p
 nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
-nmap <Leader>s<Space> <Plug>(FerretAck)
-nmap <leader>ss <Plug>(FerretAckWord)
-nmap <leader>sl <Plug>(FerretLack)
-nmap <leader>sq <Plug>(FerretQuack)
-nmap <leader>sr <Plug>(FerretAcks)
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <Leader>w gw
@@ -436,6 +433,9 @@ augroup Config
 
     " Highlight the symbol and its references when holding the cursor.
     autocmd CursorHold * silent call CocActionAsync('highlight')
+
+    " Call airline customization method.
+    autocmd User AirlineAfterInit call s:handle_airline_init()
 augroup end
 
 function! s:reset_cr_mappings() abort
@@ -468,52 +468,22 @@ function! s:handle_ft_vim() abort
     setlocal softtabstop=4
 endfunction
 
-" Global statusline function to show LSP diagnostic counts.
-function! GetStatuslineLsp() abort
-    let errorCount = get(lsp#lsp#ErrorCount(), 'Error', 0)
-    let warnCount = get(lsp#lsp#ErrorCount(), 'Warn', 0)
-
-    let statuses = []
-
-    if (!empty(warnCount))
-        call add(statuses, 'W:' . warnCount)
-    endif
-
-    if (!empty(errorCount))
-        call add(statuses, 'E:' . errorCount)
-    endif
-
-    return join(statuses, ',')
+" Remove the document percentage indicator.
+function! s:handle_airline_init() abort
+  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
 endfunction
 
-" Global statusline function to show the Git branch. 
-function! GetStatuslineGit() abort
-    let fugitive = FugitiveStatusline()
+function! GetGitBranch(name) abort
+  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
+  let story = matchstr(a:name, 'sc-\d\+')
 
-    " This file is not in a git directory.
-    if (strlen(fugitive) == 0)
-        return ''
-    endif
+  " Use the identifier segment if we found one.
+  if (strlen(story) > 0)
+    return story[:strlen(story) - 1]
+  endif
 
-    let matches = matchlist(fugitive, '^\[Git(\(.\+\))\]$')
-
-    " Could not parse the fugitive output for some reason.
-    if (len(matches) == 0)
-        return ''
-    endif
-
-    let branch = matches[1]
-
-    " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-    let story = matchstr(branch, 'sc-\d\+')
-
-    " Use the identifier segment if we found one.
-    if (strlen(story) > 0)
-        return '[' . story[:strlen(story) - 1] . ']'
-    endif
-
-    " Otherwise the first ten characters.
-    return '[' . branch[:9] . ']'
+  " Otherwise the first ten characters.
+  return a:name[:9]
 endfunction
 
 let s:RE_WORD = '\%(\w\+\)'
