@@ -1,9 +1,14 @@
 {
   "coc.preferences.formatOnType": true,
   "eslint.autoFixOnSave": true,
+  "git.changedSign.text": "|",
+  "git.addedSign.text": "|",
+  "git.removedSign.text": "|",
+  "git.topRemovedSign.text": "|",
+  "git.changeRemovedSign.text": "|",
   "list.source.files.args": ["--hidden", "--files"],
   "prettier.requireConfig": true,
-  "[html][css][scss][markdown][json]": {
+  "[html][css][scss][markdown][json][yaml]": {
     "coc.preferences.formatOnSave": true
   },
   "[javascript][typescript][javascriptreact][typescriptreact]": {

@@ -2,11 +2,6 @@
 " is improved.
 " https://sw.kovidgoyal.net/kitty/faq/#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
 if &term == 'xterm-kitty'
-  " Mouse support
-  set mouse=a
-  set ttymouse=sgr
-  set balloonevalterm
-
   " Styled and colored underline support
   let &t_AU = "\e[58:5:%dm"
   let &t_8u = "\e[58:2:%lu:%lu:%lum"
@@ -50,12 +45,6 @@ if &term == 'xterm-kitty'
   " Window title
   let &t_ST = "\e[22;2t"
   let &t_RT = "\e[23;2t"
-
-  " vim hardcodes background color erase even if the terminfo file does not
-  " contain bce. This causes incorrect background rendering when using a color
-  " theme with a background color in terminals such as
-  " kitty that do not support background color erase.
-  let &t_ut=''
 endif
 
 " Enable filetype and indent detection.
@@ -140,6 +129,9 @@ set showbreak=↪
 
 " Show partial commands in the last line.
 set showcmd
+
+" Don't show the mode as vim-airline will already display it for us.
+set noshowmode
 
 " Make search case-sensitive if capital letters are used.
 set smartcase
@@ -239,6 +231,7 @@ let g:coc_global_extensions = [
       \ 'coc-css',
       \ 'coc-cssmodules',
       \ 'coc-eslint',
+      \ 'coc-git',
       \ 'coc-html',
       \ 'coc-json',
       \ 'coc-lists',
@@ -253,11 +246,29 @@ omap i, <Plug>(swap-textobject-i)
 xmap a, <Plug>(swap-textobject-a)
 omap a, <Plug>(swap-textobject-a)
 
-" Sandwich text-object for "m"atching characters.
-xmap im <Plug>(textobj-sandwich-auto-i)
-omap im <Plug>(textobj-sandwich-auto-i)
-xmap am <Plug>(textobj-sandwich-auto-a)
-omap am <Plug>(textobj-sandwich-auto-a)
+" Sandwich text-objects for surrounding characters.
+xmap is <Plug>(textobj-sandwich-auto-i)
+omap is <Plug>(textobj-sandwich-auto-i)
+xmap as <Plug>(textobj-sandwich-auto-a)
+omap as <Plug>(textobj-sandwich-auto-a)
+xmap im <Plug>(textobj-sandwich-query-i)
+omap im <Plug>(textobj-sandwich-query-i)
+xmap am <Plug>(textobj-sandwich-query-a)
+omap am <Plug>(textobj-sandwich-query-a)
+
+" Ctrl-JKHL for moving text.
+nnoremap <C-K> :m .-2<cr>==
+vnoremap <C-K> :m '<-2<cr>gv=gv
+nnoremap <C-J> :m .+1<cr>==
+vnoremap <C-J> :m '>+1<cr>gv=gv
+nmap <C-H> <Plug>(swap-prev)
+nmap <C-L> <Plug>(swap-next)
+nnoremap <C-Up> :m .-2<cr>==
+vnoremap <C-Up> :m '<-2<cr>gv=gv
+nnoremap <C-Down> :m .+1<cr>==
+vnoremap <C-Down> :m '>+1<cr>gv=gv
+nmap <C-Left> <Plug>(swap-prev)
+nmap <C-Right> <Plug>(swap-next)
 
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -272,29 +283,20 @@ nnoremap <Backspace> O
 vnoremap <Backspace> O
 nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
+" Use backslash for backward search since it is the same key as forward slash.
+noremap \ ?
+
+" You have a question about something?
+nnoremap ? <Cmd>call <SID>show_documentation()<CR>
+vnoremap ? K
+
 " Reselect visual selection after indenting.
 vnoremap < <gv
 vnoremap > >gv
 
-" Change matching characters.
-nmap cm <Plug>(sandwich-replace)
-nmap cmm <Plug>(sandwich-replace-auto)
-
 " Quick change the word under the cursor.
 nmap cn *``cgn
 nmap cN *``cgN
-
-" Delete matching characters.
-nmap dm <Plug>(sandwich-delete)
-nmap dmm <Plug>(sandwich-delete-auto)
-
-" Use multiline "f" from sneak.
-nmap f <Plug>Sneak_f
-nmap F <Plug>Sneak_F
-xmap f <Plug>Sneak_f
-xmap F <Plug>Sneak_F
-omap f <Plug>Sneak_f
-omap F <Plug>Sneak_F
 
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
@@ -310,11 +312,19 @@ vnoremap K H
 nnoremap L g_
 vnoremap L g_
 
+" Use m for sneak movements.
+nmap m <Plug>Sneak_s
+nmap M <Plug>Sneak_S
+xmap m <Plug>Sneak_s
+xmap M <Plug>Sneak_S
+omap m <Plug>Sneak_s
+omap M <Plug>Sneak_S
+
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
 
-" Use "o" for controlling comments.
+" Use o for controlling comments.
 xmap o <Plug>Commentary
 nmap o <Plug>Commentary
 omap o <Plug>Commentary
@@ -325,29 +335,21 @@ nmap O <Plug>Commentary<Plug>Commentary
 nnoremap q @
 nnoremap Q q
 
-" Use s/S for sneak everywhere since it won't confict with surround mappings.
-omap s <Plug>Sneak_s
-omap S <Plug>Sneak_S
-xmap S <Plug>Sneak_S
-
-" Use multiline "t" from sneak.
-nmap t <Plug>Sneak_t
-nmap T <Plug>Sneak_T
-xmap t <Plug>Sneak_t
-xmap T <Plug>Sneak_T
-omap t <Plug>Sneak_t
-omap T <Plug>Sneak_T
+" Use s for vim-sandwich, but tweak the defaults slightly.
+nmap s <Nop>
+xmap s <Nop>
+nmap sa <Plug>(sandwich-add)
+xmap sa <Plug>(sandwich-add)
+omap sa <Plug>(sandwich-add)
+nmap sd <Plug>(sandwich-delete)
+xmap sd <Plug>(sandwich-delete)
+nmap sdd <Plug>(sandwich-delete-auto)
+nmap sr <Plug>(sandwich-replace)
+xmap sr <Plug>(sandwich-replace)
+nmap srr <Plug>(sandwich-replace-auto)
 
 " Better redo.
 nnoremap U <C-r>
-
-" All "x" mappings are easily peformed with "d" so use wildfire instead.
-map x <Plug>(wildfire-fuel)
-nmap X <Plug>(wildfire-quick-select)
-xmap X <Plug>(wildfire-water)
-
-" ym to add matching characters.
-nmap ym <Plug>(sandwich-add)
 
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
@@ -357,11 +359,11 @@ nnoremap Y yg_
 vnoremap y myy`y
 vnoremap Y myY`y
 
+" Ctrl-D for <Del> when in middle of line, from rsi.vim.
+inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
+cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
+
 " Alt for prev/next "unimpaired" style mappings are much easier than brackets.
-nnoremap <A-CR> :m .+1<cr>==
-vnoremap <A-CR> :m '>+1<cr>gv=gv
-nnoremap <A-Backspace> :m .-2<cr>==
-vnoremap <A-Backspace> :m '<-2<cr>gv=gv
 nnoremap <A-B> <Cmd>bprevious<CR>
 nnoremap <A-b> <Cmd>bnext<CR>
 nmap <A-D> <Plug>(coc-diagnostic-prev)
@@ -370,16 +372,16 @@ nnoremap <A-L> <Cmd>lprevious<CR>
 nnoremap <A-l> <Cmd>lnext<CR>
 nnoremap <A-Q> <Cmd>cprevious<CR>
 nnoremap <A-q> <Cmd>cnext<CR>
-xmap <A-X> <Plug>(coc-range-select-backward)
-nmap <A-x> <Plug>(coc-range-select)
-xmap <A-x> <Plug>(coc-range-select)
+xmap <silent> <A-X> <Plug>(coc-range-select-backward)
+nmap <silent> <A-x> <Plug>(coc-range-select)
+xmap <silent> <A-x> <Plug>(coc-range-select)
 
-nmap <Leader><Space> <Cmd>CocList --reverse files<CR>
+nnoremap <Leader><Space> <Cmd>CocList --reverse files<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
 nnoremap <Leader><S-CR> <Cmd>exit<CR>
 nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
 nnoremap <Leader><S-Backspace> <Cmd>quit<CR>
-nmap <Leader>b <Cmd>CocList buffers<CR>
+nnoremap <Leader>b <Cmd>CocList buffers<CR>
 nmap <Leader>ca <Plug>(coc-codeaction-selected)
 nmap <Leader>cd <Plug>(coc-definition)
 nmap <Leader>cf <Plug>(coc-format)
@@ -388,6 +390,7 @@ nmap <Leader>cm <Plug>(coc-implementation)
 nmap <Leader>cn <Plug>(coc-rename)
 nmap <Leader>cr <Plug>(coc-references)
 nmap <Leader>ct <Plug>(coc-type-definition)
+nnoremap <Leader>d <Cmd>CocList diagnostics<CR>
 nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>f gq
 xnoremap <Leader>f gq
@@ -471,6 +474,15 @@ endfunction
 " Remove the document percentage indicator.
 function! s:handle_airline_init() abort
   let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+endfunction
+
+" Inegrate LSP hover and keyword lookup.
+function! s:show_documentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
 endfunction
 
 function! GetGitBranch(name) abort

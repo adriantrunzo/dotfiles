@@ -68,9 +68,6 @@
 [submodule "vim/plugins/nnn.vim"]
 	path = vim/plugins/nnn.vim
 	url = https://github.com/mcchrish/nnn.vim.git
-[submodule "vim/plugins/wildfire.vim"]
-	path = vim/plugins/wildfire.vim
-	url = https://github.com/gcmt/wildfire.vim.git
 [submodule "vim/plugins/coc.nvim"]
 	path = vim/plugins/coc.nvim
 	url = https://github.com/neoclide/coc.nvim.git
