@@ -2,49 +2,49 @@
 " is improved.
 " https://sw.kovidgoyal.net/kitty/faq/#using-a-color-theme-with-a-background-color-does-not-work-well-in-vim
 if &term == 'xterm-kitty'
-  " Styled and colored underline support
-  let &t_AU = "\e[58:5:%dm"
-  let &t_8u = "\e[58:2:%lu:%lu:%lum"
-  let &t_Us = "\e[4:2m"
-  let &t_Cs = "\e[4:3m"
-  let &t_ds = "\e[4:4m"
-  let &t_Ds = "\e[4:5m"
-  let &t_Ce = "\e[4:0m"
+    " Styled and colored underline support
+    let &t_AU = "\e[58:5:%dm"
+    let &t_8u = "\e[58:2:%lu:%lu:%lum"
+    let &t_Us = "\e[4:2m"
+    let &t_Cs = "\e[4:3m"
+    let &t_ds = "\e[4:4m"
+    let &t_Ds = "\e[4:5m"
+    let &t_Ce = "\e[4:0m"
 
-  " Strikethrough
-  let &t_Ts = "\e[9m"
-  let &t_Te = "\e[29m"
+    " Strikethrough
+    let &t_Ts = "\e[9m"
+    let &t_Te = "\e[29m"
 
-  " Truecolor support
-  let &t_8f = "\e[38:2:%lu:%lu:%lum"
-  let &t_8b = "\e[48:2:%lu:%lu:%lum"
-  let &t_RF = "\e]10;?\e\\"
-  let &t_RB = "\e]11;?\e\\"
+    " Truecolor support
+    let &t_8f = "\e[38:2:%lu:%lu:%lum"
+    let &t_8b = "\e[48:2:%lu:%lu:%lum"
+    let &t_RF = "\e]10;?\e\\"
+    let &t_RB = "\e]11;?\e\\"
 
-  " Bracketed paste
-  let &t_BE = "\e[?2004h"
-  let &t_BD = "\e[?2004l"
-  let &t_PS = "\e[200~"
-  let &t_PE = "\e[201~"
+    " Bracketed paste
+    let &t_BE = "\e[?2004h"
+    let &t_BD = "\e[?2004l"
+    let &t_PS = "\e[200~"
+    let &t_PE = "\e[201~"
 
-  " Cursor control
-  let &t_RC = "\e[?12$p"
-  let &t_SH = "\e[%d q"
-  let &t_RS = "\eP$q q\e\\"
-  let &t_SI = "\e[5 q"
-  let &t_SR = "\e[3 q"
-  let &t_EI = "\e[1 q"
-  let &t_VS = "\e[?12l"
+    " Cursor control
+    let &t_RC = "\e[?12$p"
+    let &t_SH = "\e[%d q"
+    let &t_RS = "\eP$q q\e\\"
+    let &t_SI = "\e[5 q"
+    let &t_SR = "\e[3 q"
+    let &t_EI = "\e[1 q"
+    let &t_VS = "\e[?12l"
 
-  " Focus tracking
-  let &t_fe = "\e[?1004h"
-  let &t_fd = "\e[?1004l"
-  execute "set <FocusGained>=\<Esc>[I"
-  execute "set <FocusLost>=\<Esc>[O"
+    " Focus tracking
+    let &t_fe = "\e[?1004h"
+    let &t_fd = "\e[?1004l"
+    execute "set <FocusGained>=\<Esc>[I"
+    execute "set <FocusLost>=\<Esc>[O"
 
-  " Window title
-  let &t_ST = "\e[22;2t"
-  let &t_RT = "\e[23;2t"
+    " Window title
+    let &t_ST = "\e[22;2t"
+    let &t_RT = "\e[23;2t"
 endif
 
 " Enable filetype and indent detection.
@@ -186,7 +186,7 @@ let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
 
 if !exists('g:airline_symbols')
-  let g:airline_symbols = {}
+    let g:airline_symbols = {}
 endif
 
 " Remove the space before the line number prefix since we are removing the
@@ -201,10 +201,10 @@ let g:airline#extensions#branch#format = 'GetGitBranch'
 
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
-    \ line_continuation: shiftwidth(),
-    \ more_in_bracket_block: v:false,
-    \ searchpair_timeout: 100,
-    \ }
+  \ line_continuation: shiftwidth(),
+  \ more_in_bracket_block: v:false,
+  \ searchpair_timeout: 100,
+  \ }
 
 " Disable default mappings in the following plugins.
 let g:nnn#set_default_mappings = 0
@@ -228,18 +228,17 @@ let g:sneak#label = 1
 
 " Coc Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
-      \ 'coc-css',
-      \ 'coc-cssmodules',
-      \ 'coc-eslint',
-      \ 'coc-git',
-      \ 'coc-html',
-      \ 'coc-json',
-      \ 'coc-lists',
-      \ 'coc-pairs',
-      \ 'coc-prettier',
-      \ 'coc-tsserver',
-      \ 'coc-vimlsp'
-      \ ]
+  \ 'coc-css',
+  \ 'coc-cssmodules',
+  \ 'coc-eslint',
+  \ 'coc-git',
+  \ 'coc-html',
+  \ 'coc-json',
+  \ 'coc-lists',
+  \ 'coc-prettier',
+  \ 'coc-tsserver',
+  \ 'coc-vimlsp'
+  \ ]
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
@@ -271,20 +270,20 @@ vnoremap <C-Down> :m '>+1<cr>gv=gv
 nmap <C-Left> <Plug>(swap-prev)
 nmap <C-Right> <Plug>(swap-next)
 
+" Big keys for sneak.
+nmap <CR> <Plug>Sneak_s
+nmap <BS> <Plug>Sneak_S
+xmap <CR> <Plug>Sneak_s
+xmap <BS> <Plug>Sneak_S
+omap <CR> <Plug>Sneak_s
+omap <BS> <Plug>Sneak_S
+
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
-" Using enter and backspace for "open" is more intuitive.
-nnoremap <CR> o
-vnoremap <CR> o
-nnoremap <S-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap <Backspace> O
-vnoremap <Backspace> O
-nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
-
-" Use backslash for backward search since it is the same key as forward slash.
+" Backslash is the same key as forward slash in the Engram layout.
 noremap \ ?
 
 " You have a question about something?
@@ -303,34 +302,12 @@ nmap cN *``cgN
 nnoremap j gj
 nnoremap k gk
 
-" More intuitive go to screen and line positions.
-nnoremap H _
-vnoremap H _
-nnoremap J L
-vnoremap J L
-nnoremap K H
-vnoremap K H
-nnoremap L g_
-vnoremap L g_
-
-" Use m for sneak movements.
-nmap m <Plug>Sneak_s
-nmap M <Plug>Sneak_S
-xmap m <Plug>Sneak_s
-xmap M <Plug>Sneak_S
-omap m <Plug>Sneak_s
-omap M <Plug>Sneak_S
+" Convenient join without spaces.
+nnoremap K gJ
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-" Use o for controlling comments.
-xmap o <Plug>Commentary
-nmap o <Plug>Commentary
-omap o <Plug>Commentary
-nmap oo <Plug>CommentaryLine
-nmap O <Plug>Commentary<Plug>Commentary
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -349,6 +326,11 @@ nmap sr <Plug>(sandwich-replace)
 xmap sr <Plug>(sandwich-replace)
 nmap srr <Plug>(sandwich-replace-auto)
 
+" Quickly select semantic ranges.
+xmap <silent> X <Plug>(coc-range-select-backward)
+nmap <silent> x <Plug>(coc-range-select)
+xmap <silent> x <Plug>(coc-range-select)
+
 " Better redo.
 nnoremap U <C-r>
 
@@ -364,18 +346,19 @@ vnoremap Y myY`y
 inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
-" Alt for prev/next "unimpaired" style mappings are much easier than brackets.
-nnoremap <A-B> <Cmd>bprevious<CR>
-nnoremap <A-b> <Cmd>bnext<CR>
-nmap <A-D> <Plug>(coc-diagnostic-prev)
-nmap <A-d> <Plug>(coc-diagnostic-next)
-nnoremap <A-L> <Cmd>lprevious<CR>
-nnoremap <A-l> <Cmd>lnext<CR>
-nnoremap <A-Q> <Cmd>cprevious<CR>
-nnoremap <A-q> <Cmd>cnext<CR>
-xmap <silent> <A-X> <Plug>(coc-range-select-backward)
-nmap <silent> <A-x> <Plug>(coc-range-select)
-xmap <silent> <A-x> <Plug>(coc-range-select)
+" Previous.
+nnoremap [<Space> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+nnoremap [b <Cmd>bprevious<CR>
+nmap [d <Plug>(coc-diagnostic-prev)
+nnoremap [l <Cmd>lprevious<CR>
+nnoremap [q <Cmd>cprevious<CR>
+
+" Next.
+nnoremap ]<Space> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap ]b <Cmd>bnext<CR>
+nmap ]d <Plug>(coc-diagnostic-next)
+nnoremap ]l <Cmd>lnext<CR>
+nnoremap ]q <Cmd>cnext<CR>
 
 nnoremap <Leader><Space> <Cmd>CocList --reverse files<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
@@ -392,43 +375,34 @@ nmap <Leader>cn <Plug>(coc-rename)
 nmap <Leader>cr <Plug>(coc-references)
 nmap <Leader>ct <Plug>(coc-type-definition)
 nnoremap <Leader>d <Cmd>CocList diagnostics<CR>
-nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
-nnoremap <Leader>f gq
-xnoremap <Leader>f gq
-nnoremap <Leader>ff gqq
+nnoremap <Leader>e <Cmd>Dirvish<CR>
 nnoremap <Leader>g <Cmd>Git<CR>
-nnoremap <Leader>j J
-xnoremap <Leader>j J
-nnoremap <Leader>m m
 nnoremap <Leader>n <Cmd>nohlsearch<CR>
 nnoremap <Leader>p "*p
 nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
 nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
 nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
-nnoremap <Leader>w gw
-xnoremap <Leader>w gw
-nnoremap <Leader>ww gww
 nnoremap <leader>y "*y
 nnoremap <leader>Y "*Y
 xnoremap <leader>y "*y
 
 augroup Config
     autocmd!
-    " In certain buffers, mapping <CR> can be problematic.
-    autocmd BufReadPost * if !empty(&bt) | call s:reset_cr_mappings() | endif
+    " https://stackoverflow.com/a/16360104
     autocmd CmdWinEnter * call s:reset_cr_mappings()
-    autocmd FileType qf call s:reset_cr_mappings()
 
     " These files should be treated as JSONC.
     autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
     autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
     autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 
+    " Filetype specific settings.
     autocmd FileType css,scss call s:handle_ft_css()
     autocmd FileType html call s:handle_ft_html()
-    autocmd FileType json call s:handle_ft_json()
     autocmd FileType javascript,javascriptreact call s:handle_ft_javascript()
+    autocmd FileType json call s:handle_ft_json()
+    autocmd FileType qf call s:handle_ft_qt()
     autocmd FileType typescript,typescriptreact call s:handle_ft_typescript()
     autocmd FileType vim call s:handle_ft_vim()
 
@@ -442,28 +416,28 @@ augroup Config
     autocmd User AirlineAfterInit call s:handle_airline_init()
 augroup end
 
-function! s:reset_cr_mappings() abort
-    noremap <buffer> <CR> <CR>
+function! s:handle_ft_css() abort
+    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
-function! s:handle_ft_css() abort
-  setlocal formatexpr=CocAction('formatSelected')
+function! s:handle_ft_html() abort
+    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_javascript() abort
-  setlocal formatexpr=CocAction('formatSelected')
+    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_json() abort
-  setlocal formatexpr=CocAction('formatSelected')
+    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
-function! s:handle_ft_javascript() abort
-  setlocal formatexpr=CocAction('formatSelected')
+function! s:handle_ft_qf() abort
+    call s:reset_cr_mappings()
 endfunction
 
 function! s:handle_ft_typescript() abort
-  setlocal formatexpr=CocAction('formatSelected')
+    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_vim() abort
@@ -474,49 +448,31 @@ endfunction
 
 " Remove the document percentage indicator.
 function! s:handle_airline_init() abort
-  let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+    let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+endfunction
+
+function! s:reset_cr_mappings() abort
+    noremap <buffer> <CR> <CR>
 endfunction
 
 " Inegrate LSP hover and keyword lookup.
 function! s:show_documentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
+    if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+    else
+        call feedkeys('K', 'in')
+    endif
 endfunction
 
 function! GetGitBranch(name) abort
-  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-  let story = matchstr(a:name, 'sc-\d\+')
+    " Shortcut git branches contain the ticket identifier preceeded by "sc-".
+    let story = matchstr(a:name, 'sc-\d\+')
 
-  " Use the identifier segment if we found one.
-  if (strlen(story) > 0)
-    return story[:strlen(story) - 1]
-  endif
+    " Use the identifier segment if we found one.
+    if (strlen(story) > 0)
+        return story[:strlen(story) - 1]
+    endif
 
-  " Otherwise the first ten characters.
-  return a:name[:9]
+    " Otherwise the first ten characters.
+    return a:name[:9]
 endfunction
-
-let s:RE_WORD = '\%(\w\+\)'
-let s:RE_ATTR_NAME = '\%([a-zA-Z0-9\-_:@.]\+\)'
-let s:RE_QUOTED_STR = '\%(".\{-}"\|''.\{-}''\)'
-let s:RE_JSX_BLOCK = '\%({\_.\{-}\%(}}\|}\)\%(\/>\|[ \n>]\)\@=\)'
-let s:RE_ATTR_VALUE = '\%(' . s:RE_QUOTED_STR . '\|' . s:RE_WORD . '\|' . s:RE_JSX_BLOCK . '\)'
-let s:RE_ATTR_RHS = '\%(=' . s:RE_ATTR_VALUE . '\)\='
-let s:RE_ATTR = '\%(' . s:RE_ATTR_NAME . s:RE_ATTR_RHS . '\)'
-let s:RE_ATTR_WITH_SPACE = '\%(\_s*' . s:RE_ATTR . '\)'
-" let s:RE_ATTR_A = '\(' . s:RE_ATTR_WITH_SPACE . '\)'
-" let s:RE_JSX_TAG = '<?\?\h\w*\_s*\zs\%(' . s:RE_ATTR_WITH_SPACE . '\)*\ze\_s*/\?>'
-
-call textobj#user#plugin('tagattr', {
-\   'attr-i': {
-\     'pattern': s:RE_ATTR,
-\     'select': 'ix',
-\   },
-\   'attr-a': {
-\     'pattern': s:RE_ATTR_WITH_SPACE,
-\     'select': 'ax',
-\   },
-\ })
