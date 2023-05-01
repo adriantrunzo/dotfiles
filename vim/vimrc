@@ -223,6 +223,13 @@ let g:nnn#layout = 'enew'
 " Use n³ when opening directories instead of netrw.
 let g:nnn#replace_netrw = 1
 
+" n³ split actions.
+let g:nnn#action = {
+  \ '<c-t>': 'tab split',
+  \ '<c-s>': 'split',
+  \ '<c-v>': 'vsplit'
+  \ }
+
 " Use the sneak label mode for faster jumping.
 let g:sneak#label = 1
 
@@ -256,6 +263,14 @@ omap im <Plug>(textobj-sandwich-query-i)
 xmap am <Plug>(textobj-sandwich-query-a)
 omap am <Plug>(textobj-sandwich-query-a)
 
+" Using enter and backspace for "open" is more intuitive.
+nnoremap <CR> o
+vnoremap <CR> o
+nnoremap <S-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <Backspace> O
+vnoremap <Backspace> O
+nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+
 " Ctrl-JKHL for moving text.
 nnoremap <C-K> :m .-2<cr>==
 vnoremap <C-K> :m '<-2<cr>gv=gv
@@ -269,14 +284,6 @@ nnoremap <C-Down> :m .+1<cr>==
 vnoremap <C-Down> :m '>+1<cr>gv=gv
 nmap <C-Left> <Plug>(swap-prev)
 nmap <C-Right> <Plug>(swap-next)
-
-" Big keys for sneak.
-nmap <CR> <Plug>Sneak_s
-nmap <BS> <Plug>Sneak_S
-xmap <CR> <Plug>Sneak_s
-xmap <BS> <Plug>Sneak_S
-omap <CR> <Plug>Sneak_s
-omap <BS> <Plug>Sneak_S
 
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -305,9 +312,24 @@ nnoremap k gk
 " Convenient join without spaces.
 nnoremap K gJ
 
+" Moving around with sneak.
+nmap m <Plug>Sneak_s
+xmap m <Plug>Sneak_s
+omap m <Plug>Sneak_s
+nmap M <Plug>Sneak_S
+xmap M <Plug>Sneak_S
+omap M <Plug>Sneak_S
+
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
+
+" Use o for controlling comments.
+xmap o <Plug>Commentary
+nmap o <Plug>Commentary
+omap o <Plug>Commentary
+nmap oo <Plug>CommentaryLine
+nmap O <Plug>Commentary<Plug>Commentary
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -326,7 +348,7 @@ nmap sr <Plug>(sandwich-replace)
 xmap sr <Plug>(sandwich-replace)
 nmap srr <Plug>(sandwich-replace-auto)
 
-" Quickly select semantic ranges.
+" Quickly select syntactic ranges.
 xmap <silent> X <Plug>(coc-range-select-backward)
 nmap <silent> x <Plug>(coc-range-select)
 xmap <silent> x <Plug>(coc-range-select)
@@ -375,7 +397,7 @@ nmap <Leader>cn <Plug>(coc-rename)
 nmap <Leader>cr <Plug>(coc-references)
 nmap <Leader>ct <Plug>(coc-type-definition)
 nnoremap <Leader>d <Cmd>CocList diagnostics<CR>
-nnoremap <Leader>e <Cmd>Dirvish<CR>
+nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>g <Cmd>Git<CR>
 nnoremap <Leader>n <Cmd>nohlsearch<CR>
 nnoremap <Leader>p "*p
