@@ -271,20 +271,6 @@ nnoremap <Backspace> O
 vnoremap <Backspace> O
 nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
-" Ctrl-JKHL for moving text.
-nnoremap <C-K> :m .-2<cr>==
-vnoremap <C-K> :m '<-2<cr>gv=gv
-nnoremap <C-J> :m .+1<cr>==
-vnoremap <C-J> :m '>+1<cr>gv=gv
-nmap <C-H> <Plug>(swap-prev)
-nmap <C-L> <Plug>(swap-next)
-nnoremap <C-Up> :m .-2<cr>==
-vnoremap <C-Up> :m '<-2<cr>gv=gv
-nnoremap <C-Down> :m .+1<cr>==
-vnoremap <C-Down> :m '>+1<cr>gv=gv
-nmap <C-Left> <Plug>(swap-prev)
-nmap <C-Right> <Plug>(swap-next)
-
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
@@ -369,18 +355,24 @@ inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
 " Previous.
-nnoremap [<Space> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
-nnoremap [b <Cmd>bprevious<CR>
-nmap [d <Plug>(coc-diagnostic-prev)
-nnoremap [l <Cmd>lprevious<CR>
-nnoremap [q <Cmd>cprevious<CR>
+nnoremap <A-B> <Cmd>bprevious<CR>
+nmap <A-D> <Plug>(coc-diagnostic-prev)
+nnoremap <A-L> <Cmd>lprevious<CR>
+nnoremap <A-Q> <Cmd>cprevious<CR>
 
 " Next.
-nnoremap ]<Space> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap ]b <Cmd>bnext<CR>
-nmap ]d <Plug>(coc-diagnostic-next)
-nnoremap ]l <Cmd>lnext<CR>
-nnoremap ]q <Cmd>cnext<CR>
+nnoremap <A-b> <Cmd>bnext<CR>
+nmap <A-d> <Plug>(coc-diagnostic-next)
+nnoremap <A-l> <Cmd>lnext<CR>
+nnoremap <A-q> <Cmd>cnext<CR>
+
+" Moving text.
+nnoremap <A-Up> :m .-2<cr>==
+vnoremap <A-Up> :m '<-2<cr>gv=gv
+nnoremap <A-Down> :m .+1<cr>==
+vnoremap <A-Down> :m '>+1<cr>gv=gv
+nmap <A-Left> <Plug>(swap-prev)
+nmap <A-Right> <Plug>(swap-next)
 
 nnoremap <Leader><Space> <Cmd>CocList --reverse files<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
@@ -403,11 +395,11 @@ nnoremap <Leader>n <Cmd>nohlsearch<CR>
 nnoremap <Leader>p "*p
 nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
-nnoremap <leader>vc <cmd>edit $MYVIMRC<cr>
-nnoremap <leader>vr <cmd>source $MYVIMRC<cr>
-nnoremap <leader>y "*y
-nnoremap <leader>Y "*Y
-xnoremap <leader>y "*y
+nnoremap <Leader>vc <cmd>edit $MYVIMRC<cr>
+nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
+nnoremap <Leader>y "*y
+nnoremap <Leader>Y "*Y
+xnoremap <Leader>y "*y
 
 augroup Config
     autocmd!
@@ -424,7 +416,7 @@ augroup Config
     autocmd FileType html call s:handle_ft_html()
     autocmd FileType javascript,javascriptreact call s:handle_ft_javascript()
     autocmd FileType json call s:handle_ft_json()
-    autocmd FileType qf call s:handle_ft_qt()
+    autocmd FileType qf call s:handle_ft_qf()
     autocmd FileType typescript,typescriptreact call s:handle_ft_typescript()
     autocmd FileType vim call s:handle_ft_vim()
 
@@ -455,6 +447,15 @@ function! s:handle_ft_json() abort
 endfunction
 
 function! s:handle_ft_qf() abort
+    setlocal norelativenumber
+    setlocal nowrap
+
+    augroup QFConfig
+      autocmd!
+      autocmd BufEnter <buffer> setlocal scrolloff=0
+      autocmd BufLeave <buffer> setlocal scrolloff=-1
+    augroup END
+
     call s:reset_cr_mappings()
 endfunction
 
