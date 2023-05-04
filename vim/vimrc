@@ -178,6 +178,11 @@ set wildoptions=fuzzy,pum
 " Wrap long lines.
 set wrap
 
+if has('osx')
+    " Load the fzf plugin included with the homebrew install.
+    set rtp+=/usr/local/opt/fzf
+endif
+
 " Use space for leader. 
 let mapleader = ' '
 
@@ -198,6 +203,9 @@ let g:airline_extensions = ['branch', 'coc', 'quickfix']
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
+
+" Open FZF in a new buffer at the bottom.
+let g:fzf_layout = { 'window': '12new' }
 
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
@@ -246,6 +254,11 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-vimlsp'
   \ ]
+
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+    set grepformat+=%f:%l:%c:%m
+endif
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
@@ -374,7 +387,7 @@ vnoremap <A-Down> :m '>+1<cr>gv=gv
 nmap <A-Left> <Plug>(swap-prev)
 nmap <A-Right> <Plug>(swap-next)
 
-nnoremap <Leader><Space> <Cmd>CocList --reverse files<CR>
+nnoremap <Leader><Space> <Cmd>FZF<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
 nnoremap <Leader><S-CR> <Cmd>exit<CR>
 nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
@@ -405,6 +418,7 @@ augroup Config
     autocmd!
     " https://stackoverflow.com/a/16360104
     autocmd CmdWinEnter * call s:reset_cr_mappings()
+    autocmd BufReadPost * if !empty(&bt) | call s:reset_cr_mappings() | endif
 
     " These files should be treated as JSONC.
     autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
@@ -413,6 +427,7 @@ augroup Config
 
     " Filetype specific settings.
     autocmd FileType css,scss call s:handle_ft_css()
+    autocmd FileType fzf call s:handle_ft_fzf()
     autocmd FileType html call s:handle_ft_html()
     autocmd FileType javascript,javascriptreact call s:handle_ft_javascript()
     autocmd FileType json call s:handle_ft_json()
@@ -432,6 +447,12 @@ augroup end
 
 function! s:handle_ft_css() abort
     setlocal formatexpr=CocAction('formatSelected')
+endfunction
+
+function! s:handle_ft_fzf() abort
+    " Hide the status line on the bottom window temporarily.
+    set laststatus=0
+    autocmd BufLeave <buffer> set laststatus=2
 endfunction
 
 function! s:handle_ft_html() abort
@@ -475,6 +496,7 @@ function! s:handle_airline_init() abort
 endfunction
 
 function! s:reset_cr_mappings() abort
+    noremap <buffer> <BS> <BS>
     noremap <buffer> <CR> <CR>
 endfunction
 
