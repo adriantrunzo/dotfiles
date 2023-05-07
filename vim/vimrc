@@ -47,6 +47,18 @@ if &term == 'xterm-kitty'
     let &t_RT = "\e[23;2t"
 endif
 
+" Autocommand group to use throughout this configuration file.
+augroup Config
+    autocmd!
+augroup end
+
+" Customize the dracula theme. Must be called before colorscheme.
+autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
+
+function! s:handle_colorscheme_dracula() abort
+    highlight link CurSearch IncSearch
+endfunction
+
 " Enable filetype and indent detection.
 filetype plugin indent on
 
@@ -142,6 +154,9 @@ set softtabstop=2
 " Open horizontal splits below.
 set splitbelow
 
+" Don't shift the buffer when splitting below.
+set splitkeep=topline
+
 " Open vertical splits to the right.
 set splitright
 
@@ -181,6 +196,12 @@ set wrap
 if has('osx')
     " Load the fzf plugin included with the homebrew install.
     set rtp+=/usr/local/opt/fzf
+endif
+
+" Ripgrep is much faster.
+if executable("rg")
+    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+    set grepformat+=%f:%l:%c:%m
 endif
 
 " Use space for leader. 
@@ -255,10 +276,31 @@ let g:coc_global_extensions = [
   \ 'coc-vimlsp'
   \ ]
 
-if executable("rg")
-    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
-    set grepformat+=%f:%l:%c:%m
-endif
+" Better grep experience without seeing the terminal output. 
+" https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
+function! s:grep(...)
+    let l:result = ''
+
+    " c[l]getexpr uses errorformat by default. Let's use grepformat instead.
+    let l:saved_errorformat = &errorformat
+    let &errorformat = &grepformat
+
+    try
+        let l:result = system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+    finally
+        let &errorformat = l:saved_errorformat
+    endtry
+
+    return l:result
+endfunction
+
+" Commands to call the custom grep function.
+command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr s:grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr s:grep(<f-args>)
+
+" Vim will change grep to Grep for us.
+cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
+cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
@@ -414,36 +456,38 @@ nnoremap <Leader>y "*y
 nnoremap <Leader>Y "*Y
 xnoremap <Leader>y "*y
 
-augroup Config
-    autocmd!
-    " https://stackoverflow.com/a/16360104
-    autocmd CmdWinEnter * call s:reset_cr_mappings()
-    autocmd BufReadPost * if !empty(&bt) | call s:reset_cr_mappings() | endif
+" https://stackoverflow.com/a/16360104
+autocmd Config CmdWinEnter * call s:reset_cr_mappings()
+autocmd Config BufReadPost * if !empty(&bt) | call s:reset_cr_mappings() | endif
 
-    " These files should be treated as JSONC.
-    autocmd BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
-    autocmd BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
-    autocmd BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
+" These files should be treated as JSONC.
+autocmd Config BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
+autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
+autocmd Config BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 
-    " Filetype specific settings.
-    autocmd FileType css,scss call s:handle_ft_css()
-    autocmd FileType fzf call s:handle_ft_fzf()
-    autocmd FileType html call s:handle_ft_html()
-    autocmd FileType javascript,javascriptreact call s:handle_ft_javascript()
-    autocmd FileType json call s:handle_ft_json()
-    autocmd FileType qf call s:handle_ft_qf()
-    autocmd FileType typescript,typescriptreact call s:handle_ft_typescript()
-    autocmd FileType vim call s:handle_ft_vim()
+" Filetype specific settings.
+autocmd Config FileType css,scss call s:handle_ft_css()
+autocmd Config FileType fzf call s:handle_ft_fzf()
+autocmd Config FileType html call s:handle_ft_html()
+autocmd Config FileType javascript,javascriptreact call s:handle_ft_javascript()
+autocmd Config FileType json call s:handle_ft_json()
+autocmd Config FileType qf call s:handle_ft_qf()
+autocmd Config FileType typescript,typescriptreact call s:handle_ft_typescript()
+autocmd Config FileType vim call s:handle_ft_vim()
 
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" Open the quickfix and location windows automatically.
+" https://noahfrederick.com/log/vim-streamlining-grep
+autocmd Config QuickFixCmdPost [^l]* cwindow
+autocmd Config QuickFixCmdPost l* lwindow
 
-    " Highlight the symbol and its references when holding the cursor.
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+" Update signature help on jump placeholder.
+autocmd Config User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
-    " Call airline customization method.
-    autocmd User AirlineAfterInit call s:handle_airline_init()
-augroup end
+" Highlight the symbol and its references when holding the cursor.
+autocmd Config CursorHold * silent call CocActionAsync('highlight')
+
+" Call airline customization method.
+autocmd Config User AirlineAfterInit call s:handle_airline_init()
 
 function! s:handle_ft_css() abort
     setlocal formatexpr=CocAction('formatSelected')
@@ -472,9 +516,9 @@ function! s:handle_ft_qf() abort
     setlocal nowrap
 
     augroup QFConfig
-      autocmd!
-      autocmd BufEnter <buffer> setlocal scrolloff=0
-      autocmd BufLeave <buffer> setlocal scrolloff=-1
+        autocmd!
+        autocmd BufEnter <buffer> setlocal scrolloff=0
+        autocmd BufLeave <buffer> setlocal scrolloff=-1
     augroup END
 
     call s:reset_cr_mappings()
