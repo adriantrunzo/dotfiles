@@ -278,25 +278,27 @@ let g:coc_global_extensions = [
 
 " Better grep experience without seeing the terminal output. 
 " https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
-function! s:grep(...)
-    let l:result = ''
-
+function! s:grep(is_location, ...)
     " c[l]getexpr uses errorformat by default. Let's use grepformat instead.
     let l:saved_errorformat = &errorformat
     let &errorformat = &grepformat
 
     try
         let l:result = system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
+
+        if a:is_location
+            lgetexpr l:result
+        else
+            cgetexpr l:result
+        endif
     finally
         let &errorformat = l:saved_errorformat
     endtry
-
-    return l:result
 endfunction
 
 " Commands to call the custom grep function.
-command! -nargs=+ -complete=file_in_path -bar Grep  cgetexpr s:grep(<f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep lgetexpr s:grep(<f-args>)
+command! -nargs=+ -complete=file_in_path -bar Grep  call s:grep(v:false, <f-args>)
+command! -nargs=+ -complete=file_in_path -bar LGrep call s:grep(v:true, <f-args>)
 
 " Vim will change grep to Grep for us.
 cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
