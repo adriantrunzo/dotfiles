@@ -311,14 +311,14 @@ xmap a, <Plug>(swap-textobject-a)
 omap a, <Plug>(swap-textobject-a)
 
 " Sandwich text-objects for surrounding characters.
-xmap is <Plug>(textobj-sandwich-auto-i)
-omap is <Plug>(textobj-sandwich-auto-i)
-xmap as <Plug>(textobj-sandwich-auto-a)
-omap as <Plug>(textobj-sandwich-auto-a)
-xmap im <Plug>(textobj-sandwich-query-i)
-omap im <Plug>(textobj-sandwich-query-i)
-xmap am <Plug>(textobj-sandwich-query-a)
-omap am <Plug>(textobj-sandwich-query-a)
+xmap im <Plug>(textobj-sandwich-auto-i)
+omap im <Plug>(textobj-sandwich-auto-i)
+xmap am <Plug>(textobj-sandwich-auto-a)
+omap am <Plug>(textobj-sandwich-auto-a)
+xmap iq <Plug>(textobj-sandwich-query-i)
+omap iq <Plug>(textobj-sandwich-query-i)
+xmap aq <Plug>(textobj-sandwich-query-a)
+omap aq <Plug>(textobj-sandwich-query-a)
 
 " Using enter and backspace for "open" is more intuitive.
 nnoremap <CR> o
@@ -355,13 +355,18 @@ nnoremap k gk
 " Convenient join without spaces.
 nnoremap K gJ
 
-" Moving around with sneak.
-nmap m <Plug>Sneak_s
-xmap m <Plug>Sneak_s
-omap m <Plug>Sneak_s
-nmap M <Plug>Sneak_S
-xmap M <Plug>Sneak_S
-omap M <Plug>Sneak_S
+" Use vim-sandwich for matching operations.
+nmap m <Nop>
+xmap m <Nop>
+nmap ma <Plug>(sandwich-add)
+xmap ma <Plug>(sandwich-add)
+omap ma <Plug>(sandwich-add)
+nmap md <Plug>(sandwich-delete)
+xmap md <Plug>(sandwich-delete)
+nmap mdd <Plug>(sandwich-delete-auto)
+nmap mr <Plug>(sandwich-replace)
+xmap mr <Plug>(sandwich-replace)
+nmap mrr <Plug>(sandwich-replace-auto)
 
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
@@ -378,18 +383,10 @@ nmap O <Plug>Commentary<Plug>Commentary
 nnoremap q @
 nnoremap Q q
 
-" Use s for vim-sandwich, but tweak the defaults slightly.
-nmap s <Nop>
-xmap s <Nop>
-nmap sa <Plug>(sandwich-add)
-xmap sa <Plug>(sandwich-add)
-omap sa <Plug>(sandwich-add)
-nmap sd <Plug>(sandwich-delete)
-xmap sd <Plug>(sandwich-delete)
-nmap sdd <Plug>(sandwich-delete-auto)
-nmap sr <Plug>(sandwich-replace)
-xmap sr <Plug>(sandwich-replace)
-nmap srr <Plug>(sandwich-replace-auto)
+" Use s for sneak in all modes.
+omap s <Plug>Sneak_s
+omap S <Plug>Sneak_S
+xmap S <Plug>Sneak_S
 
 " Quickly select syntactic ranges.
 xmap <silent> X <Plug>(coc-range-select-backward)
