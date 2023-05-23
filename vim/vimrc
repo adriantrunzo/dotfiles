@@ -225,9 +225,6 @@ let g:airline_extensions = ['branch', 'coc', 'quickfix']
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
 
-" Open FZF in a new buffer at the bottom.
-let g:fzf_layout = { 'window': '12new' }
-
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
   \ line_continuation: shiftwidth(),
@@ -275,34 +272,6 @@ let g:coc_global_extensions = [
   \ 'coc-tsserver',
   \ 'coc-vimlsp'
   \ ]
-
-" Better grep experience without seeing the terminal output. 
-" https://gist.github.com/romainl/56f0c28ef953ffc157f36cc495947ab3
-function! s:grep(is_location, ...)
-    " c[l]getexpr uses errorformat by default. Let's use grepformat instead.
-    let l:saved_errorformat = &errorformat
-    let &errorformat = &grepformat
-
-    try
-        let l:result = system(join([&grepprg] + [expandcmd(join(a:000, ' '))], ' '))
-
-        if a:is_location
-            lgetexpr l:result
-        else
-            cgetexpr l:result
-        endif
-    finally
-        let &errorformat = l:saved_errorformat
-    endtry
-endfunction
-
-" Commands to call the custom grep function.
-command! -nargs=+ -complete=file_in_path -bar Grep  call s:grep(v:false, <f-args>)
-command! -nargs=+ -complete=file_in_path -bar LGrep call s:grep(v:true, <f-args>)
-
-" Vim will change grep to Grep for us.
-cnoreabbrev <expr> grep  (getcmdtype() ==# ':' && getcmdline() ==# 'grep')  ? 'Grep'  : 'grep'
-cnoreabbrev <expr> lgrep (getcmdtype() ==# ':' && getcmdline() ==# 'lgrep') ? 'LGrep' : 'lgrep'
 
 " Swappable (eg arguments) text objects.
 xmap i, <Plug>(swap-textobject-i)
@@ -428,7 +397,7 @@ vnoremap <A-Down> :m '>+1<cr>gv=gv
 nmap <A-Left> <Plug>(swap-prev)
 nmap <A-Right> <Plug>(swap-next)
 
-nnoremap <Leader><Space> <Cmd>FZF<CR>
+nnoremap <Leader><Space> <Cmd>Files<CR>
 nnoremap <Leader><CR> <Cmd>update<CR>
 nnoremap <Leader><S-CR> <Cmd>exit<CR>
 nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
@@ -466,7 +435,6 @@ autocmd Config BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 
 " Filetype specific settings.
 autocmd Config FileType css,scss call s:handle_ft_css()
-autocmd Config FileType fzf call s:handle_ft_fzf()
 autocmd Config FileType html call s:handle_ft_html()
 autocmd Config FileType javascript,javascriptreact call s:handle_ft_javascript()
 autocmd Config FileType json call s:handle_ft_json()
@@ -488,14 +456,12 @@ autocmd Config CursorHold * silent call CocActionAsync('highlight')
 " Call airline customization method.
 autocmd Config User AirlineAfterInit call s:handle_airline_init()
 
+" Custom FZF commands.
+command! -bang -complete=dir -nargs=? Files call s:fzf_files(<q-args>, <bang>0)
+command! -bang -complete=dir -nargs=? Grep call s:fzf_grep(<q-args>, <bang>0)
+
 function! s:handle_ft_css() abort
     setlocal formatexpr=CocAction('formatSelected')
-endfunction
-
-function! s:handle_ft_fzf() abort
-    " Hide the status line on the bottom window temporarily.
-    set laststatus=0
-    autocmd BufLeave <buffer> set laststatus=2
 endfunction
 
 function! s:handle_ft_html() abort
@@ -513,12 +479,6 @@ endfunction
 function! s:handle_ft_qf() abort
     setlocal norelativenumber
     setlocal nowrap
-
-    augroup QFConfig
-        autocmd!
-        autocmd BufEnter <buffer> setlocal scrolloff=0
-        autocmd BufLeave <buffer> setlocal scrolloff=-1
-    augroup END
 
     call s:reset_cr_mappings()
 endfunction
@@ -563,4 +523,83 @@ function! GetGitBranch(name) abort
 
     " Otherwise the first ten characters.
     return a:name[:9]
+endfunction
+
+" Open an FZF mulit-file picker with the ability to change from
+" version-controlled files to all files. Defaults to using the CWD, but
+" optionally accepts an alternate directory.
+function! s:fzf_files(dir, fullscreen) abort
+    let l:name = 'files'
+    let l:options = [
+      \ '--bind', 'ctrl-space:change-prompt(Files(all): )+reload(fd -t f -uL)',
+      \ '--border', 'top',
+      \ '--prompt', 'Files: ',
+      \ '--multi'
+      \ ]
+    let l:window = { 'width': 1.0, 'height': 14, 'yoffset': 1.0 }
+    let l:fzf = { 'dir': a:dir, 'options': l:options, 'window': l:window }
+
+    call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
+endfunction
+
+" Parse lines from ripgrep for use in the quickfix window.
+function! s:parse_fzf_grep_line(line)
+    let parts = split(a:line, ':')
+
+    " The names of the properties are dictated by setqflist.
+    return {
+      \ 'filename': parts[0],
+      \ 'lnum': parts[1],
+      \ 'col': parts[2],
+      \ 'text': join(parts[3:], ':')
+      \ }
+endfunction
+
+" Handle the chosen entries when doing a grep through FZF. The first file is
+" always opened and selecting multiple files updates the quickfix list.
+function! s:sinklist_fzf_grep(lines)
+  let l:list = map(a:lines, 's:parse_fzf_grep_line(v:val)')
+  let l:first = l:list[0]
+
+  execute 'edit' escape(l:first.filename, ' %#\')
+  execute l:first.lnum
+  execute 'normal!' l:first.col . '|zz'
+
+  if len(l:list) > 1
+      call setqflist(l:list)
+      cwindow
+      wincmd p
+  endif
+endfunction
+
+" Open an FZF window for live-grepping the CWD, optionally accepting an initial
+" query. Adapted from the following examples:
+" https://github.com/junegunn/fzf.vim/blob/master/README.md#example-advanced-ripgrep-integration
+" https://github.com/junegunn/fzf/blob/master/ADVANCED.md#using-fzf-as-interactive-ripgrep-launcher
+function s:fzf_grep(query, fullscreen) abort
+    let l:name = 'grep'
+    let l:cmd = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
+    let l:source = printf(cmd, shellescape(a:query))
+    let l:reload = printf(cmd, '{q}')
+    let l:options = [
+      \ '--ansi',
+      \ '--disabled',
+      \ '--bind', 'change:reload:sleep 0.1; ' . l:reload,
+      \ '--border', 'top',
+      \ '--delimiter', ':',
+      \ '--preview', 'bat --color=always {1} --highlight-line {2}',
+      \ '--preview-window', 'up,60%,border-bottom,+{2}+3/3,~3',
+      \ '--prompt', 'Grep: ',
+      \ '--query', a:query,
+      \ '--multi'
+      \ ]
+    let l:window = { 'width': 1.0, 'height': 0.8, 'yoffset': 1.0 }
+    let l:fzf = {
+      \ 'options': l:options,
+      \ 'sinklist': function('<sid>sinklist_fzf_grep'),
+      \ 'source': l:source,
+      \ 'window': l:window
+      \ }
+
+    call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
 endfunction
