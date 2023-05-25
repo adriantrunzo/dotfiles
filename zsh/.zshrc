@@ -7,7 +7,7 @@ export BAT_THEME=Dracula
 # fzf configuration. https://github.com/junegunn/fzf#settings
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--info=inline --bind=shift-down:toggle+down,shift-up:toggle+up,ctrl-space:toggle'
+export FZF_DEFAULT_OPTS='--info=inline --reverse --marker=* --bind=ctrl-s:toggle'
 
 # Use fd to generate the list for file completion.
 _fzf_compgen_path() {

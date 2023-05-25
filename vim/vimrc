@@ -251,8 +251,8 @@ let g:nnn#replace_netrw = 1
 
 " n³ split actions.
 let g:nnn#action = {
+  \ '<c-h>': 'split',
   \ '<c-t>': 'tab split',
-  \ '<c-s>': 'split',
   \ '<c-v>': 'vsplit'
   \ }
 
@@ -531,12 +531,12 @@ endfunction
 function! s:fzf_files(dir, fullscreen) abort
     let l:name = 'files'
     let l:options = [
-      \ '--bind', 'ctrl-space:change-prompt(Files(all): )+reload(fd -t f -uL)',
-      \ '--border', 'top',
+      \ '--bind', 'ctrl-f:change-prompt(Files(all): )+reload(fd -t f -uL)',
+      \ '--padding', '1',
       \ '--prompt', 'Files: ',
       \ '--multi'
       \ ]
-    let l:window = { 'width': 1.0, 'height': 14, 'yoffset': 1.0 }
+    let l:window = { 'width': 0.6, 'height': 0.4 }
     let l:fzf = { 'dir': a:dir, 'options': l:options, 'window': l:window }
 
     call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
@@ -585,15 +585,15 @@ function s:fzf_grep(query, fullscreen) abort
       \ '--ansi',
       \ '--disabled',
       \ '--bind', 'change:reload:sleep 0.1; ' . l:reload,
-      \ '--border', 'top',
       \ '--delimiter', ':',
+      \ '--padding', '1',
       \ '--preview', 'bat --color=always {1} --highlight-line {2}',
-      \ '--preview-window', 'up,60%,border-bottom,+{2}+3/3,~3',
+      \ '--preview-window', 'right,50%,border-left,+{2}+3/3,~3,<80(up,50%,border-bottom)',
       \ '--prompt', 'Grep: ',
       \ '--query', a:query,
       \ '--multi'
       \ ]
-    let l:window = { 'width': 1.0, 'height': 0.8, 'yoffset': 1.0 }
+    let l:window = { 'width': 0.9, 'height': 0.8 }
     let l:fzf = {
       \ 'options': l:options,
       \ 'sinklist': function('<sid>sinklist_fzf_grep'),
