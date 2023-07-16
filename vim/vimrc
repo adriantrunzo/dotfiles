@@ -133,6 +133,9 @@ set signcolumn=yes
 " Use two spaces when indenting.
 set shiftwidth=2
 
+" Display the number of search results.
+set shortmess-=S
+
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
 
@@ -195,7 +198,7 @@ set wrap
 
 if has('osx')
     " Load the fzf plugin included with the homebrew install.
-    set rtp+=/usr/local/opt/fzf
+    set rtp+=/opt/homebrew/opt/fzf
 endif
 
 " Ripgrep is much faster.

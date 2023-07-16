@@ -1,5 +1,5 @@
 # Add Homebrew's executable directory to the front of the PATH.
-export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 
 # bat configuration. https://github.com/sharkdp/bat#customization
 export BAT_THEME=Dracula
