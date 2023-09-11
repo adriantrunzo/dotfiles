@@ -57,6 +57,7 @@ autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
 
 function! s:handle_colorscheme_dracula() abort
     highlight link CurSearch IncSearch
+    highlight link CocErrorSign DraculaWarning
 endfunction
 
 " Enable filetype and indent detection.
@@ -208,7 +209,7 @@ if executable("rg")
 endif
 
 " Use space for leader. 
-let mapleader = ' '
+let mapleader = '?'
 
 " Use dracula in airline and remove all of the symbols.
 let g:airline_theme='dracula'
@@ -270,6 +271,7 @@ let g:sneak#label = 1
 
 " Coc Extensions. These should be automatically installed by coc.nvim.
 let g:coc_global_extensions = [
+  \ 'coc-clangd',
   \ 'coc-css',
   \ 'coc-cssmodules',
   \ 'coc-eslint',
@@ -298,13 +300,20 @@ omap iq <Plug>(textobj-sandwich-query-i)
 xmap aq <Plug>(textobj-sandwich-query-a)
 omap aq <Plug>(textobj-sandwich-query-a)
 
-" Using enter and backspace for "open" is more intuitive.
-nnoremap <CR> o
-vnoremap <CR> o
-nnoremap <S-CR> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap <Backspace> O
-vnoremap <Backspace> O
-nnoremap <S-Backspace> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+" Convenient saving.
+nnoremap <CR> <Cmd>update<CR>
+nnoremap <S-CR> <Cmd>exit<CR>
+
+" On the Kinesis Advantage, Space and Backspace are just under the thumbs.
+nnoremap <Space> <C-d>
+nnoremap <Backspace> <C-u>
+
+" Quickly close a buffer.
+nnoremap <S-Backspace> <Cmd>bdelete<CR>
+
+" Alias for quickly scrolling through open buffers.
+nnoremap <Tab> <Cmd>bnext<CR>
+nnoremap <S-Tab> <Cmd>bprevious<CR>
 
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -314,24 +323,30 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 " Backslash is the same key as forward slash in the Engram layout.
 noremap \ ?
 
-" You have a question about something?
-nnoremap ? <Cmd>call <SID>show_documentation()<CR>
-vnoremap ? K
+" ? is the leader key.
+noremap ? <Nop>
+
+" Add LSP to K.
+nnoremap K <Cmd>call <SID>show_documentation()<CR>
 
 " Reselect visual selection after indenting.
 vnoremap < <gv
 vnoremap > >gv
 
-" Quick change the word under the cursor.
-nmap cn *``cgn
-nmap cN *``cgN
+" Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
+" cs is used for sneak.
+nmap <silent> cd <Plug>(coc-definition)
+nmap <silent> cm <Plug>(coc-implementation)
+nmap <silent> cp <Plug>(coc-type-definition)
+nmap <silent> cq <Plug>(coc-format)
+nmap <silent> cn <Plug>(coc-rename)
+nmap <silent> cr <Plug>(coc-references)
+nmap <silent> cx <Plug>(coc-declaration)
+nmap <silent> cz <Plug>(coc-codeaction-selected)
 
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
 nnoremap k gk
-
-" Convenient join without spaces.
-nnoremap K gJ
 
 " Use vim-sandwich for matching operations.
 nmap m <Nop>
@@ -346,16 +361,19 @@ nmap mr <Plug>(sandwich-replace)
 xmap mr <Plug>(sandwich-replace)
 nmap mrr <Plug>(sandwich-replace-auto)
 
+" Moving text.
+nnoremap mk :m .-2<cr>==
+vnoremap mk :m '<-2<cr>gv=gv
+nnoremap mj :m .+1<cr>==
+vnoremap mj :m '>+1<cr>gv=gv
+nmap mh <Plug>(swap-prev)
+nmap ml <Plug>(swap-next)
+nmap gs <Plug>(swap-interactive)
+xmap gs <Plug>(swap-interactive)
+
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
-
-" Use o for controlling comments.
-xmap o <Plug>Commentary
-nmap o <Plug>Commentary
-omap o <Plug>Commentary
-nmap oo <Plug>CommentaryLine
-nmap O <Plug>Commentary<Plug>Commentary
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -366,13 +384,24 @@ omap s <Plug>Sneak_s
 omap S <Plug>Sneak_S
 xmap S <Plug>Sneak_S
 
-" Quickly select syntactic ranges.
-xmap <silent> X <Plug>(coc-range-select-backward)
-nmap <silent> x <Plug>(coc-range-select)
-xmap <silent> x <Plug>(coc-range-select)
-
 " Better redo.
 nnoremap U <C-r>
+
+" Substitute over a range. x is mostly redundant with d.
+nmap x <Plug>(SubversiveSubstituteRange)
+xmap x <Plug>(SubversiveSubstituteRange)
+nmap xx <Plug>(SubversiveSubstituteWordRange)
+nmap X <Plug>(SubversiveSubstituteRangeConfirm)
+xmap X <Plug>(SubversiveSubstituteRangeConfirm)
+nmap XX <Plug>(SubversiveSubstituteWordRangeConfirm)
+
+" Unused y-mappings: yc yd ym yo yp yq yr ys yu yx yz
+" ys is used for sneak.
+" Use yp for "yank-paste", substituting the target without overwriting the
+" unnamed buffer. In visual mode use P. 
+nmap yp <Plug>(SubversiveSubstitute)
+nmap ypp <Plug>(SubversiveSubstituteLine)
+nmap yP <Plug>(SubversiveSubstituteToEndOfLine)
 
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
@@ -387,65 +416,37 @@ inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
 " Previous.
-nnoremap <A-B> <Cmd>bprevious<CR>
-nmap <A-D> <Plug>(coc-diagnostic-prev)
-nnoremap <A-L> <Cmd>lprevious<CR>
-nnoremap <A-Q> <Cmd>cprevious<CR>
+nnoremap [b <Cmd>bprevious<CR>
+nmap [d <Plug>(coc-diagnostic-prev)
+nnoremap [l <Cmd>lprevious<CR>
+nnoremap [q <Cmd>cprevious<CR>
+nnoremap [<Space> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
 " Next.
-nnoremap <A-b> <Cmd>bnext<CR>
-nmap <A-d> <Plug>(coc-diagnostic-next)
-nnoremap <A-l> <Cmd>lnext<CR>
-nnoremap <A-q> <Cmd>cnext<CR>
+nnoremap ]b <Cmd>bnext<CR>
+nmap ]d <Plug>(coc-diagnostic-next)
+nnoremap ]l <Cmd>lnext<CR>
+nnoremap ]q <Cmd>cnext<CR>
+nnoremap ]<Space> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
 
-" Moving text.
-nnoremap <A-Up> :m .-2<cr>==
-vnoremap <A-Up> :m '<-2<cr>gv=gv
-nnoremap <A-Down> :m .+1<cr>==
-vnoremap <A-Down> :m '>+1<cr>gv=gv
-nmap <A-Left> <Plug>(swap-prev)
-nmap <A-Right> <Plug>(swap-next)
-
-nnoremap <Leader><Space> <Cmd>Files<CR>
-nnoremap <Leader><CR> <Cmd>update<CR>
-nnoremap <Leader><S-CR> <Cmd>exit<CR>
-nnoremap <Leader><Backspace> <Cmd>bdelete<CR>
-nnoremap <Leader><S-Backspace> <Cmd>quit<CR>
-nnoremap <Leader>b <Cmd>Buffers<CR>
-nmap <Leader>ca <Plug>(coc-codeaction-selected)
-nmap <Leader>cd <Plug>(coc-definition)
-nmap <Leader>cf <Plug>(coc-format)
-nmap <Leader>cl <Plug>(coc-declaration)
-nmap <Leader>cm <Plug>(coc-implementation)
-nmap <Leader>cn <Plug>(coc-rename)
-nmap <Leader>cr <Plug>(coc-references)
-nmap <Leader>ct <Plug>(coc-type-definition)
-nnoremap <Leader>d <Cmd>CocList diagnostics<CR>
+nnoremap <Leader>? <Cmd>Files<CR>
 nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>g <Cmd>Git<CR>
-nnoremap <Leader>n <Cmd>nohlsearch<CR>
 nnoremap <Leader>p "*p
 nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
-nnoremap <Leader>vc <cmd>edit $MYVIMRC<cr>
-nnoremap <Leader>vr <cmd>source $MYVIMRC<cr>
 nnoremap <Leader>y "*y
 nnoremap <Leader>Y "*Y
 xnoremap <Leader>y "*y
 
 " https://stackoverflow.com/a/16360104
-autocmd Config CmdWinEnter * call s:reset_cr_mappings()
-autocmd Config BufReadPost * if !empty(&bt) | call s:reset_cr_mappings() | endif
-
-" These files should be treated as JSONC.
-autocmd Config BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
-autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
-autocmd Config BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
+autocmd Config CmdWinEnter * call s:unmap_cr()
+autocmd Config BufReadPost * if !empty(&bt) | call s:unmap_cr() | endif
 
 " Buffer MRU, adapted from:
 " https://github.com/junegunn/fzf.vim/blob/dc71692255b62d1f67dc55c8e51ab1aa467b1d46/plugin/fzf.vim#L125
-autocmd BufWinEnter,WinEnter * let g:buffer_timestamps[bufnr('')] = reltimefloat(reltime())
-autocmd BufDelete * silent! call remove(g:buffer_timestamps, expand('<abuf>'))
+autocmd Config BufWinEnter,WinEnter * let g:buffer_timestamps[bufnr('')] = reltimefloat(reltime())
+autocmd Config BufDelete * silent! call remove(g:buffer_timestamps, expand('<abuf>'))
 
 " Filetype specific settings.
 autocmd Config FileType css,scss call s:handle_ft_css()
@@ -475,6 +476,10 @@ command! -bang -complete=dir -nargs=? Files call s:fzf_files(<q-args>, <bang>0)
 command! -bang -complete=dir -nargs=? Grep call s:fzf_grep(<q-args>, <bang>0)
 command! -bang -complete=dir -nargs=? Buffers call s:fzf_buffers(<q-args>, <bang>0)
 
+function! s:unmap_cr() abort
+    noremap <buffer> <CR> <CR>
+endfunction
+
 function! s:handle_ft_css() abort
     setlocal formatexpr=CocAction('formatSelected')
 endfunction
@@ -495,7 +500,7 @@ function! s:handle_ft_qf() abort
     setlocal norelativenumber
     setlocal nowrap
 
-    call s:reset_cr_mappings()
+    call s:unmap_cr()
 endfunction
 
 function! s:handle_ft_typescript() abort
@@ -511,11 +516,6 @@ endfunction
 " Remove the document percentage indicator.
 function! s:handle_airline_init() abort
     let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
-endfunction
-
-function! s:reset_cr_mappings() abort
-    noremap <buffer> <BS> <BS>
-    noremap <buffer> <CR> <CR>
 endfunction
 
 " Inegrate LSP hover and keyword lookup.
