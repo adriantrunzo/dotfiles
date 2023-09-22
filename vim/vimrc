@@ -208,9 +208,6 @@ if executable("rg")
     set grepformat+=%f:%l:%c:%m
 endif
 
-" Use space for leader. 
-let mapleader = '?'
-
 " Use dracula in airline and remove all of the symbols.
 let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
@@ -300,20 +297,25 @@ omap iq <Plug>(textobj-sandwich-query-i)
 xmap aq <Plug>(textobj-sandwich-query-a)
 omap aq <Plug>(textobj-sandwich-query-a)
 
+" Use space for leader. 
+let mapleader = ' '
+
+nnoremap <Leader><Space> <Cmd>Files<CR>
+
 " Convenient saving.
 nnoremap <CR> <Cmd>update<CR>
-nnoremap <S-CR> <Cmd>exit<CR>
-
-" On the Kinesis Advantage, Space and Backspace are just under the thumbs.
-nnoremap <Space> <C-d>
-nnoremap <Backspace> <C-u>
+nnoremap <S-CR> <Cmd>write<CR>
+nnoremap <Leader><CR> <Cmd>exit<CR>
 
 " Quickly close a buffer.
-nnoremap <S-Backspace> <Cmd>bdelete<CR>
+nnoremap <Backspace> <Cmd>bdelete<CR>
+nnoremap <S-Backspace> <Cmd>bdelete!<CR>
+nnoremap <Leader><Backspace> <Cmd>quit<CR>
 
 " Alias for quickly scrolling through open buffers.
 nnoremap <Tab> <Cmd>bnext<CR>
 nnoremap <S-Tab> <Cmd>bprevious<CR>
+nnoremap <Leader><Tab> <Cmd>Buffers<CR>
 
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -322,9 +324,6 @@ inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Backslash is the same key as forward slash in the Engram layout.
 noremap \ ?
-
-" ? is the leader key.
-noremap ? <Nop>
 
 " Add LSP to K.
 nnoremap K <Cmd>call <SID>show_documentation()<CR>
@@ -343,6 +342,12 @@ nmap <silent> cn <Plug>(coc-rename)
 nmap <silent> cr <Plug>(coc-references)
 nmap <silent> cx <Plug>(coc-declaration)
 nmap <silent> cz <Plug>(coc-codeaction-selected)
+
+" Explore the file system.
+nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
+
+" Go git.
+nnoremap <Leader>g <Cmd>Git<CR>
 
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
@@ -374,6 +379,10 @@ xmap gs <Plug>(swap-interactive)
 " Keep the cursor centered when going through search results.
 nnoremap n nzzzv
 nnoremap N Nzzzv
+
+" Add lines above and below with entering insert mode.
+nnoremap <Leader>o <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <Leader>O <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
 " Ex mode is rarely useful.
 nnoremap q @
@@ -411,6 +420,15 @@ nnoremap Y yg_
 vnoremap y myy`y
 vnoremap Y myY`y
 
+" Copy/paste using the system clipboard.
+nnoremap <Leader>p "*p
+nnoremap <Leader>P "*P
+xnoremap <Leader>p "*p
+xnoremap <Leader>P "*P
+nnoremap <Leader>y "*y
+nnoremap <Leader>Y "*Y
+xnoremap <Leader>y "*y
+
 " Ctrl-D for <Del> when in middle of line, from rsi.vim.
 inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
@@ -420,24 +438,12 @@ nnoremap [b <Cmd>bprevious<CR>
 nmap [d <Plug>(coc-diagnostic-prev)
 nnoremap [l <Cmd>lprevious<CR>
 nnoremap [q <Cmd>cprevious<CR>
-nnoremap [<Space> <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
 " Next.
 nnoremap ]b <Cmd>bnext<CR>
 nmap ]d <Plug>(coc-diagnostic-next)
 nnoremap ]l <Cmd>lnext<CR>
 nnoremap ]q <Cmd>cnext<CR>
-nnoremap ]<Space> <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-
-nnoremap <Leader>? <Cmd>Files<CR>
-nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
-nnoremap <Leader>g <Cmd>Git<CR>
-nnoremap <Leader>p "*p
-nnoremap <Leader>P "*P
-xnoremap <Leader>p "*p
-nnoremap <Leader>y "*y
-nnoremap <Leader>Y "*Y
-xnoremap <Leader>y "*y
 
 " https://stackoverflow.com/a/16360104
 autocmd Config CmdWinEnter * call s:unmap_cr()
