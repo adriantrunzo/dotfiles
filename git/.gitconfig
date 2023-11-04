@@ -1,7 +1,3 @@
-[user]
-  name = Adrian Trunzo
-  email = trunzoap@gmail.com
-
 [core]
   editor = vim
   pager = delta
@@ -27,5 +23,5 @@
 [submodule]
   recurse = true
 
-[includeif "gitdir:~/slice/"]
-  path = ~/slice/.gitconfig
+[include]
+  path = ./.gitconfig-local

@@ -52,6 +52,9 @@ plugins=(
 
   # $(brew --prefix)/opt/fzf/install
   ~/.fzf.zsh
+
+  # Private, work-related configuration.
+  ~/slice/slice.zsh
 )
 
 for p ($plugins) {
