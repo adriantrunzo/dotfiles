@@ -282,58 +282,79 @@ let g:coc_global_extensions = [
   \ ]
 
 " Swappable (eg arguments) text objects.
-xmap i, <Plug>(swap-textobject-i)
-omap i, <Plug>(swap-textobject-i)
 xmap a, <Plug>(swap-textobject-a)
 omap a, <Plug>(swap-textobject-a)
-
-xmap am <Plug>(matchup-a%)
-omap am <Plug>(matchup-a%)
-xmap im <Plug>(matchup-i%)
-omap im <Plug>(matchup-i%)
-
-" Sandwich text-objects for surrounding characters.
-xmap iq <Plug>(textobj-sandwich-query-i)
-omap iq <Plug>(textobj-sandwich-query-i)
-xmap aq <Plug>(textobj-sandwich-query-a)
-omap aq <Plug>(textobj-sandwich-query-a)
-xmap is <Plug>(textobj-sandwich-auto-i)
-omap is <Plug>(textobj-sandwich-auto-i)
-xmap as <Plug>(textobj-sandwich-auto-a)
-omap as <Plug>(textobj-sandwich-auto-a)
+xmap i, <Plug>(swap-textobject-i)
+omap i, <Plug>(swap-textobject-i)
 
 " Use space for leader. 
-" let mapleader = ' '
+let mapleader = ' '
 
-" Use <Space> for sneak in all modes for quick, convenient movement. Vim can't
-" map <S-Space>, yet, but we can configure Kitty to send an unlikely key
-" sequence instead.
-nmap <S-F12> <S-Space>
-xmap <S-F12> <S-Space>
-omap <S-F12> <S-Space>
-imap <S-F12> <Space>
-cmap <S-F12> <Space>
-nmap <Space> <Plug>Sneak_s
-nmap <S-Space> <Plug>Sneak_S
-xmap <Space> <Plug>Sneak_s
-xmap <S-Space> <Plug>Sneak_S
-omap <Space> <Plug>Sneak_s
-omap <S-Space> <Plug>Sneak_S
+" Sandwich text-objects for surrounding characters.
+xmap a<Space> <Plug>(textobj-sandwich-auto-a)
+omap a<Space> <Plug>(textobj-sandwich-auto-a)
+xmap i<Space> <Plug>(textobj-sandwich-auto-i)
+omap i<Space> <Plug>(textobj-sandwich-auto-i)
+
+nnoremap <Leader><Space> <Cmd>Files<CR>
+
+nmap <Leader><Tab> <Plug>(matchup-%)
+xmap <Leader><Tab> <Plug>(matchup-%)
+omap <Leader><Tab> <Plug>(matchup-%)
+
+nmap <Leader>a <Plug>(sandwich-add)
+xmap <Leader>a <Plug>(sandwich-add)
+omap <Leader>a <Plug>(sandwich-add)
+
+nmap <Leader>d <Plug>(sandwich-delete)
+xmap <Leader>d <Plug>(sandwich-delete)
+nmap <Leader>dd <Plug>(sandwich-delete-auto)
+
+" Explore the file system.
+nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
+
+" Go git.
+nnoremap <Leader>g <Cmd>Git<CR>
+
+" Add lines above and below with entering insert mode.
+nnoremap <Leader>o <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
+nnoremap <Leader>O <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
+
+" Paste from the system clipboard.
+nnoremap <Leader>p "*p
+nnoremap <Leader>P "*P
+xnoremap <Leader>p "*p
+xnoremap <Leader>P "*P
+
+nmap <Leader>r <Plug>(sandwich-replace)
+xmap <Leader>r <Plug>(sandwich-replace)
+nmap <Leader>rr <Plug>(sandwich-replace-auto)
+
+" Yank to system clipboard.
+nnoremap <Leader>y "*y
+nnoremap <Leader>Y "*Y
+xnoremap <Leader>y "*y
 
 " Convenient saving.
 nnoremap <CR> <Cmd>update<CR>
 nnoremap <S-CR> <Cmd>exit<CR>
 
+xmap a<CR> <Plug>(textobj-sandwich-query-a)
+omap a<CR> <Plug>(textobj-sandwich-query-a)
+xmap i<CR> <Plug>(textobj-sandwich-query-i)
+omap i<CR> <Plug>(textobj-sandwich-query-i)
+
 " Quickly close a buffer.
 nnoremap <Backspace> <Cmd>bdelete<CR>
 nnoremap <S-Backspace> <Cmd>quit<CR>
 
-" Alias for quickly scrolling through open buffers.
-" nnoremap <Tab> <Cmd>bnext<CR>
-" nnoremap <S-Tab> <Cmd>bprevious<CR>
+xmap a<Tab> <Plug>(matchup-a%)
+omap a<Tab> <Plug>(matchup-a%)
+xmap i<Tab> <Plug>(matchup-i%)
+omap i<Tab> <Plug>(matchup-i%)
+
 nmap <Tab> <Plug>(matchup-z%)
 nmap <S-Tab> <Plug>(matchup-Z%)
-nnoremap <Leader><Tab> <Cmd>Buffers<CR>
 
 " Use tab for cycling through completion entries in insert mode.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
@@ -365,26 +386,11 @@ nmap <silent> cz <Plug>(coc-codeaction-selected)
 nnoremap j gj
 nnoremap k gk
 
-" Use vim-sandwich for matching operations.
 nmap m <Nop>
 xmap m <Nop>
 omap m <Nop>
 
-nmap ma <Plug>(matchup-[%)
-xmap ma <Plug>(matchup-[%)
-omap ma <Plug>(matchup-[%)
-nmap me <Plug>(matchup-]%)
-xmap me <Plug>(matchup-]%)
-omap me <Plug>(matchup-]%)
-nmap mi <Plug>(matchup-z%)
-xmap mi <Plug>(matchup-z%)
-omap mi <Plug>(matchup-z%)
-nmap mm <Plug>(matchup-%)
-xmap mm <Plug>(matchup-%)
-omap mm <Plug>(matchup-%)
-nmap mo <Plug>(matchup-Z%)
-xmap mo <Plug>(matchup-Z%)
-xmap mo <Plug>(matchup-Z%)
+
 
 " Moving text.
 nnoremap mk :m .-2<cr>==
@@ -404,61 +410,29 @@ nnoremap N Nzzzv
 nnoremap q @
 nnoremap Q q
 
-" Use vim-sandwich for matching operations.
-map s <Nop>
-
-nnoremap s<Space> <Cmd>Files<CR>
-
-nmap sa <Plug>(sandwich-add)
-xmap sa <Plug>(sandwich-add)
-omap sa <Plug>(sandwich-add)
-
-nmap sc <Plug>(SubversiveSubstituteRangeConfirm)
-xmap sc <Plug>(SubversiveSubstituteRangeConfirm)
-nmap scc <Plug>(SubversiveSubstituteWordRangeConfirm)
-
-nmap sd <Plug>(sandwich-delete)
-xmap sd <Plug>(sandwich-delete)
-nmap sdd <Plug>(sandwich-delete-auto)
-
-" Explore the file system.
-nnoremap se <Cmd>NnnPicker %:p:h<CR>
-
-" Go git.
-nnoremap sg <Cmd>Git<CR>
-
-" Add lines above and below with entering insert mode.
-nnoremap so <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
-nnoremap sO <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
-
-" Copy/paste using the system clipboard.
-nnoremap <Leader>p "*p
-nnoremap <Leader>P "*P
-xnoremap <Leader>p "*p
-xnoremap <Leader>P "*P
-
-nmap sr <Plug>(sandwich-replace)
-xmap sr <Plug>(sandwich-replace)
-nmap srr <Plug>(sandwich-replace-auto)
-
-nmap ss <Plug>(SubversiveSubstituteRange)
-xmap ss <Plug>(SubversiveSubstituteRange)
-nmap sss <Plug>(SubversiveSubstituteWordRange)
-
-nnoremap sy "*y
-nnoremap sY "*Y
-xnoremap sy "*y
+" Use s for sneak in all modes.
+omap s <Plug>Sneak_s
+omap S <Plug>Sneak_S
+xmap S <Plug>Sneak_S
 
 " Better redo.
 nnoremap U <C-r>
 
-" Unused y-mappings: yc yd ym yo yp yq yr ys yu yx yz
-" Use yp for "yank-paste", substituting the target without overwriting the
+nmap xc <Plug>(SubversiveSubstituteRangeConfirm)
+xmap xc <Plug>(SubversiveSubstituteRangeConfirm)
+nmap xcc <Plug>(SubversiveSubstituteWordRangeConfirm)
+"
+" Use xp for "yank-paste", substituting the target without overwriting the
 " unnamed buffer. In visual mode use P. 
-nmap yp <Plug>(SubversiveSubstitute)
-nmap ypp <Plug>(SubversiveSubstituteLine)
-nmap yP <Plug>(SubversiveSubstituteToEndOfLine)
+nmap xp <Plug>(SubversiveSubstitute)
+nmap xpp <Plug>(SubversiveSubstituteLine)
+nmap xP <Plug>(SubversiveSubstituteToEndOfLine)
 
+nmap xs <Plug>(SubversiveSubstituteRange)
+xmap xs <Plug>(SubversiveSubstituteRange)
+nmap xss <Plug>(SubversiveSubstituteWordRange)
+
+" Unused y-mappings: yc yd ym yo yp yq yr ys yu yx yz
 " Make Y behave as expected, though don't yank the trailing whitespace.
 nnoremap Y yg_
 
@@ -472,12 +446,18 @@ inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
 " Previous.
+nmap [<Tab> <Plug>(matchup-[%)
+xmap [<Tab> <Plug>(matchup-[%)
+omap [<Tab> <Plug>(matchup-[%)
 nnoremap [b <Cmd>bprevious<CR>
 nmap [d <Plug>(coc-diagnostic-prev)
 nnoremap [l <Cmd>lprevious<CR>
 nnoremap [q <Cmd>cprevious<CR>
 
 " Next.
+nmap ]<Tab> <Plug>(matchup-]%)
+xmap ]<Tab> <Plug>(matchup-]%)
+omap ]<Tab> <Plug>(matchup-]%)
 nnoremap ]b <Cmd>bnext<CR>
 nmap ]d <Plug>(coc-diagnostic-next)
 nnoremap ]l <Cmd>lnext<CR>
@@ -514,6 +494,8 @@ autocmd Config CursorHold * silent call CocActionAsync('highlight')
 
 " Call airline customization method.
 autocmd Config User AirlineAfterInit call s:handle_airline_init()
+
+autocmd Config BufReadPost * if &filetype == "gitcommit" | execute "startinsert!" | endif
 
 " Custom FZF commands.
 command! -bang -complete=dir -nargs=? Files call s:fzf_files(<q-args>, <bang>0)
