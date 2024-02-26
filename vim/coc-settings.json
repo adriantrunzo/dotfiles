@@ -13,7 +13,7 @@
   "list.source.files.args": ["--hidden", "--files"],
   "prettier.requireConfig": true,
   "tsserver.useLocalTsdk": true,
-  "[html][css][scss][markdown][json][yaml]": {
+  "[html][css][scss][markdown][mdx][json][yaml]": {
     "coc.preferences.formatOnSave": true
   },
   "[javascript][typescript][javascriptreact][typescriptreact]": {
