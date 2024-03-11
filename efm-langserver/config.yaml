@@ -1,0 +1,46 @@
+version: 2
+root-markers:
+  - .git/
+
+tools:
+  prettier: &prettier
+    format-command: >
+      bunx prettier --stdin --stdin-filepath ${INPUT} \
+        ${--range-start=charStart} ${--range-start=charEnd}      
+    format-can-range: true
+    format-stdin: true
+    root-markers:
+      - .prettierrc
+      - .prettierrc.json
+      - .prettierrc.js
+      - .prettierrc.yml
+      - .prettierrc.yaml
+      - .prettierrc.json5
+      - .prettierrc.mjs
+      - .prettierrc.cjs
+      - .prettierrc.toml
+
+languages:
+  css:
+    - <<: *prettier
+
+  html:
+    - <<: *prettier
+
+  javascript:
+    - <<: *prettier
+
+  javascriptreact:
+    - <<: *prettier
+
+  json:
+    - <<: *prettier
+
+  typescript:
+    - <<: *prettier
+
+  typescriptreact:
+    - <<: *prettier
+
+  yaml:
+    - <<: *prettier

@@ -9,5 +9,12 @@ success_symbol = "[i❯](bold green) "
 error_symbol = "[i❯](bold red) "
 vicmd_symbol = "[n❯](bold green) "
 
+[docker_context]
+disabled = true
+
+[git_branch]
+symbol = ''
+
 [nodejs]
-symbol = "⬢ " # https://github.com/starship/starship/issues/2546
+format = 'node [($version)]($style) '
+version_format = '${raw}'

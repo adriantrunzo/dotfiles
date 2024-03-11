@@ -2,60 +2,6 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "vim/plugins/dracula"]
-	path = vim/plugins/dracula
-	url = https://github.com/dracula/vim.git
-[submodule "vim/plugins/vim-kitty"]
-	path = vim/plugins/vim-kitty
-	url = https://github.com/fladson/vim-kitty.git
-        branch = main
-[submodule "vim/plugins/vim-textobj-user"]
-	path = vim/plugins/vim-textobj-user
-	url = https://github.com/kana/vim-textobj-user.git
-[submodule "vim/plugins/vim-textobj-entire"]
-	path = vim/plugins/vim-textobj-entire
-	url = https://github.com/kana/vim-textobj-entire.git
-	ignore = untracked
-[submodule "vim/plugins/vim-textobj-indent"]
-	path = vim/plugins/vim-textobj-indent
-	url = https://github.com/kana/vim-textobj-indent.git
-	ignore = untracked
-[submodule "vim/plugins/vim-highlightedyank"]
-	path = vim/plugins/vim-highlightedyank
-	url = https://github.com/machakann/vim-highlightedyank.git
-[submodule "vim/plugins/vim-sandwich"]
-	path = vim/plugins/vim-sandwich
-	url = https://github.com/machakann/vim-sandwich.git
-[submodule "vim/plugins/vim-commentary"]
-	path = vim/plugins/vim-commentary
-	url = https://github.com/tpope/vim-commentary.git
-[submodule "vim/plugins/vim-fugitive"]
-	path = vim/plugins/vim-fugitive
-	url = https://github.com/tpope/vim-fugitive.git
-[submodule "vim/plugins/vim-javascript"]
-	path = vim/plugins/vim-javascript
-	url = https://github.com/pangloss/vim-javascript.git
-[submodule "vim/plugins/vim-jsx-pretty"]
-	path = vim/plugins/vim-jsx-pretty
-	url = https://github.com/MaxMEllon/vim-jsx-pretty.git
-[submodule "vim/plugins/yats.vim"]
-	path = vim/plugins/yats.vim
-	url = https://github.com/HerringtonDarkholme/yats.vim.git
-[submodule "vim/plugins/vim-swap"]
-	path = vim/plugins/vim-swap
-	url = https://github.com/machakann/vim-swap.git
-[submodule "vim/plugins/vim-terraform"]
-	path = vim/plugins/vim-terraform
-	url = https://github.com/hashivim/vim-terraform.git
-[submodule "vim/plugins/vim-sneak"]
-	path = vim/plugins/vim-sneak
-	url = https://github.com/justinmk/vim-sneak.git
-[submodule "vim/plugins/vim-ruby"]
-	path = vim/plugins/vim-ruby
-	url = https://github.com/vim-ruby/vim-ruby.git
-[submodule "vim/plugins/vim-matchup"]
-	path = vim/plugins/vim-matchup
-	url = https://github.com/andymass/vim-matchup.git
 [submodule "kitty/dracula"]
 	path = kitty/dracula
 	url = https://github.com/dracula/kitty.git
@@ -65,28 +11,6 @@
 [submodule "zsh/zsh-autosuggestions"]
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
-[submodule "vim/plugins/nnn.vim"]
-	path = vim/plugins/nnn.vim
-	url = https://github.com/mcchrish/nnn.vim.git
-[submodule "vim/plugins/coc.nvim"]
-	path = vim/plugins/coc.nvim
-	url = https://github.com/neoclide/coc.nvim.git
-	branch = release
-[submodule "vim/plugins/vim-airline"]
-	path = vim/plugins/vim-airline
-	url = https://github.com/vim-airline/vim-airline.git
-[submodule "vim/plugins/vim-airline-themes"]
-	path = vim/plugins/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
-[submodule "vim/plugins/vim-textobj-line"]
-	path = vim/plugins/vim-textobj-line
-	url = https://github.com/kana/vim-textobj-line.git
-[submodule "vim/plugins/jsonc.vim"]
-	path = vim/plugins/jsonc.vim
-	url = https://github.com/neoclide/jsonc.vim.git
-[submodule "vim/plugins/vim-cool"]
-	path = vim/plugins/vim-cool
-	url = https://github.com/romainl/vim-cool.git
-[submodule "vim/plugins/vim-subversive"]
-	path = vim/plugins/vim-subversive
-	url = https://github.com/svermeulen/vim-subversive.git
+[submodule "vim/minpac"]
+	path = vim/minpac
+	url = https://github.com/k-takata/minpac.git

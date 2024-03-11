@@ -47,18 +47,58 @@ if &term == 'xterm-kitty'
     let &t_RT = "\e[23;2t"
 endif
 
+function! PackInit() abort
+  packadd minpac
+
+  call minpac#init()
+  call minpac#add('k-takata/minpac', { 'type': 'opt' })
+  call minpac#add('yegappan/lsp' , { 'type': 'opt' })
+
+  call minpac#add('HerringtonDarkholme/yats.vim')
+  call minpac#add('LunarWatcher/auto-pairs')
+  call minpac#add('airblade/vim-gitgutter')
+  call minpac#add('andymass/vim-matchup')
+  call minpac#add('dracula/vim', { 'name': 'dracula' })
+  call minpac#add('eugen0329/vim-esearch')
+  call minpac#add('fladson/vim-kitty')
+  call minpac#add('girishji/scope.vim')
+  call minpac#add('hashivim/vim-terraform')
+  call minpac#add('justinmk/vim-dirvish')
+  call minpac#add('justinmk/vim-sneak')
+  call minpac#add('kana/vim-textobj-entire')
+  call minpac#add('kana/vim-textobj-indent')
+  call minpac#add('kana/vim-textobj-line')
+  call minpac#add('kana/vim-textobj-user')
+  call minpac#add('machakann/vim-highlightedyank')
+  call minpac#add('machakann/vim-sandwich')
+  call minpac#add('machakann/vim-swap')
+  call minpac#add('maxmellon/vim-jsx-pretty')
+  call minpac#add('pangloss/vim-javascript')
+  call minpac#add('romainl/vim-cool')
+  call minpac#add('svermeulen/vim-subversive')
+  call minpac#add('tpope/vim-commentary')
+  call minpac#add('tpope/vim-fugitive')
+  call minpac#add('vim-airline/vim-airline')
+  call minpac#add('vim-airline/vim-airline-themes')
+  call minpac#add('vim-ruby/vim-ruby')
+endfunction
+
+command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
+command! PackClean source $MYVIMRC | call PackInit() | call minpac#clean()
+command! PackStatus packadd minpac | call minpac#status()
+
 " Autocommand group to use throughout this configuration file.
 augroup Config
-    autocmd!
+  autocmd!
 augroup end
 
 " Customize the dracula theme. Must be called before colorscheme.
-autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
+" autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
 
-function! s:handle_colorscheme_dracula() abort
-    highlight link CurSearch IncSearch
-    highlight link CocErrorSign DraculaWarning
-endfunction
+" function! s:handle_colorscheme_dracula() abort
+"     highlight link CurSearch IncSearch
+"     highlight link CocErrorSign DraculaWarning
+" endfunction
 
 " Enable filetype and indent detection.
 filetype plugin indent on
@@ -197,15 +237,10 @@ set wildoptions=fuzzy,pum
 " Wrap long lines.
 set wrap
 
-if has('osx')
-    " Load the fzf plugin included with the homebrew install.
-    set rtp+=/opt/homebrew/opt/fzf
-endif
-
 " Ripgrep is much faster.
 if executable("rg")
-    set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
-    set grepformat+=%f:%l:%c:%m
+  set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
+  set grepformat+=%f:%l:%c:%m
 endif
 
 " Use dracula in airline and remove all of the symbols.
@@ -213,24 +248,53 @@ let g:airline_theme='dracula'
 let g:airline_symbols_ascii = 1
 
 if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
+  let g:airline_symbols = {}
 endif
 
 " Remove the space before the line number prefix since we are removing the
 " percentage indicator (see below).
 let g:airline_symbols.linenr = 'ln:'
 
+" Using autocomplete can make the mode block go crazy. Airline redefines this
+" variable on load, so don't overwrite it when we source vimrc again.
+if !exists('g:airline_mode_map')
+  let g:airline_mode_map = {
+    \ 'ic' : 'INSERT',
+    \ 'ix' : 'INSERT',
+    \ }
+endif
+
 " Disable most extensions by default.
-let g:airline_extensions = ['branch', 'coc', 'quickfix']
+let g:airline_extensions = ['branch', 'quickfix', 'vim9lsp']
+
+function! GetGitBranch(name) abort
+  " Shortcut git branches contain the ticket identifier preceeded by "sc-".
+  let story = matchstr(a:name, 'sc-\d\+')
+
+  " Use the identifier segment if we found one.
+  if (strlen(story) > 0)
+    return story[:strlen(story) - 1]
+  endif
+
+  " Otherwise the first ten characters.
+  return a:name[:9]
+endfunction
 
 " Use a custom function to get the git branch text.
 let g:airline#extensions#branch#format = 'GetGitBranch'
 
-" A map of buffer numbers to the timestamp each buffer is opened. We manage this
-" map using autocommands and use the map to sort the FZF buffer picker.
-if !exists('g:buffer_timestamps')
-  let g:buffer_timestamps = {}
-endif
+" Remove the document percentage indicator.
+function! s:handle_airline_init() abort
+    let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
+endfunction
+
+autocmd Config User AirlineAfterInit call s:handle_airline_init()
+
+" Delete brackets and quotes in pairs.
+let g:AutoPairsMapBS = 1
+
+" We'll manually map <CR> with autocomplete.
+let g:AutoPairsMapCR = 0
 
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
@@ -240,9 +304,24 @@ let g:vim_indent = #{
   \ }
 
 " Disable default mappings in the following plugins.
-let g:nnn#set_default_mappings = 0
 let g:sandwich_no_default_key_mappings = 1
 let g:swap_no_default_key_mappings = 1
+
+" Use bars for git signs as they are easier to read at a glance.
+let g:gitgutter_sign_added = '❙'
+let g:gitgutter_sign_modified = '❙'
+let g:gitgutter_sign_removed = '❙'
+let g:gitgutter_sign_removed_first_line = '❙'
+let g:gitgutter_sign_removed_above_and_below = '❙'
+let g:gitgutter_sign_modified_removed = '❙'
+
+" GitGutter signs take priority over LSP signs by default.
+let g:gitgutter_sign_priority = 5
+
+" Override the sign backgrounds to match the sign column.
+" TODO: Dracula forcefully overwrites highlight groups with hi!, so this line
+" doesn't work yet..
+let g:gitgutter_set_sign_backgrounds = 1
 
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
@@ -250,36 +329,84 @@ let g:vim_jsx_pretty_colorful_config = 1
 " Don't show offscreen matches as they cause odd statusline issues.
 let g:matchup_matchparen_offscreen = {}
 
-" Opens the n³ window in the same window like netrw.
-let g:nnn#layout = 'enew'
-
-" Use n³ when opening directories instead of netrw.
-let g:nnn#replace_netrw = 1
-
-" n³ split actions.
-let g:nnn#action = {
-  \ '<c-h>': 'split',
-  \ '<c-t>': 'tab split',
-  \ '<c-v>': 'vsplit'
-  \ }
+" Sort directories at the top.
+let g:dirvish_mode = ':sort ,^.*[\/],'
 
 " Use the sneak label mode for faster jumping.
 let g:sneak#label = 1
 
-" Coc Extensions. These should be automatically installed by coc.nvim.
-let g:coc_global_extensions = [
-  \ 'coc-clangd',
-  \ 'coc-css',
-  \ 'coc-cssmodules',
-  \ 'coc-eslint',
-  \ 'coc-git',
-  \ 'coc-html',
-  \ 'coc-json',
-  \ 'coc-lists',
-  \ 'coc-prettier',
-  \ 'coc-tsserver',
-  \ 'coc-vimlsp'
-  \ ]
+" Configure available language servers.
+let servers = []
+
+if executable('typescript-language-server')
+  call add(servers, #{
+    \ filetype: [
+    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
+    \ ],
+    \ path: 'typescript-language-server',
+    \ args: ['--stdio'],
+    \ features: #{ documentFormatting: v:false },
+    \ })
+endif
+
+if executable('efm-langserver')
+  call add(servers, #{
+    \ filetype: [
+    \   'css', 'html', 'json', 'yaml',
+    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
+    \ ],
+    \ path: 'efm-langserver',
+    \ args: [],
+    \ initializationOptions: #{
+    \   documentFormatting: v:true,
+    \ },
+    \ })
+endif
+
+if len(servers) > 0
+  packadd lsp
+
+  call LspAddServer(servers)
+  call LspOptionsSet({
+    \ 'completionMatcher': 'fuzzy',
+    \ 'diagSignErrorText': '●',
+    \ 'diagSignHintText': '●',
+    \ 'diagSignInfoText': '●',
+    \ 'diagSignWarningText': '●',
+    \ 'noNewlineInCompletion': v:false,
+    \ 'outlineOnRight': v:true,
+    \ 'outlineWinSize': 50,
+    \ 'snippetSupport': v:true,
+    \ 'useBufferCompletion': v:true,
+    \ 'usePopupInCodeAction': v:true
+    \ })
+endif
+
+function! s:handle_lsp_attached() abort
+  " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
+  " cs is used for sneak.
+  nnoremap <buffer> cd <Cmd>LspGotoDefinition<CR>
+  nnoremap <buffer> cm <Cmd>LspGotoImpl<CR>
+  nnoremap <buffer> co <Cmd>LspOutline<CR>
+  nnoremap <buffer> cpd <Cmd>LspPeekDefinition<CR>
+  nnoremap <buffer> cpm <Cmd>LspPeekImpl<CR>
+  nnoremap <buffer> cpr <Cmd>LspPeekReferences<CR>
+  nnoremap <buffer> cpx <Cmd>LspPeekDeclaration<CR>
+  nnoremap <buffer> cpy <Cmd>LspPeekTypeDef<CR>
+  nnoremap <buffer> cq <Cmd>LspFormat<CR>
+  nnoremap <buffer> cn <Cmd>LspRename<CR>
+  nnoremap <buffer> cr <Cmd>LspShowReferences<CR>
+  nnoremap <buffer> cx <Cmd>LspGotoDeclaration<CR>
+  nnoremap <buffer> cy <Cmd>LspGotoTypeDef<CR>
+  nnoremap <buffer> cz <Cmd>LspCodeAction<CR>
+
+  nnoremap <buffer> [d <Cmd>LspDiag prev<CR>
+  nnoremap <buffer> ]d <Cmd>LspDiag next<CR>
+
+  setlocal keywordprg=:LspHover
+endfunction
+
+autocmd Config User LspAttached call s:handle_lsp_attached()
 
 " Swappable (eg arguments) text objects.
 xmap a, <Plug>(swap-textobject-a)
@@ -291,27 +418,24 @@ omap i, <Plug>(swap-textobject-i)
 let mapleader = ' '
 
 " Sandwich text-objects for surrounding characters.
-xmap a<Space> <Plug>(textobj-sandwich-auto-a)
-omap a<Space> <Plug>(textobj-sandwich-auto-a)
-xmap i<Space> <Plug>(textobj-sandwich-auto-i)
-omap i<Space> <Plug>(textobj-sandwich-auto-i)
+xmap am <Plug>(textobj-sandwich-auto-a)
+omap am <Plug>(textobj-sandwich-auto-a)
+xmap im <Plug>(textobj-sandwich-auto-i)
+omap im <Plug>(textobj-sandwich-auto-i)
+xmap aM <Plug>(matchup-a%)
+omap aM <Plug>(matchup-a%)
+xmap iM <Plug>(matchup-i%)
+omap iM <Plug>(matchup-i%)
 
-nnoremap <Leader><Space> <Cmd>Files<CR>
+xmap aq <Plug>(textobj-sandwich-query-a)
+omap aq <Plug>(textobj-sandwich-query-a)
+xmap iq <Plug>(textobj-sandwich-query-i)
+omap iq <Plug>(textobj-sandwich-query-i)
 
-nmap <Leader><Tab> <Plug>(matchup-%)
-xmap <Leader><Tab> <Plug>(matchup-%)
-omap <Leader><Tab> <Plug>(matchup-%)
-
-nmap <Leader>a <Plug>(sandwich-add)
-xmap <Leader>a <Plug>(sandwich-add)
-omap <Leader>a <Plug>(sandwich-add)
-
-nmap <Leader>d <Plug>(sandwich-delete)
-xmap <Leader>d <Plug>(sandwich-delete)
-nmap <Leader>dd <Plug>(sandwich-delete-auto)
+nnoremap <Leader><Space> <Cmd>call scope#fuzzy#File()<CR>
 
 " Explore the file system.
-nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
+nnoremap <Leader>e <Cmd>Dirvish<CR>
 
 " Go git.
 nnoremap <Leader>g <Cmd>Git<CR>
@@ -326,10 +450,6 @@ nnoremap <Leader>P "*P
 xnoremap <Leader>p "*p
 xnoremap <Leader>P "*P
 
-nmap <Leader>r <Plug>(sandwich-replace)
-xmap <Leader>r <Plug>(sandwich-replace)
-nmap <Leader>rr <Plug>(sandwich-replace-auto)
-
 " Yank to system clipboard.
 nnoremap <Leader>y "*y
 nnoremap <Leader>Y "*Y
@@ -339,48 +459,24 @@ xnoremap <Leader>y "*y
 nnoremap <CR> <Cmd>update<CR>
 nnoremap <S-CR> <Cmd>exit<CR>
 
-xmap a<CR> <Plug>(textobj-sandwich-query-a)
-omap a<CR> <Plug>(textobj-sandwich-query-a)
-xmap i<CR> <Plug>(textobj-sandwich-query-i)
-omap i<CR> <Plug>(textobj-sandwich-query-i)
-
 " Quickly close a buffer.
 nnoremap <Backspace> <Cmd>bdelete<CR>
 nnoremap <S-Backspace> <Cmd>quit<CR>
-
-xmap a<Tab> <Plug>(matchup-a%)
-omap a<Tab> <Plug>(matchup-a%)
-xmap i<Tab> <Plug>(matchup-i%)
-omap i<Tab> <Plug>(matchup-i%)
 
 nmap <Tab> <Plug>(matchup-z%)
 nmap <S-Tab> <Plug>(matchup-Z%)
 
 " Use tab for cycling through completion entries in insert mode.
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>\<Plug>AutoPairsReturn"
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 
 " Backslash is the same key as forward slash in the Engram layout.
 noremap \ ?
 
-" Add LSP to K.
-nnoremap K <Cmd>call <SID>show_documentation()<CR>
-
 " Reselect visual selection after indenting.
 vnoremap < <gv
 vnoremap > >gv
-
-" Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
-" cs is used for sneak.
-nmap <silent> cd <Plug>(coc-definition)
-nmap <silent> cn <Plug>(coc-rename)
-nmap <silent> co <Plug>(coc-implementation)
-nmap <silent> cp <Plug>(coc-type-definition)
-nmap <silent> cq <Plug>(coc-format)
-nmap <silent> cr <Plug>(coc-references)
-nmap <silent> cx <Plug>(coc-declaration)
-nmap <silent> cz <Plug>(coc-codeaction-selected)
 
 " Move vertically by visual line with wrapping enabled.
 nnoremap j gj
@@ -389,8 +485,15 @@ nnoremap k gk
 nmap m <Nop>
 xmap m <Nop>
 omap m <Nop>
-
-
+nmap ma <Plug>(sandwich-add)
+xmap ma <Plug>(sandwich-add)
+omap ma <Plug>(sandwich-add)
+nmap md <Plug>(sandwich-delete)
+xmap md <Plug>(sandwich-delete)
+nmap mdd <Plug>(sandwich-delete-auto)
+nmap mr <Plug>(sandwich-replace)
+xmap mr <Plug>(sandwich-replace)
+nmap mrr <Plug>(sandwich-replace-auto)
 
 " Moving text.
 nnoremap mk :m .-2<cr>==
@@ -446,80 +549,45 @@ inoremap <expr> <C-D> col('.')>strlen(getline('.'))?"\<Lt>C-D>":"\<Lt>Del>"
 cnoremap <expr> <C-D> getcmdpos()>strlen(getcmdline())?"\<Lt>C-D>":"\<Lt>Del>"
 
 " Previous.
-nmap [<Tab> <Plug>(matchup-[%)
-xmap [<Tab> <Plug>(matchup-[%)
-omap [<Tab> <Plug>(matchup-[%)
 nnoremap [b <Cmd>bprevious<CR>
-nmap [d <Plug>(coc-diagnostic-prev)
 nnoremap [l <Cmd>lprevious<CR>
 nnoremap [q <Cmd>cprevious<CR>
 
 " Next.
-nmap ]<Tab> <Plug>(matchup-]%)
-xmap ]<Tab> <Plug>(matchup-]%)
-omap ]<Tab> <Plug>(matchup-]%)
 nnoremap ]b <Cmd>bnext<CR>
-nmap ]d <Plug>(coc-diagnostic-next)
 nnoremap ]l <Cmd>lnext<CR>
 nnoremap ]q <Cmd>cnext<CR>
 
 " https://stackoverflow.com/a/16360104
 autocmd Config CmdWinEnter * call s:unmap_cr()
-autocmd Config BufReadPost * if !empty(&bt) | call s:unmap_cr() | endif
+autocmd Config BufReadPost quickfix call s:unmap_cr()
 
-" Buffer MRU, adapted from:
-" https://github.com/junegunn/fzf.vim/blob/dc71692255b62d1f67dc55c8e51ab1aa467b1d46/plugin/fzf.vim#L125
-autocmd Config BufWinEnter,WinEnter * let g:buffer_timestamps[bufnr('')] = reltimefloat(reltime())
-autocmd Config BufDelete * silent! call remove(g:buffer_timestamps, expand('<abuf>'))
+" These files should be treated as JSONC.
+autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
+autocmd Config BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
+
+" Use prettier for formatting with gq. Prettier doesn't seem to support range
+" formatting via efm-langserver with lsp#lsp#FormatExpr(),
+autocmd Config FileType css,html,json,jsonc,yaml call s:use_prettier()
+autocmd Config FileType javascript,javascriptreact call s:use_prettier()
+autocmd Config FileType typescript,typescriptreact call s:use_prettier()
+
+function! s:use_prettier() abort
+  " The yats.vim plugin sets a custom formatexpr that doesn't work well.
+  setlocal formatexpr&
+  setlocal formatprg=bunx\ prettier\ --log-level\ silent\ --stdin-filepath\ %
+endfunction
 
 " Filetype specific settings.
-autocmd Config FileType css,scss call s:handle_ft_css()
-autocmd Config FileType html call s:handle_ft_html()
-autocmd Config FileType javascript,javascriptreact call s:handle_ft_javascript()
-autocmd Config FileType json call s:handle_ft_json()
 autocmd Config FileType qf call s:handle_ft_qf()
-autocmd Config FileType typescript,typescriptreact call s:handle_ft_typescript()
-autocmd Config FileType vim call s:handle_ft_vim()
 
 " Open the quickfix and location windows automatically.
 " https://noahfrederick.com/log/vim-streamlining-grep
 autocmd Config QuickFixCmdPost [^l]* cwindow
 autocmd Config QuickFixCmdPost l* lwindow
 
-" Update signature help on jump placeholder.
-autocmd Config User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-
-" Highlight the symbol and its references when holding the cursor.
-autocmd Config CursorHold * silent call CocActionAsync('highlight')
-
-" Call airline customization method.
-autocmd Config User AirlineAfterInit call s:handle_airline_init()
-
-autocmd Config BufReadPost * if &filetype == "gitcommit" | execute "startinsert!" | endif
-
-" Custom FZF commands.
-command! -bang -complete=dir -nargs=? Files call s:fzf_files(<q-args>, <bang>0)
-command! -bang -complete=dir -nargs=? Grep call s:fzf_grep(<q-args>, <bang>0)
-command! -bang -complete=dir -nargs=? Buffers call s:fzf_buffers(<q-args>, <bang>0)
-
 function! s:unmap_cr() abort
     noremap <buffer> <CR> <CR>
-endfunction
-
-function! s:handle_ft_css() abort
-    setlocal formatexpr=CocAction('formatSelected')
-endfunction
-
-function! s:handle_ft_html() abort
-    setlocal formatexpr=CocAction('formatSelected')
-endfunction
-
-function! s:handle_ft_javascript() abort
-    setlocal formatexpr=CocAction('formatSelected')
-endfunction
-
-function! s:handle_ft_json() abort
-    setlocal formatexpr=CocAction('formatSelected')
 endfunction
 
 function! s:handle_ft_qf() abort
@@ -527,200 +595,4 @@ function! s:handle_ft_qf() abort
     setlocal nowrap
 
     call s:unmap_cr()
-endfunction
-
-function! s:handle_ft_typescript() abort
-    setlocal formatexpr=CocAction('formatSelected')
-endfunction
-
-function! s:handle_ft_vim() abort
-    " Use 4 spaces for indendation rather than the default 2.
-    setlocal shiftwidth=4
-    setlocal softtabstop=4
-endfunction
-
-" Remove the document percentage indicator.
-function! s:handle_airline_init() abort
-    let g:airline_section_z = airline#section#create(['linenr', 'maxlinenr', 'colnr'])
-endfunction
-
-" Inegrate LSP hover and keyword lookup.
-function! s:show_documentation()
-    if CocAction('hasProvider', 'hover')
-        call CocActionAsync('doHover')
-    else
-        call feedkeys('K', 'in')
-    endif
-endfunction
-
-function! GetGitBranch(name) abort
-    " Shortcut git branches contain the ticket identifier preceeded by "sc-".
-    let story = matchstr(a:name, 'sc-\d\+')
-
-    " Use the identifier segment if we found one.
-    if (strlen(story) > 0)
-        return story[:strlen(story) - 1]
-    endif
-
-    " Otherwise the first ten characters.
-    return a:name[:9]
-endfunction
-
-" Open an FZF mulit-file picker with the ability to change from
-" version-controlled files to all files. Defaults to using the CWD, but
-" optionally accepts an alternate directory.
-function! s:fzf_files(dir, fullscreen) abort
-    let l:name = 'files'
-    let l:options = [
-      \ '--bind', 'ctrl-f:change-prompt(Files(all): )+reload(fd -t f -uL)',
-      \ '--padding', '1',
-      \ '--prompt', 'Files: ',
-      \ '--multi'
-      \ ]
-    let l:window = { 'width': 0.6, 'height': 0.4 }
-    let l:fzf = { 'dir': a:dir, 'options': l:options, 'window': l:window }
-
-    call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
-endfunction
-
-" Parse lines from ripgrep for use in the quickfix window.
-function! s:parse_fzf_grep_line(line) abort
-    let parts = split(a:line, ':')
-
-    " The names of the properties are dictated by setqflist.
-    return {
-      \ 'filename': parts[0],
-      \ 'lnum': parts[1],
-      \ 'col': parts[2],
-      \ 'text': join(parts[3:], ':')
-      \ }
-endfunction
-
-" Handle the chosen entries when doing a grep through FZF. The first file is
-" always opened and selecting multiple files updates the quickfix list.
-function! s:sinklist_fzf_grep(lines) abort
-  let l:list = map(a:lines, 's:parse_fzf_grep_line(v:val)')
-  let l:first = l:list[0]
-
-  execute 'edit' escape(l:first.filename, ' %#\')
-  execute l:first.lnum
-  execute 'normal!' l:first.col . '|zz'
-
-  if len(l:list) > 1
-      call setqflist(l:list)
-      cwindow
-      wincmd p
-  endif
-endfunction
-
-" Open an FZF window for live-grepping the CWD, optionally accepting an initial
-" query. Adapted from the following examples:
-" https://github.com/junegunn/fzf.vim/blob/master/README.md#example-advanced-ripgrep-integration
-" https://github.com/junegunn/fzf/blob/master/ADVANCED.md#using-fzf-as-interactive-ripgrep-launcher
-function! s:fzf_grep(query, fullscreen) abort
-    let l:name = 'grep'
-    let l:cmd = 'rg --column --line-number --no-heading --color=always --smart-case -- %s || true'
-    let l:source = printf(cmd, shellescape(a:query))
-    let l:reload = printf(cmd, '{q}')
-    let l:options = [
-      \ '--ansi',
-      \ '--disabled',
-      \ '--bind', 'change:reload:sleep 0.1; ' . l:reload,
-      \ '--delimiter', ':',
-      \ '--padding', '1',
-      \ '--preview', 'bat --color=always {1} --highlight-line {2}',
-      \ '--preview-window', 'right,50%,border-left,+{2}+3/3,~3,<80(up,50%,border-bottom)',
-      \ '--prompt', 'Grep: ',
-      \ '--query', a:query,
-      \ '--multi'
-      \ ]
-    let l:window = { 'width': 0.9, 'height': 0.8 }
-    let l:fzf = {
-      \ 'options': l:options,
-      \ 'sinklist': function('<sid>sinklist_fzf_grep'),
-      \ 'source': l:source,
-      \ 'window': l:window
-      \ }
-
-    call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
-endfunction
-
-" Try to find an existing window with the given buffer number.
-function! s:find_open_window(b) abort
-    let l:tab_count = tabpagenr('$')
-    let l:current_tab = tabpagenr() - 1
-
-    " Loop through all tabs starting with the current one and wrapping.
-    for l:tab_offset in range(0, tab_count - 1)
-        let l:tab = (l:current_tab + l:tab_offset) % l:tab_count + 1
-        let l:buffers = tabpagebuflist(l:tab)
-
-        for l:window in range(1, len(l:buffers))
-            if buffers[l:window - 1] == a:b
-                return [l:tab, l:window]
-            endif
-        endfor
-    endfor
-
-    " We didn't find the buffer.
-    return [0, 0]
-endfunction
-
-" Handle the chosen buffer entry. Try to navigate to an existing window if the
-" buffer is already open, otherwise switch to the buffer in the current window.
-function! s:sink_fzf_buffer(line) abort
-    " Match the buffer number inside the brackets.
-    let l:buffer = matchstr(a:line, '\[\zs[0-9]*\ze\]')
-    let [l:tab, l:window] = s:find_open_window(l:buffer)
-
-    if l:tab
-        execute l:tab . 'tabnext'
-        execute l:window . 'wincmd w'
-        return
-    endif
-
-    execute 'buffer' l:buffer
-endfunction
-
-" Format the result line for the given buffer number.
-function! s:format_fzf_buffer_line(b) abort
-    let l:name = bufname(a:b)
-    let l:name = empty(name) ? '[No Name]' : fnamemodify(name, ":p:~:.")
-    return trim(printf("[%s]\t%s", a:b, name))
-endfunction
-
-" Sort the given buffer numbers based upon their timestamp in the global MRU.
-function! s:sort_fzf_buffers(a, b) abort
-    let l:timestamp_a = get(g:buffer_timestamps, a:a, a:a)
-    let l:timestamp_b = get(g:buffer_timestamps, a:b, a:b)
-
-    " Recently opened buffers will have larger timestamps.
-    return l:timestamp_a < l:timestamp_b ? 1 : -1
-endfunction
-
-" Open an FZF window for choosing an open buffer. Adapted from fzf.vim:
-" https://github.com/junegunn/fzf.vim/blob/dc71692255b62d1f67dc55c8e51ab1aa467b1d46/autoload/fzf/vim.vim#L716
-function! s:fzf_buffers(query, fullscreen) abort
-    " Listed buffers minus the quickfix.
-    let l:buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&filetype") != "qf"')
-    let l:sorted = sort(l:buffers, 's:sort_fzf_buffers')
-    let l:source = map(l:sorted, 's:format_fzf_buffer_line(v:val)')
-
-    let l:name = 'buffers'
-    let l:options = [
-      \ '--delimiter', '\t',
-      \ '--padding', '1',
-      \ '--prompt', 'Buffers: ',
-      \ '--query', a:query,
-      \ '--tiebreak', 'index'
-      \ ]
-    let l:window = { 'width': 0.6, 'height': 0.4 }
-    let l:fzf = {
-      \ 'options': l:options,
-      \ 'sink': function('<sid>sink_fzf_buffer'),
-      \ 'source': l:source,
-      \ 'window': l:window
-      \ }
-
-    call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen)) 
 endfunction
