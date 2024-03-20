@@ -16,7 +16,7 @@ bindkey -v
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-kitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
-alias install-tools='brew install fd fnm git ripgrep starship typescript-language-server vim'
+alias install-tools='brew install bun fd fnm git ripgrep starship typescript-language-server vim'
 
 plugins=(
   ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh

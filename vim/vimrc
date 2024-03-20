@@ -51,18 +51,23 @@ function! PackInit() abort
   packadd minpac
 
   call minpac#init()
-  call minpac#add('k-takata/minpac', { 'type': 'opt' })
-  call minpac#add('yegappan/lsp' , { 'type': 'opt' })
+  call minpac#add('k-takata/minpac', #{ type: 'opt' })
+  call minpac#add('girishji/vimcomplete', #{ type: 'opt' })
+  call minpac#add('girishji/scope.vim', #{ type: 'opt' })
+  call minpac#add('yegappan/lsp' , #{ type: 'opt' })
 
   call minpac#add('HerringtonDarkholme/yats.vim')
   call minpac#add('LunarWatcher/auto-pairs')
   call minpac#add('airblade/vim-gitgutter')
   call minpac#add('andymass/vim-matchup')
-  call minpac#add('dracula/vim', { 'name': 'dracula' })
+  " call minpac#add('dracula/vim', { 'name': 'dracula' })
+  call minpac#add('adriantrunzo/dracula-vim',
+    \ #{ branch: 'no-after', name: 'dracula' })
   call minpac#add('eugen0329/vim-esearch')
   call minpac#add('fladson/vim-kitty')
-  call minpac#add('girishji/scope.vim')
   call minpac#add('hashivim/vim-terraform')
+  call minpac#add('hrsh7th/vim-vsnip')
+  call minpac#add('hrsh7th/vim-vsnip-integ')
   call minpac#add('justinmk/vim-dirvish')
   call minpac#add('justinmk/vim-sneak')
   call minpac#add('kana/vim-textobj-entire')
@@ -83,6 +88,8 @@ function! PackInit() abort
   call minpac#add('vim-ruby/vim-ruby')
 endfunction
 
+" Minpac commands:
+" https://github.com/k-takata/minpac?tab=readme-ov-file#load-minpac-on-demand
 command! PackUpdate source $MYVIMRC | call PackInit() | call minpac#update()
 command! PackClean source $MYVIMRC | call PackInit() | call minpac#clean()
 command! PackStatus packadd minpac | call minpac#status()
@@ -92,13 +99,13 @@ augroup Config
   autocmd!
 augroup end
 
-" Customize the dracula theme. Must be called before colorscheme.
-" autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
+" Customize the dracula theme when it loads.
+autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
 
-" function! s:handle_colorscheme_dracula() abort
-"     highlight link CurSearch IncSearch
-"     highlight link CocErrorSign DraculaWarning
-" endfunction
+function! s:handle_colorscheme_dracula() abort
+  highlight! link CurSearch IncSearch
+  highlight! link GitGutterDelete DraculaRed
+endfunction
 
 " Enable filetype and indent detection.
 filetype plugin indent on
@@ -237,6 +244,85 @@ set wildoptions=fuzzy,pum
 " Wrap long lines.
 set wrap
 
+" Configure available language servers.
+let servers = []
+
+if executable('typescript-language-server')
+  call add(servers, #{
+    \ filetype: [
+    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
+    \ ],
+    \ path: 'typescript-language-server',
+    \ args: ['--stdio'],
+    \ features: #{ documentFormatting: v:false },
+    \ })
+endif
+
+if executable('efm-langserver')
+  call add(servers, #{
+    \ filetype: [
+    \   'css', 'html', 'json', 'yaml',
+    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
+    \ ],
+    \ path: 'efm-langserver',
+    \ args: [],
+    \ initializationOptions: #{
+    \   documentFormatting: v:true,
+    \ },
+    \ })
+endif
+
+if len(servers) > 0
+  silent! packadd lsp
+
+  if exists('g:loaded_lsp')
+    call LspAddServer(servers)
+    call LspOptionsSet(#{
+      \ completionMatcher: 'fuzzy',
+      \ diagSignErrorText: '●',
+      \ diagSignHintText: '●',
+      \ diagSignInfoText: '●',
+      \ diagSignWarningText: '●',
+      \ noNewlineInCompletion: v:true,
+      \ outlineOnRight: v:true,
+      \ outlineWinSize: 50,
+      \ showSignature: v:false,
+      \ snippetSupport: v:true,
+      \ useBufferCompletion: v:true,
+      \ usePopupInCodeAction: v:true,
+      \ })
+  endif
+endif
+
+silent! packad vimcomplete
+
+if exists('g:loaded_vimcomplete')
+  let g:vimcomplete_tab_enable = 1
+
+  call VimCompleteOptionsSet(#{
+    \ completor: #{
+    \   kindDisplayType: 'text',
+    \   noNewlineInCompletion: v:true,
+    \   postfixHighlight: v:false,
+    \   shuffleEqualPriority: v:true,
+    \ },
+    \ lsp: #{
+    \   maxCount: 10,
+    \   priority: 20,
+    \ },
+    \ vsnip: #{
+    \   enable: v:true,
+    \   adaptNonKeyword: v:true,
+    \ },
+    \ })
+endif
+
+silent! packadd scope.vim
+
+if exists('g:loaded_scope')
+  call scope#popup#OptionsSet(#{ wrap: v:true })
+endif
+
 " Ripgrep is much faster.
 if executable("rg")
   set grepprg=rg\ --vimgrep\ --smart-case\ --hidden
@@ -255,7 +341,7 @@ endif
 " percentage indicator (see below).
 let g:airline_symbols.linenr = 'ln:'
 
-" Using autocomplete can make the mode block go crazy. Airline redefines this
+" Using autocomplete can make the mode block go crazy. Airline merges this
 " variable on load, so don't overwrite it when we source vimrc again.
 if !exists('g:airline_mode_map')
   let g:airline_mode_map = {
@@ -318,11 +404,6 @@ let g:gitgutter_sign_modified_removed = '❙'
 " GitGutter signs take priority over LSP signs by default.
 let g:gitgutter_sign_priority = 5
 
-" Override the sign backgrounds to match the sign column.
-" TODO: Dracula forcefully overwrites highlight groups with hi!, so this line
-" doesn't work yet..
-let g:gitgutter_set_sign_backgrounds = 1
-
 " More colorful JSX.
 let g:vim_jsx_pretty_colorful_config = 1
 
@@ -334,53 +415,6 @@ let g:dirvish_mode = ':sort ,^.*[\/],'
 
 " Use the sneak label mode for faster jumping.
 let g:sneak#label = 1
-
-" Configure available language servers.
-let servers = []
-
-if executable('typescript-language-server')
-  call add(servers, #{
-    \ filetype: [
-    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
-    \ ],
-    \ path: 'typescript-language-server',
-    \ args: ['--stdio'],
-    \ features: #{ documentFormatting: v:false },
-    \ })
-endif
-
-if executable('efm-langserver')
-  call add(servers, #{
-    \ filetype: [
-    \   'css', 'html', 'json', 'yaml',
-    \   'javascript', 'javascriptreact', 'typescript', 'typescriptreact'
-    \ ],
-    \ path: 'efm-langserver',
-    \ args: [],
-    \ initializationOptions: #{
-    \   documentFormatting: v:true,
-    \ },
-    \ })
-endif
-
-if len(servers) > 0
-  packadd lsp
-
-  call LspAddServer(servers)
-  call LspOptionsSet({
-    \ 'completionMatcher': 'fuzzy',
-    \ 'diagSignErrorText': '●',
-    \ 'diagSignHintText': '●',
-    \ 'diagSignInfoText': '●',
-    \ 'diagSignWarningText': '●',
-    \ 'noNewlineInCompletion': v:false,
-    \ 'outlineOnRight': v:true,
-    \ 'outlineWinSize': 50,
-    \ 'snippetSupport': v:true,
-    \ 'useBufferCompletion': v:true,
-    \ 'usePopupInCodeAction': v:true
-    \ })
-endif
 
 function! s:handle_lsp_attached() abort
   " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
@@ -404,6 +438,7 @@ function! s:handle_lsp_attached() abort
   nnoremap <buffer> ]d <Cmd>LspDiag next<CR>
 
   setlocal keywordprg=:LspHover
+  autocmd! CursorHold <buffer> silent! LspDiag! current
 endfunction
 
 autocmd Config User LspAttached call s:handle_lsp_attached()
@@ -414,30 +449,28 @@ omap a, <Plug>(swap-textobject-a)
 xmap i, <Plug>(swap-textobject-i)
 omap i, <Plug>(swap-textobject-i)
 
-" Use space for leader. 
-let mapleader = ' '
-
-" Sandwich text-objects for surrounding characters.
+" Sandwich text-objects for matching characters.
 xmap am <Plug>(textobj-sandwich-auto-a)
 omap am <Plug>(textobj-sandwich-auto-a)
 xmap im <Plug>(textobj-sandwich-auto-i)
 omap im <Plug>(textobj-sandwich-auto-i)
-xmap aM <Plug>(matchup-a%)
-omap aM <Plug>(matchup-a%)
-xmap iM <Plug>(matchup-i%)
-omap iM <Plug>(matchup-i%)
-
 xmap aq <Plug>(textobj-sandwich-query-a)
 omap aq <Plug>(textobj-sandwich-query-a)
 xmap iq <Plug>(textobj-sandwich-query-i)
 omap iq <Plug>(textobj-sandwich-query-i)
 
+" Matchup text-objects for larger syntactic blocks.
+xmap aM <Plug>(matchup-a%)
+omap aM <Plug>(matchup-a%)
+xmap iM <Plug>(matchup-i%)
+omap iM <Plug>(matchup-i%)
+
+" Use space for leader. 
+let mapleader = ' '
+
+" The basics.
 nnoremap <Leader><Space> <Cmd>call scope#fuzzy#File()<CR>
-
-" Explore the file system.
 nnoremap <Leader>e <Cmd>Dirvish<CR>
-
-" Go git.
 nnoremap <Leader>g <Cmd>Git<CR>
 
 " Add lines above and below with entering insert mode.
@@ -452,7 +485,7 @@ xnoremap <Leader>P "*P
 
 " Yank to system clipboard.
 nnoremap <Leader>y "*y
-nnoremap <Leader>Y "*Y
+nnoremap <Leader>Y "*yg_
 xnoremap <Leader>y "*y
 
 " Convenient saving.
@@ -463,6 +496,7 @@ nnoremap <S-CR> <Cmd>exit<CR>
 nnoremap <Backspace> <Cmd>bdelete<CR>
 nnoremap <S-Backspace> <Cmd>quit<CR>
 
+" Jump between blocks.
 nmap <Tab> <Plug>(matchup-z%)
 nmap <S-Tab> <Plug>(matchup-Z%)
 
@@ -482,6 +516,7 @@ vnoremap > >gv
 nnoremap j gj
 nnoremap k gk
 
+" Sandwich match mode.
 nmap m <Nop>
 xmap m <Nop>
 omap m <Nop>
@@ -521,6 +556,11 @@ xmap S <Plug>Sneak_S
 " Better redo.
 nnoremap U <C-r>
 
+" x is silly by default.
+nmap x <Nop>
+xmap x <Nop>
+
+" Substitute range with confirmation.
 nmap xc <Plug>(SubversiveSubstituteRangeConfirm)
 xmap xc <Plug>(SubversiveSubstituteRangeConfirm)
 nmap xcc <Plug>(SubversiveSubstituteWordRangeConfirm)
@@ -531,6 +571,7 @@ nmap xp <Plug>(SubversiveSubstitute)
 nmap xpp <Plug>(SubversiveSubstituteLine)
 nmap xP <Plug>(SubversiveSubstituteToEndOfLine)
 
+" Substitute range without confirmation.
 nmap xs <Plug>(SubversiveSubstituteRange)
 xmap xs <Plug>(SubversiveSubstituteRange)
 nmap xss <Plug>(SubversiveSubstituteWordRange)
@@ -559,8 +600,8 @@ nnoremap ]l <Cmd>lnext<CR>
 nnoremap ]q <Cmd>cnext<CR>
 
 " https://stackoverflow.com/a/16360104
-autocmd Config CmdWinEnter * call s:unmap_cr()
-autocmd Config BufReadPost quickfix call s:unmap_cr()
+autocmd Config CmdWinEnter * nnoremap <CR> <CR>
+autocmd Config BufReadPost quickfix nnoremap <CR> <CR>
 
 " These files should be treated as JSONC.
 autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
@@ -578,21 +619,7 @@ function! s:use_prettier() abort
   setlocal formatprg=bunx\ prettier\ --log-level\ silent\ --stdin-filepath\ %
 endfunction
 
-" Filetype specific settings.
-autocmd Config FileType qf call s:handle_ft_qf()
-
 " Open the quickfix and location windows automatically.
 " https://noahfrederick.com/log/vim-streamlining-grep
 autocmd Config QuickFixCmdPost [^l]* cwindow
 autocmd Config QuickFixCmdPost l* lwindow
-
-function! s:unmap_cr() abort
-    noremap <buffer> <CR> <CR>
-endfunction
-
-function! s:handle_ft_qf() abort
-    setlocal norelativenumber
-    setlocal nowrap
-
-    call s:unmap_cr()
-endfunction
