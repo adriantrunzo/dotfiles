@@ -600,8 +600,8 @@ nnoremap ]l <Cmd>lnext<CR>
 nnoremap ]q <Cmd>cnext<CR>
 
 " https://stackoverflow.com/a/16360104
-autocmd Config CmdWinEnter * nnoremap <CR> <CR>
-autocmd Config BufReadPost quickfix nnoremap <CR> <CR>
+autocmd Config CmdWinEnter * nnoremap <buffer> <CR> <CR>
+autocmd Config BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
 " These files should be treated as JSONC.
 autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
