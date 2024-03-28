@@ -63,6 +63,7 @@ function! PackInit() abort
   call minpac#add('eugen0329/vim-esearch')
   call minpac#add('fladson/vim-kitty')
   call minpac#add('hashivim/vim-terraform')
+  call minpac#add('junegunn/fzf.vim')
   call minpac#add('justinmk/vim-sneak')
   call minpac#add('kana/vim-textobj-entire')
   call minpac#add('kana/vim-textobj-indent')
@@ -306,12 +307,6 @@ let g:AutoPairsMapBS = 1
 " We'll manually map <CR> with autocomplete.
 let g:AutoPairsMapCR = 0
 
-" A map of buffer numbers to the timestamp each buffer is opened. We manage this
-" map using autocommands and use the map to sort the FZF buffer picker.
-if !exists('g:buffer_timestamps')
-  let g:buffer_timestamps = {}
-endif
-
 " Update the vim indent options to use less space for line continuation.
 let g:vim_indent = #{
   \ line_continuation: shiftwidth(),
@@ -323,6 +318,34 @@ let g:vim_indent = #{
 let g:nnn#set_default_mappings = 0
 let g:sandwich_no_default_key_mappings = 1
 let g:swap_no_default_key_mappings = 1
+
+if !exists('g:fzf_vim')
+  let g:fzf_vim = {}
+endif
+
+let g:fzf_vim.preview_window = []
+let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 } }
+
+let g:fzf_files_customization = {
+  \ 'options': [
+  \   '--bind', 'ctrl-f:change-prompt(Files(all): )+reload(fd -t f -uL)',
+  \   '--padding', '1',
+  \   '--prompt', 'Files: ',
+  \ ]
+  \ }
+
+let g:fzf_buffers_customization = {
+  \ 'options': [
+  \   '--padding', '1',
+  \   '--prompt', 'Buffers: ',
+  \ ]
+  \ }
+
+" Custom FZF commands.
+command! -bang -complete=dir -nargs=? Files
+  \ call fzf#vim#files(<q-args>, g:fzf_files_customization, <bang>0)
+command! -bang -complete=dir -nargs=? Buffers
+  \ call fzf#vim#buffers(<q-args>, g:fzf_buffers_customization, <bang>0)
 
 " Use bars for git signs as they are easier to read at a glance.
 let g:gitgutter_sign_added = '❙'
@@ -561,11 +584,6 @@ nnoremap ]q <Cmd>cnext<CR>
 autocmd Config CmdWinEnter * nnoremap <buffer> <CR> <CR>
 autocmd Config BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
-" Buffer MRU, adapted from:
-" https://github.com/junegunn/fzf.vim/blob/dc71692255b62d1f67dc55c8e51ab1aa467b1d46/plugin/fzf.vim#L125
-autocmd Config BufWinEnter,WinEnter * let g:buffer_timestamps[bufnr('')] = reltimefloat(reltime())
-autocmd Config BufDelete * silent! call remove(g:buffer_timestamps, expand('<abuf>'))
-
 " These files should be treated as JSONC.
 autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
 autocmd Config BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
@@ -593,104 +611,3 @@ autocmd Config User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd Config CursorHold * silent call CocActionAsync('highlight')
-
-" Custom FZF commands.
-command! -bang -complete=dir -nargs=? Files call s:fzf_files(<q-args>, <bang>0)
-command! -bang -complete=dir -nargs=? Buffers call s:fzf_buffers(<q-args>, <bang>0)
-
-" Open an FZF mulit-file picker with the ability to change from
-" version-controlled files to all files. Defaults to using the CWD, but
-" optionally accepts an alternate directory.
-function! s:fzf_files(dir, fullscreen) abort
-  let l:name = 'files'
-  let l:options = [
-    \ '--bind', 'ctrl-f:change-prompt(Files(all): )+reload(fd -t f -uL)',
-    \ '--padding', '1',
-    \ '--prompt', 'Files: ',
-    \ '--multi'
-    \ ]
-  let l:window = { 'width': 0.6, 'height': 0.4 }
-  let l:fzf = { 'dir': a:dir, 'options': l:options, 'window': l:window }
-
-  call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen))
-endfunction
-
-" Try to find an existing window with the given buffer number.
-function! s:find_open_window(b) abort
-  let l:tab_count = tabpagenr('$')
-  let l:current_tab = tabpagenr() - 1
-
-  " Loop through all tabs starting with the current one and wrapping.
-  for l:tab_offset in range(0, tab_count - 1)
-    let l:tab = (l:current_tab + l:tab_offset) % l:tab_count + 1
-    let l:buffers = tabpagebuflist(l:tab)
-
-    for l:window in range(1, len(l:buffers))
-      if buffers[l:window - 1] == a:b
-        return [l:tab, l:window]
-      endif
-    endfor
-  endfor
-
-  " We didn't find the buffer.
-  return [0, 0]
-endfunction
-
-" Handle the chosen buffer entry. Try to navigate to an existing window if the
-" buffer is already open, otherwise switch to the buffer in the current window.
-function! s:sink_fzf_buffer(line) abort
-  " Match the buffer number inside the brackets.
-  let l:buffer = matchstr(a:line, '\[\zs[0-9]*\ze\]')
-  let [l:tab, l:window] = s:find_open_window(l:buffer)
-
-  if l:tab
-    execute l:tab . 'tabnext'
-    execute l:window . 'wincmd w'
-    return
-  endif
-
-  execute 'buffer' l:buffer
-endfunction
-
-" Format the result line for the given buffer number.
-function! s:format_fzf_buffer_line(b) abort
-  let l:name = bufname(a:b)
-  let l:name = empty(name) ? '[No Name]' : fnamemodify(name, ":p:~:.")
-  return trim(printf("[%s]\t%s", a:b, name))
-endfunction
-
-" Sort the given buffer numbers based upon their timestamp in the global MRU.
-function! s:sort_fzf_buffers(a, b) abort
-  let l:timestamp_a = get(g:buffer_timestamps, a:a, a:a)
-  let l:timestamp_b = get(g:buffer_timestamps, a:b, a:b)
-
-  " Recently opened buffers will have larger timestamps.
-  return l:timestamp_a < l:timestamp_b ? 1 : -1
-endfunction
-
-" Open an FZF window for choosing an open buffer. Adapted from fzf.vim:
-" https://github.com/junegunn/fzf.vim/blob/dc71692255b62d1f67dc55c8e51ab1aa467b1d46/autoload/fzf/vim.vim#L716
-function! s:fzf_buffers(query, fullscreen) abort
-  " Listed buffers minus the quickfix.
-  let l:buffers = filter(range(1, bufnr('$')), 'buflisted(v:val) && getbufvar(v:val, "&filetype") != "qf"')
-  let l:sorted = sort(l:buffers, 's:sort_fzf_buffers')
-  let l:source = map(l:sorted, 's:format_fzf_buffer_line(v:val)')
-
-  let l:name = 'buffers'
-  let l:options = [
-    \ '--delimiter', '\t',
-    \ '--padding', '1',
-    \ '--prompt', 'Buffers: ',
-    \ '--query', a:query,
-    \ '--tiebreak', 'index'
-    \ ]
-  let l:window = { 'width': 0.6, 'height': 0.4 }
-  let l:fzf = {
-    \ 'options': l:options,
-    \ 'sink': function('<sid>sink_fzf_buffer'),
-    \ 'source': l:source,
-    \ 'window': l:window
-    \ }
-
-  call fzf#run(fzf#wrap(l:name, l:fzf, a:fullscreen))
-endfunction
