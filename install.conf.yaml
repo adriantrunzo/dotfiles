@@ -10,12 +10,12 @@
       recursive: true
 
 - link:
-    ~/.config/efm-langserver/config.yaml: efm-langserver/config.yaml
     ~/.config/kitty/dracula.conf: kitty/dracula/dracula.conf
     ~/.config/kitty/kitty.conf: kitty/kitty.conf
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
     ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting
+    ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/pack/minpac/opt/minpac:
       create: true
       path: vim/minpac/

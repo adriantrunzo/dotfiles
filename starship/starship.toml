@@ -16,5 +16,5 @@ disabled = true
 symbol = ''
 
 [nodejs]
-format = 'node [($version)]($style) '
+format = '[node ($version)]($style) '
 version_format = '${raw}'
