@@ -181,8 +181,11 @@ set shiftwidth=2
 " Display the number of search results.
 set shortmess-=S
 
-" Don't pass messages to |ins-completion-menu|.
+" Don't show completion menu messages.
 set shortmess+=c
+
+" Don't show the intro message when starting vim.
+set shortmess+=I
 
 " Show a symbol for wrapped lines.
 set showbreak=↪
@@ -229,7 +232,7 @@ set undodir^=$HOME/.vim/undo//
 " Persistent undo.
 set undofile
 
-" Faster update time for git signs, etc. 
+" Faster update time for git signs, etc.
 set updatetime=500
 
 " Enable wildmenu (command-line completion).
@@ -414,7 +417,7 @@ omap aM <Plug>(matchup-a%)
 xmap iM <Plug>(matchup-i%)
 omap iM <Plug>(matchup-i%)
 
-" Use space for leader. 
+" Use space for leader.
 let mapleader = ' '
 
 " The basics.
@@ -545,7 +548,7 @@ xmap xc <Plug>(SubversiveSubstituteRangeConfirm)
 nmap xcc <Plug>(SubversiveSubstituteWordRangeConfirm)
 "
 " Use xp for "yank-paste", substituting the target without overwriting the
-" unnamed buffer. In visual mode use P. 
+" unnamed buffer. In visual mode use P.
 nmap xp <Plug>(SubversiveSubstitute)
 nmap xpp <Plug>(SubversiveSubstituteLine)
 nmap xP <Plug>(SubversiveSubstituteToEndOfLine)
@@ -583,6 +586,9 @@ nnoremap ]q <Cmd>cnext<CR>
 " https://stackoverflow.com/a/16360104
 autocmd Config CmdWinEnter * nnoremap <buffer> <CR> <CR>
 autocmd Config BufReadPost quickfix nnoremap <buffer> <CR> <CR>
+
+" Remove trailing whitespace.
+autocmd Config BufWritePre * :%s/\s\+$//e
 
 " These files should be treated as JSONC.
 autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
