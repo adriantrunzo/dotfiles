@@ -19,6 +19,8 @@ _fzf_compgen_dir() {
 }
 
 # nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
+# https://draculatheme.com/nnn
+export NNN_FCOLORS="D4DEB778E79F9F67D2E5E5D2"
 export NNN_OPTS="Ae"
 export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
 
