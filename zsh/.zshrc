@@ -3,10 +3,34 @@ export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
 # bat configuration. https://github.com/sharkdp/bat#customization
 export BAT_THEME=Dracula
 
+# https://draculatheme.com/fzf
+FZF_COLORS=(
+  'fg:#f8f8f2'
+  'bg:#282a36'
+  'hl:#bd93f9'
+  'fg+:#f8f8f2'
+  'bg+:#44475a'
+  'hl+:#bd93f9'
+  'info:#ffb86c'
+  'prompt:#50fa7b'
+  'pointer:#ff79c6'
+  'marker:#ff79c6'
+  'spinner:#ffb86c'
+  'header:#6272a4' 
+)
+
+FZF_OPTIONS=(
+  '--bind=ctrl-s:toggle'
+  "--color=${(j[,])FZF_COLORS}"
+  '--info=inline'
+  '--marker=*'
+  '--reverse'
+)
+
 # fzf configuration. https://github.com/junegunn/fzf#settings
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS='--info=inline --reverse --marker=* --bind=ctrl-s:toggle'
+export FZF_DEFAULT_OPTS="${(j[ ])FZF_OPTIONS}"
 
 # Use fd to generate the list for file completion.
 _fzf_compgen_path() {
@@ -35,8 +59,14 @@ if type brew &>/dev/null; then
   compinit
 fi
 
-if type npm &>/dev/null && [[ ! -f ~/.npm.zsh ]]; then
-  npm completion >> ~/.npm.zsh
+# Load npm completion.
+if type npm &>/dev/null; then
+  eval "$(npm completion)"
+fi
+
+# Load fzf integration.
+if type fzf &>/dev/null; then
+  eval "$(fzf --zsh)"
 fi
 
 # Use Vi bindings.
@@ -51,19 +81,16 @@ alias install-tools='brew install bat bun fd fnm fzf git nnn ripgrep starship vi
 # Miscellaneous maintenance.
 alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
 
-plugins=(
+PLUGINS=(
+  ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
   ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
   ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-  # $(brew --prefix)/opt/fzf/install
-  ~/.fzf.zsh
-  ~/.npm.zsh
 
   # Private, work-related configuration.
   ~/slice/slice.zsh
 )
 
-for p ($plugins) {
+for p ($PLUGINS) {
   [ -f $p ] && source $p
 }
 
