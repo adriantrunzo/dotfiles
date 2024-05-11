@@ -35,6 +35,10 @@ if type brew &>/dev/null; then
   compinit
 fi
 
+if type npm &>/dev/null && [[ ! -f ~/.npm.zsh ]]; then
+  npm completion >> ~/.npm.zsh
+fi
+
 # Use Vi bindings.
 bindkey -v
 
@@ -53,6 +57,7 @@ plugins=(
 
   # $(brew --prefix)/opt/fzf/install
   ~/.fzf.zsh
+  ~/.npm.zsh
 
   # Private, work-related configuration.
   ~/slice/slice.zsh
