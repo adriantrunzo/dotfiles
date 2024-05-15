@@ -57,9 +57,7 @@ function! PackInit() abort
   call minpac#add('LunarWatcher/auto-pairs')
   call minpac#add('airblade/vim-gitgutter')
   call minpac#add('andymass/vim-matchup')
-  " call minpac#add('dracula/vim', { 'name': 'dracula' })
-  call minpac#add('adriantrunzo/dracula-vim',
-    \ #{ branch: 'no-after', name: 'dracula' })
+  call minpac#add('dracula/vim', { 'name': 'dracula' })
   call minpac#add('eugen0329/vim-esearch')
   call minpac#add('fladson/vim-kitty')
   call minpac#add('hashivim/vim-terraform')
@@ -102,6 +100,7 @@ autocmd Config ColorScheme dracula call s:handle_colorscheme_dracula()
 function! s:handle_colorscheme_dracula() abort
   highlight! link CurSearch IncSearch
   highlight! link GitGutterDelete DraculaRed
+  highlight! link CocSearch DraculaCyan
 endfunction
 
 " Enable filetype and indent detection.
