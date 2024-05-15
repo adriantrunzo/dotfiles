@@ -1,16 +1,8 @@
 {
-  "coc.preferences.formatOnType": true,
   "eslint.autoFixOnSave": true,
   "diagnostic.hintSign": "●",
   "diagnostic.infoSign": "●",
   "diagnostic.errorSign": "●",
   "diagnostic.warningSign": "●",
-  "prettier.requireConfig": true,
-  "tsserver.useLocalTsdk": true,
-  "[html][css][scss][markdown][mdx][json][yaml]": {
-    "coc.preferences.formatOnSave": true
-  },
-  "[javascript][typescript][javascriptreact][typescriptreact]": {
-    "coc.preferences.formatOnSave": true
-  }
+  "tsserver.useLocalTsdk": true
 }
