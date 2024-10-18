@@ -1,8 +1,17 @@
 {
-  "eslint.autoFixOnSave": true,
   "diagnostic.hintSign": "●",
   "diagnostic.infoSign": "●",
   "diagnostic.errorSign": "●",
   "diagnostic.warningSign": "●",
+  "eslint.autoFixOnSave": true,
+  "languageserver": {
+    "zls": {
+      "command": "zls",
+      "filetypes": ["zig", "zon"]
+    }
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["clsx\\(.*?\\)(?!\\])", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"]
+  ],
   "tsserver.useLocalTsdk": true
 }
