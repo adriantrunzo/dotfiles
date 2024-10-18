@@ -94,6 +94,8 @@ for p ($PLUGINS) {
   [ -f $p ] && source $p
 }
 
+zstyle ':fzf-tab:*' use-fzf-default-opts yes
+
 if type fnm &>/dev/null; then
   eval "$(fnm env --corepack-enabled --use-on-cd)"
 fi
