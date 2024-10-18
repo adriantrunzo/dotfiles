@@ -95,7 +95,7 @@ for p ($PLUGINS) {
 }
 
 if type fnm &>/dev/null; then
-  eval "$(fnm env --use-on-cd)"
+  eval "$(fnm env --corepack-enabled --use-on-cd)"
 fi
 
 if type starship &>/dev/null; then
