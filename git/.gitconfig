@@ -1,6 +1,32 @@
+[branch]
+  sort = -committerdate
+
+[column]
+  ui = auto
+
 [core]
   editor = vim
   excludesfile = ~/.gitignore
+
+[diff]
+  algorithm = histogram
+  colorMoved = plain
+  mnemonicPrefix = true
+  renames = true
+
+[fetch]
+  prune = true
+  pruneTags = true
+  all = true
+
+[help]
+  autocorrect = prompt
+
+[include]
+  path = ./.gitconfig-local
+
+[init]
+  defaultBranch = main
 
 [pull]
   ff = only
@@ -11,5 +37,5 @@
 [submodule]
   recurse = true
 
-[include]
-  path = ./.gitconfig-local
+[tag]
+  sort = version:refname
