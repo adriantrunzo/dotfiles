@@ -1,6 +1,6 @@
 # dotfiles
 
-My dotfiles, mainly based around vim, git and kitty. Please feel free to copy
+My dotfiles, mainly based around vim, git and ghostty. Please feel free to copy
 anything you find useful into your own dotfiles.
 
 ## Usage
