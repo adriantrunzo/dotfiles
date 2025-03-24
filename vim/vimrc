@@ -368,7 +368,7 @@ nnoremap <Leader>b <Cmd>Buffers<CR>
 nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>g <Cmd>Git<CR>
 
-" Add lines above and below with entering insert mode.
+" Add lines above and below without entering insert mode.
 nnoremap <Leader>o <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
 nnoremap <Leader>O <Cmd>put!=repeat([''],v:count)<Bar>']+1<CR>
 
