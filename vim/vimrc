@@ -51,6 +51,11 @@ function! s:handle_colorscheme_dracula() abort
   highlight! link CurSearch IncSearch
   highlight! link GitGutterDelete DraculaRed
   highlight! link CocSearch DraculaCyan
+
+  " Support --highlight-line.
+  let g:fzf_colors['bg+'] = ['bg', 'CursorLine']
+  let g:fzf_colors['fg+'] = ['fg', 'CursorLine']
+  let g:fzf_colors.gutter = ['bg', 'Normal']
 endfunction
 
 " Cursor shape control.
