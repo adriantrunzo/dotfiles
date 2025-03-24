@@ -20,8 +20,10 @@ FZF_COLORS=(
 )
 
 FZF_OPTIONS=(
-  '--bind=ctrl-s:toggle'
+  '--bind=alt-space:toggle-all,ctrl-a:toggle-all,ctrl-space:toggle'
+  '--bind=ctrl-j:preview-down,ctrl-k:preview-up'
   "--color=${(j[,])FZF_COLORS}"
+  '--highlight-line'
   '--info=inline'
   '--marker=*'
   '--reverse'
