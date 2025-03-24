@@ -10,8 +10,15 @@
       "filetypes": ["zig", "zon"]
     }
   },
+  "prettier.requireConfig": true,
   "tailwindCSS.experimental.classRegex": [
-    ["clsx\\(.*?\\)(?!\\])", "(?:'|\"|`)([^\"'`]*)(?:'|\"|`)"]
+    ["joinClassNames\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "tsserver.useLocalTsdk": true
+  "tsserver.useLocalTsdk": true,
+  "[html][css][scss][markdown][mdx][json][yaml]": {
+    "coc.preferences.formatOnSave": true
+  },
+  "[javascript][typescript][javascriptreact][typescriptreact]": {
+    "coc.preferences.formatOnSave": true
+  }
 }
