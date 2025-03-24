@@ -287,29 +287,9 @@ if !exists('g:fzf_vim')
   let g:fzf_vim = {}
 endif
 
-let g:fzf_vim.preview_window = []
-let g:fzf_layout = { 'window': { 'width': 0.6, 'height': 0.4 } }
-
-let g:fzf_files_customization = {
-  \ 'options': [
-  \   '--bind', 'ctrl-f:change-prompt(Files(all): )+reload(fd -t f -uL)',
-  \   '--padding', '1',
-  \   '--prompt', 'Files: ',
-  \ ]
-  \ }
-
-let g:fzf_buffers_customization = {
-  \ 'options': [
-  \   '--padding', '1',
-  \   '--prompt', 'Buffers: ',
-  \ ]
-  \ }
-
-" Custom FZF commands.
-command! -bang -complete=dir -nargs=? Files
-  \ call fzf#vim#files(<q-args>, g:fzf_files_customization, <bang>0)
-command! -bang -complete=dir -nargs=? Buffers
-  \ call fzf#vim#buffers(<q-args>, g:fzf_buffers_customization, <bang>0)
+" let g:fzf_vim.preview_window = []
+let g:fzf_vim.preview_window = ['right,50%,<70(up,40%)', 'ctrl-/']
+let g:fzf_layout = { 'window': { 'width': 0.9, 'height': 0.9 } }
 
 " Use bars for git signs as they are easier to read at a glance.
 let g:gitgutter_sign_added = '❙'
