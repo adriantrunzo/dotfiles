@@ -31,6 +31,7 @@ function! PackInit() abort
   call minpac#add('vim-airline/vim-airline')
   call minpac#add('vim-airline/vim-airline-themes')
   call minpac#add('vim-ruby/vim-ruby')
+  call minpac#add('ziglang/zig.vim')
 endfunction
 
 " Minpac commands:
@@ -367,6 +368,7 @@ nnoremap <Leader><Space> <Cmd>Files<CR>
 nnoremap <Leader>b <Cmd>Buffers<CR>
 nnoremap <Leader>e <Cmd>NnnPicker %:p:h<CR>
 nnoremap <Leader>g <Cmd>Git<CR>
+nnoremap <Leader>G <Cmd>vertical Git<CR>
 
 " Add lines above and below without entering insert mode.
 nnoremap <Leader>o <Cmd>put=repeat([''],v:count)<Bar>'[-1<CR>
@@ -529,6 +531,8 @@ nnoremap ]q <Cmd>cnext<CR>
 autocmd Config CmdWinEnter * nnoremap <buffer> <CR> <CR>
 autocmd Config BufReadPost quickfix nnoremap <buffer> <CR> <CR>
 
+autocmd Config BufNewFile,BufRead *.mdx set filetype=mdx
+
 " These files should be treated as JSONC.
 autocmd Config BufNewFile,BufRead .eslintrc.json setlocal filetype=jsonc
 autocmd Config BufNewFile,BufRead coc-settings.json setlocal filetype=jsonc
@@ -536,6 +540,7 @@ autocmd Config BufNewFile,BufRead tsconfig.json setlocal filetype=jsonc
 
 " Use prettier for formatting with gq. Prettier doesn't seem to support range
 " formatting via efm-langserver with lsp#lsp#FormatExpr(),
+autocmd Config FileType markdown call s:use_prettier()
 autocmd Config FileType css,html,json,jsonc,yaml call s:use_prettier()
 autocmd Config FileType javascript,javascriptreact call s:use_prettier()
 autocmd Config FileType typescript,typescriptreact call s:use_prettier()

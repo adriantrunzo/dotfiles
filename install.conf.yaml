@@ -11,15 +11,24 @@
 
 - link:
     ~/.config/ghostty/config: ghostty/config
+    ~/.config/nvim/after:
+      create: true
+      path: nvim/after
     ~/.config/nvim/init.lua: nvim/init.lua
+    ~/.config/nvim/lsp:
+      create: true
+      path: nvim/lsp
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/fzf-tab: zsh/fzf-tab
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
     ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting
+    ~/.local/share/nvim/site/pack/plugin/start:
+      create: true
+      path: nvim/start
     ~/.vim/coc-settings.json: vim/coc-settings.json
     ~/.vim/pack/minpac/opt/minpac:
       create: true
-      path: vim/minpac/
+      path: vim/minpac
     ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.gitignore: git/.gitignore

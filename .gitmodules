@@ -2,18 +2,52 @@
 	path = dotbot
 	url = https://github.com/anishathalye/dotbot
 	ignore = dirty
-[submodule "kitty/dracula"]
-	path = kitty/dracula
-	url = https://github.com/dracula/kitty.git
+	branch = master
 [submodule "zsh/zsh-syntax-highlighting"]
 	path = zsh/zsh-syntax-highlighting
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
+	branch = master
 [submodule "zsh/zsh-autosuggestions"]
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
+	branch = master
 [submodule "vim/minpac"]
 	path = vim/minpac
 	url = https://github.com/k-takata/minpac.git
+	branch = master
 [submodule "zsh/fzf-tab"]
 	path = zsh/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab.git
+	branch = master
+[submodule "nvim/start/mini.nvim"]
+	path = nvim/start/mini.nvim
+	url = https://github.com/echasnovski/mini.nvim.git
+	branch = main
+[submodule "nvim/start/vim-sandwich"]
+	path = nvim/start/vim-sandwich
+	url = https://github.com/machakann/vim-sandwich.git
+	branch = master
+[submodule "nvim/start/vim-fugitive"]
+	path = nvim/start/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+	branch = master
+[submodule "nvim/start/dracula"]
+	path = nvim/start/dracula
+	url = https://github.com/dracula/vim.git
+	branch = master
+[submodule "nvim/start/fzf-lua"]
+	path = nvim/start/fzf-lua
+	url = https://github.com/ibhagwan/fzf-lua.git
+	branch = main
+[submodule "nvim/start/conform.nvim"]
+	path = nvim/start/conform.nvim
+	url = https://github.com/stevearc/conform.nvim.git
+	branch = master
+[submodule "nvim/start/nnn.nvim"]
+	path = nvim/start/nnn.nvim
+	url = https://github.com/luukvbaal/nnn.nvim.git
+	branch = master
+[submodule "nvim/start/nvim-treesitter"]
+	path = nvim/start/nvim-treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+	branch = master
