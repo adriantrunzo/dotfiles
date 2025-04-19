@@ -28,7 +28,7 @@ local function fix_all(opts)
     arguments = {
       {
         uri = vim.uri_from_bufnr(bufnr),
-        version = lsp.util.buf_versions[bufnr],
+        version = vim.lsp.util.buf_versions[bufnr],
       },
     },
   })
@@ -90,6 +90,7 @@ vim.lsp.config("eslint", {
       showDocumentation = { enable = true },
     },
   },
+  --- @diagnostic disable-next-line: unused-local
   before_init = function(params, config)
     local root_dir = config.root_dir
 
