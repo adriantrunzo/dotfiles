@@ -1,14 +1,14 @@
 vim.lsp.config("vtsls", {
-  cmd = { 'npx', "--yes", "@vtsls/language-server", '--stdio' },
+  cmd = { "npx", "--yes", "@vtsls/language-server", "--stdio" },
   filetypes = {
-    'javascript',
-    'javascriptreact',
-    'javascript.jsx',
-    'typescript',
-    'typescriptreact',
-    'typescript.tsx',
+    "javascript",
+    "javascriptreact",
+    "javascript.jsx",
+    "typescript",
+    "typescriptreact",
+    "typescript.tsx",
   },
-  root_markers = { 'tsconfig.json', 'package.json', 'jsconfig.json', '.git' },
+  root_markers = { "tsconfig.json", "package.json", "jsconfig.json" },
   settings = {
     vtsls = {
       autoUseWorkspaceTsdk = true,

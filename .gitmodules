@@ -23,10 +23,6 @@
 	path = nvim/start/mini.nvim
 	url = https://github.com/echasnovski/mini.nvim.git
 	branch = main
-[submodule "nvim/start/vim-sandwich"]
-	path = nvim/start/vim-sandwich
-	url = https://github.com/machakann/vim-sandwich.git
-	branch = master
 [submodule "nvim/start/vim-fugitive"]
 	path = nvim/start/vim-fugitive
 	url = https://github.com/tpope/vim-fugitive.git
@@ -50,4 +46,12 @@
 [submodule "nvim/start/nvim-treesitter"]
 	path = nvim/start/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+	branch = master
+[submodule "nvim/start/vim-sneak"]
+	path = nvim/start/vim-sneak
+	url = https://github.com/justinmk/vim-sneak.git
+	branch = master
+[submodule "nvim/start/vim-rsi"]
+	path = nvim/start/vim-rsi
+	url = https://github.com/tpope/vim-rsi.git
 	branch = master

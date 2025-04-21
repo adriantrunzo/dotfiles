@@ -6,11 +6,11 @@ return {
     "vscode-langservers-extracted",
     "--",
     "vscode-json-language-server",
-    "--stdio"
+    "--stdio",
   },
-  filetypes = { 'json', 'jsonc' },
+  filetypes = { "json", "jsonc" },
   init_options = {
     provideFormatter = true,
   },
-  root_markers = { '.git' },
+  root_markers = { "package.json" },
 }

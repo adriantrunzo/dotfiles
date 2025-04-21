@@ -6,14 +6,14 @@ return {
     "vscode-langservers-extracted",
     "--",
     "vscode-html-language-server",
-    "--stdio"
+    "--stdio",
   },
-  filetypes = { 'html', 'templ' },
-  root_markers = { 'package.json', '.git' },
-  settings = {},
+  filetypes = { "html", "templ" },
   init_options = {
     provideFormatter = true,
     embeddedLanguages = { css = true, javascript = true },
-    configurationSection = { 'html', 'css', 'javascript' },
+    configurationSection = { "html", "css", "javascript" },
   },
+  root_markers = { "package.json" },
+  settings = {},
 }
