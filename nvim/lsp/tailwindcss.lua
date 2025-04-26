@@ -24,17 +24,40 @@ return {
     "typescript",
     "typescriptreact",
   },
+  root_dir = function(bufnr, on_dir)
+    local root_files = {
+      "tailwind.config.js",
+      "tailwind.config.cjs",
+      "tailwind.config.mjs",
+      "tailwind.config.ts",
+    }
+
+    local buffer_file_name = vim.api.nvim_buf_get_name(bufnr)
+    local buffer_file_path = vim.fn.fnamemodify(buffer_file_name, ":h")
+    local package_directory = vim.fs.dirname(
+      vim.fs.find("package.json", { path = buffer_file_path, upward = true })[1]
+    )
+
+    if package_directory then
+      for line in io.lines(package_directory .. "/package.json") do
+        if line:find("tailwindcss") then
+          root_files[#root_files + 1] = "package.json"
+          break
+        end
+      end
+    end
+
+    on_dir(
+      vim.fs.dirname(
+        vim.fs.find(root_files, { path = buffer_file_name, upward = true })[1]
+      )
+    )
+  end,
   settings = {
     tailwindCSS = {
       classFunctions = { "classNames", "clsx", "joinClassNames" },
       validate = true,
     },
-  },
-  root_markers = {
-    "tailwind.config.js",
-    "tailwind.config.cjs",
-    "tailwind.config.mjs",
-    "tailwind.config.ts",
   },
   workspace_required = true,
 }

@@ -2,7 +2,7 @@
 vim.api.nvim_create_augroup("Config", { clear = true })
 
 -- Use space for leader.
-vim.g.mapleader = vim.keycode("<space>")
+vim.g.mapleader = vim.keycode("<Space>")
 
 -- Use the sneak label mode for faster jumping.
 vim.g["sneak#label"] = 1
@@ -24,6 +24,9 @@ vim.opt.formatexpr = 'v:lua.require"conform".formatexpr()'
 
 -- Ignore case when searching.
 vim.opt.ignorecase = true
+
+-- Disable mouse support.
+vim.opt.mouse = ""
 
 -- Show line numbers.
 vim.opt.number = true
@@ -112,15 +115,21 @@ vim.lsp.enable("lua")
 vim.lsp.enable("vtsls")
 
 -- The basics.
-vim.keymap.set("n", "<Leader><Space>", "<cmd>FzfLua files<cr>")
-vim.keymap.set("n", "<Leader><CR>", "<cmd>FzfLua live_grep<cr>")
-vim.keymap.set("n", "<Leader>b", "<cmd>FzfLua buffers<cr>")
-vim.keymap.set("n", "<Leader>c", "<cmd>close<cr>")
-vim.keymap.set("n", "<Leader>d", "<cmd>bdelete<cr>")
-vim.keymap.set("n", "<Leader>e", "<cmd>NnnPicker %:p:h<cr>")
-vim.keymap.set("n", "<Leader>g", "<cmd>Git<cr>")
-vim.keymap.set("n", "<Leader>s", "<cmd>update<cr>")
-vim.keymap.set("n", "<Leader>x", "<cmd>exit<cr>")
+vim.keymap.set("n", "<Leader><Space>", "<Cmd>FzfLua files<CR>")
+vim.keymap.set("n", "<Leader><CR>", "<Cmd>FzfLua live_grep<CR>")
+vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
+vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
+vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
+vim.keymap.set("n", "<Leader>e", "<Cmd>NnnPicker %:p:h<CR>")
+vim.keymap.set("n", "<Leader>g", "<Cmd>Git<CR>")
+vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
+vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
+
+-- Thumb clusters on Advantage keyboard.
+-- vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
+-- vim.keymap.set("n", "<S-CR>", "<Cmd>exit<CR>")
+vim.keymap.set("n", "<Backspace>", "<Cmd>bdelete<CR>")
+vim.keymap.set("n", "<S-Backspace>", "<Cmd>quit<cr>")
 
 -- Add lines above and below without entering insert mode.
 vim.keymap.set("n", "<Leader>o", "]<Space>", { remap = true })
@@ -158,8 +167,9 @@ vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
 
 -- Move vertically by visual line with wrapping enabled.
--- nnoremap j gj
--- nnoremap k gk
+-- https://vi.stackexchange.com/a/37629
+vim.keymap.set("n", "j", "&wrap && v:count == 0 ? 'gj' : 'j'", { expr = true })
+vim.keymap.set("n", "k", "&wrap && v:count == 0 ? 'gk' : 'k'", { expr = true })
 
 -- Use "m" for matches and moves.
 vim.keymap.set({ "n", "x" }, "m", "<Nop>")
@@ -176,6 +186,9 @@ vim.keymap.set({ "n", "v" }, "Q", "q")
 vim.keymap.set("o", "s", "<Plug>Sneak_s")
 vim.keymap.set({ "o", "x" }, "S", "<Plug>Sneak_S")
 
+-- vim.keymap.set({ "n", "o", "x" }, "<CR>", "<Plug>Sneak_s")
+-- vim.keymap.set({ "n", "o", "x" }, "<S-CR>", "<Plug>Sneak_S")
+
 -- Better redo.
 vim.keymap.set(
   "n",
@@ -191,6 +204,26 @@ vim.keymap.set("n", "Y", "yg_")
 -- http://ddrscott.github.io/blog/2016/yank-without-jank/
 vim.keymap.set("v", "y", "myy`y")
 vim.keymap.set("v", "Y", "myY`y")
+
+-- Restore default <CR> mapping in command-line window.
+-- https://stackoverflow.com/a/16360104
+vim.api.nvim_create_autocmd("CmdWinEnter", {
+  callback = function(event)
+    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
+  end,
+  group = "Config",
+  pattern = "*",
+})
+
+-- Restore default <CR> mapping in location and quickfix windows.
+-- https://stackoverflow.com/a/16360104
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function(event)
+    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
+  end,
+  group = "Config",
+  pattern = "quickfix",
+})
 
 -- Highlight on yank.
 vim.api.nvim_create_autocmd("TextYankPost", {
@@ -213,7 +246,7 @@ vim.api.nvim_create_autocmd("CursorMoved", {
   group = "Config",
 })
 
--- Open the quickfix and location windows automatically.
+-- Open the quickfix window automatically.
 -- https://noahfrederick.com/log/vim-streamlining-grep
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
   callback = function()
@@ -222,6 +255,9 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
   group = "Config",
   pattern = "[^l]*",
 })
+
+-- Open the location window automatically.
+-- https://noahfrederick.com/log/vim-streamlining-grep
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
   callback = function()
     vim.cmd.lwindow()
@@ -279,57 +315,57 @@ vim.api.nvim_create_autocmd("LspAttach", {
     vim.keymap.set(
       "n",
       "cd",
-      "<cmd>FzfLua lsp_definitions jump1=true<cr>",
+      "<Cmd>FzfLua lsp_definitions jump1=true<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cm",
-      "<cmd>FzfLua lsp_implementations jump1=true<cr>",
+      "<Cmd>FzfLua lsp_implementations jump1=true<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = event.buf })
     vim.keymap.set(
       "n",
       "cpd",
-      "<cmd>FzfLua lsp_definitions jump1=false<cr>",
+      "<Cmd>FzfLua lsp_definitions jump1=false<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cpm",
-      "<cmd>FzfLua lsp_implementations jump1=false<cr>",
+      "<Cmd>FzfLua lsp_implementations jump1=false<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cpr",
-      "<cmd>FzfLua lsp_references jump1=false<cr>",
+      "<Cmd>FzfLua lsp_references jump1=false<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cpy",
-      "<cmd>FzfLua lsp_typedefs jump1=false<cr>",
+      "<Cmd>FzfLua lsp_typedefs jump1=false<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
     vim.keymap.set(
       "n",
       "cr",
-      "<cmd>FzfLua lsp_references jump1=true<cr>",
+      "<Cmd>FzfLua lsp_references jump1=true<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cy",
-      "<cmd>FzfLua lsp_typedefs jump1=true<cr>",
+      "<Cmd>FzfLua lsp_typedefs jump1=true<CR>",
       { buffer = event.buf }
     )
     vim.keymap.set(
       "n",
       "cz",
-      "<cmd>FzfLua lsp_code_actions<cr>",
+      "<Cmd>FzfLua lsp_code_actions<CR>",
       { buffer = event.buf }
     )
   end,

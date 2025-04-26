@@ -74,16 +74,8 @@ vim.lsp.config("eslint", {
       return {}
     end,
   },
-  --   on_attach = function(client, bufnr)
-  --     vim.api.nvim_create_autocmd("BufWritePre", {
-  --       buffer = bufnr,
-  --       command = "EslintFixAll",
-  --     })
-  --   end,
-  on_init = function(client)
-    vim.api.nvim_create_user_command("EslintFixAll", function()
-      local bufnr = vim.api.nvim_get_current_buf()
-
+  on_attach = function(client, bufnr)
+    vim.api.nvim_create_user_command("LspEslintFixAll", function()
       client:exec_cmd({
         title = "Fix all Eslint errors for current buffer",
         command = "eslint.applyAllFixes",
@@ -95,6 +87,11 @@ vim.lsp.config("eslint", {
         },
       }, { bufnr = bufnr })
     end, {})
+
+    vim.api.nvim_create_autocmd("LspEslintFixAll", {
+      buffer = bufnr,
+      command = "EslintFixAll",
+    })
   end,
   root_markers = {
     ".eslintrc",
@@ -111,23 +108,23 @@ vim.lsp.config("eslint", {
     "eslint.config.cts",
   },
   settings = {
-    validate = "on",
-    packageManager = nil,
-    useESLintClass = false,
-    experimental = { useFlatConfig = false },
-    codeActionOnSave = { enable = false, mode = "all" },
-    format = false,
-    quiet = false,
-    onIgnoredFiles = "off",
-    options = {},
-    rulesCustomizations = {},
-    run = "onType",
-    problems = { shortenToSingleLine = false },
-    nodePath = "",
-    workingDirectory = { mode = "location" },
     codeAction = {
       disableRuleComment = { enable = true, location = "separateLine" },
       showDocumentation = { enable = true },
     },
+    codeActionOnSave = { enable = false, mode = "all" },
+    experimental = { useFlatConfig = false },
+    format = false,
+    nodePath = "",
+    onIgnoredFiles = "off",
+    options = {},
+    packageManager = nil,
+    problems = { shortenToSingleLine = false },
+    quiet = false,
+    rulesCustomizations = {},
+    run = "onType",
+    useESLintClass = false,
+    validate = "on",
+    workingDirectory = { mode = "location" },
   },
 })

@@ -10,10 +10,11 @@ conform.setup({
     scss = { "prettier" },
     typescript = { "prettier" },
     typescriptreact = { "prettier" },
-    ['_'] = { 'trim_whitespace', 'trim_newlines' },
+    yaml = { "prettier" },
+    ["_"] = { "trim_whitespace", "trim_newlines" },
   },
   format_on_save = {
-    timeout_ms = 500,
+    timeout_ms = 1000,
     lsp_format = "fallback",
   },
 })
