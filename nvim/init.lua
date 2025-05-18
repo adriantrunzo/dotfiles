@@ -11,7 +11,7 @@ vim.g["sneak#label"] = 1
 vim.opt.colorcolumn = { "+1" }
 
 -- More intuitive insert completion.
-vim.opt.completeopt = { "fuzzy", "menuone", "noselect" }
+vim.opt.completeopt = { "fuzzy", "menuone", "noinsert" }
 
 -- Expand tabs to spaces in insert mode.
 vim.opt.expandtab = true
@@ -76,8 +76,14 @@ vim.opt.textwidth = 80
 -- Persistent undo.
 vim.opt.undofile = true
 
+-- Don't automatically select a wildmenu option. Sort buffers by last used.
+vim.opt.wildmode = { "noselect:lastused", "full" }
+
 -- Use fuzzy matching and the pum for the wildmenu.
 vim.opt.wildoptions = { "fuzzy", "pum" }
+
+-- Default to rounded float borders.
+vim.opt.winborder = "rounded"
 
 -- Allow customizing a color scheme using the "after/colors" directory.
 -- https://vi.stackexchange.com/a/24847
@@ -106,12 +112,82 @@ vim.diagnostic.config({
   virtual_lines = true,
 })
 
+-- Configure language servers.
+vim.lsp.config("cssls", {
+  cmd = {
+    "npx",
+    "--yes",
+    "--package",
+    "vscode-langservers-extracted",
+    "--",
+    "vscode-css-language-server",
+    "--stdio",
+  },
+})
+
+vim.lsp.config("html", {
+  cmd = {
+    "npx",
+    "--yes",
+    "--package",
+    "vscode-langservers-extracted",
+    "--",
+    "vscode-html-language-server",
+    "--stdio",
+  },
+})
+
+vim.lsp.config("jsonls", {
+  cmd = {
+    "npx",
+    "--yes",
+    "--package",
+    "vscode-langservers-extracted",
+    "--",
+    "vscode-json-language-server",
+    "--stdio",
+  },
+})
+
+vim.lsp.config("eslint", {
+  cmd = {
+    "npx",
+    "--yes",
+    "--package",
+    "vscode-langservers-extracted",
+    "--",
+    "vscode-eslint-language-server",
+    "--stdio",
+  },
+  --- @diagnostic disable-next-line: unused-local
+  on_attach = function(client, bufnr)
+    vim.api.nvim_create_autocmd("BufWritePre", {
+      buffer = bufnr,
+      command = "LspEslintFixAll",
+    })
+  end,
+})
+
+vim.lsp.config("vtsls", {
+  cmd = { "npx", "--yes", "@vtsls/language-server", "--stdio" },
+  settings = {
+    vtsls = {
+      autoUseWorkspaceTsdk = true,
+      experimental = {
+        completion = {
+          enableServerSideFuzzyMatch = true,
+        },
+      },
+    },
+  },
+})
+
 -- Enable LSP servers.
-vim.lsp.enable("css")
+vim.lsp.enable("cssls")
 vim.lsp.enable("html")
-vim.lsp.enable("json")
+vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
-vim.lsp.enable("lua")
+vim.lsp.enable("lua_ls")
 vim.lsp.enable("vtsls")
 
 -- The basics.
@@ -120,14 +196,14 @@ vim.keymap.set("n", "<Leader><CR>", "<Cmd>FzfLua live_grep<CR>")
 vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
 vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
 vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
-vim.keymap.set("n", "<Leader>e", "<Cmd>NnnPicker %:p:h<CR>")
+vim.keymap.set("n", "<Leader>e", "<Cmd>Oil --float<CR>")
 vim.keymap.set("n", "<Leader>g", "<Cmd>Git<CR>")
 vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
 vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
 
 -- Thumb clusters on Advantage keyboard.
--- vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
--- vim.keymap.set("n", "<S-CR>", "<Cmd>exit<CR>")
+vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
+vim.keymap.set("n", "<S-CR>", "<Cmd>exit<CR>")
 vim.keymap.set("n", "<Backspace>", "<Cmd>bdelete<CR>")
 vim.keymap.set("n", "<S-Backspace>", "<Cmd>quit<cr>")
 
@@ -135,7 +211,7 @@ vim.keymap.set("n", "<S-Backspace>", "<Cmd>quit<cr>")
 vim.keymap.set("n", "<Leader>o", "]<Space>", { remap = true })
 vim.keymap.set("n", "<Leader>O", "[<Space>", { remap = true })
 
--- Paste from the system clipboa"d.
+-- Paste from the system clipboard.
 vim.keymap.set({ "n", "x" }, "<Leader>p", '"*p')
 vim.keymap.set({ "n", "x" }, "<Leader>P", '"*P')
 
@@ -143,21 +219,6 @@ vim.keymap.set({ "n", "x" }, "<Leader>P", '"*P')
 vim.keymap.set("n", "<Leader>y", '"*y')
 vim.keymap.set("n", "<Leader>Y", '"*yg_')
 vim.keymap.set("x", "<Leader>y", '"*y')
-
--- Use tab for cycling through completion entries in insert mode.
-vim.keymap.set("i", "<Tab>", function()
-  return vim.fn.pumvisible() == 0 and "<Tab>" or "<C-n>"
-end, { expr = true })
-vim.keymap.set("i", "<S-Tab>", function()
-  return vim.fn.pumvisible() == 0 and "<S-Tab>" or "<C-p>"
-end, { expr = true })
-vim.keymap.set("i", "<CR>", function()
-  if vim.fn.pumvisible() ~= 0 and vim.fn.complete_info()["selected"] ~= -1 then
-    return vim.keycode("<C-y>")
-  end
-
-  return require("mini.pairs").cr()
-end, { expr = true })
 
 -- Backslash is the same key as forward slash in the Engram layout.
 vim.keymap.set({ "n", "v", "o" }, "\\", "?")
@@ -185,9 +246,6 @@ vim.keymap.set({ "n", "v" }, "Q", "q")
 -- Use s for sneak in all modes.
 vim.keymap.set("o", "s", "<Plug>Sneak_s")
 vim.keymap.set({ "o", "x" }, "S", "<Plug>Sneak_S")
-
--- vim.keymap.set({ "n", "o", "x" }, "<CR>", "<Plug>Sneak_s")
--- vim.keymap.set({ "n", "o", "x" }, "<S-CR>", "<Plug>Sneak_S")
 
 -- Better redo.
 vim.keymap.set(

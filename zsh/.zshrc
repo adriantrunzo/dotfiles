@@ -16,7 +16,7 @@ FZF_COLORS=(
   'pointer:#ff79c6'
   'marker:#ff79c6'
   'spinner:#ffb86c'
-  'header:#6272a4' 
+  'header:#6272a4'
 )
 
 FZF_OPTIONS=(
@@ -50,7 +50,7 @@ export NNN_FCOLORS="D4DEB778E79F9F67D2E5E5D2"
 export NNN_OPTS="Ae"
 export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
 
-export VISUAL="vim"
+export VISUAL="nvim"
 
 # Load Homebrew completions.
 if type brew &>/dev/null; then

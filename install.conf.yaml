@@ -15,9 +15,6 @@
       create: true
       path: nvim/after
     ~/.config/nvim/init.lua: nvim/init.lua
-    ~/.config/nvim/lsp:
-      create: true
-      path: nvim/lsp
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/fzf-tab: zsh/fzf-tab
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
