@@ -11,10 +11,3 @@ vicmd_symbol = "[n❯](bold green) "
 
 [docker_context]
 disabled = true
-
-[git_branch]
-symbol = ''
-
-[nodejs]
-format = '[node ($version)]($style) '
-version_format = '${raw}'
