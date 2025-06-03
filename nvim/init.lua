@@ -159,13 +159,15 @@ vim.lsp.config("eslint", {
     "vscode-eslint-language-server",
     "--stdio",
   },
-  --- @diagnostic disable-next-line: unused-local
-  on_attach = function(client, bufnr)
-    vim.api.nvim_create_autocmd("BufWritePre", {
-      buffer = bufnr,
-      command = "LspEslintFixAll",
-    })
-  end,
+})
+
+vim.lsp.config("tailwindcss", {
+  cmd = {
+    "npx",
+    "--yes",
+    "@tailwindcss/language-server",
+    "--stdio",
+  },
 })
 
 vim.lsp.config("vtsls", {
@@ -188,6 +190,7 @@ vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("tailwindcss")
 vim.lsp.enable("vtsls")
 
 -- The basics.
@@ -332,18 +335,26 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
     vim.api.nvim_create_augroup("ConfigLsp", { clear = false })
 
+    if client.name == "eslint" then
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = buffer,
+        command = "LspEslintFixAll",
+        group = "ConfigLsp",
+      })
+    end
+
     if client:supports_method(methods.textDocument_documentHighlight) then
       vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-        group = "ConfigLsp",
         buffer = buffer,
         callback = vim.lsp.buf.document_highlight,
+        group = "ConfigLsp",
       })
       vim.api.nvim_create_autocmd(
         { "CursorMoved", "InsertEnter", "BufLeave" },
         {
-          group = "ConfigLsp",
           buffer = buffer,
           callback = vim.lsp.buf.clear_references,
+          group = "ConfigLsp",
         }
       )
     end
