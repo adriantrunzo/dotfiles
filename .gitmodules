@@ -51,11 +51,15 @@
 	path = nvim/start/vim-rsi
 	url = https://github.com/tpope/vim-rsi.git
 	branch = master
-[submodule "nvim/start/oil.nvim"]
-	path = nvim/start/oil.nvim
-	url = https://github.com/stevearc/oil.nvim.git
-	branch = master
 [submodule "nvim/start/nvim-lspconfig"]
 	path = nvim/start/nvim-lspconfig
 	url = https://github.com/neovim/nvim-lspconfig.git
+	branch = master
+[submodule "nvim/start/vim-sandwich"]
+	path = nvim/start/vim-sandwich
+	url = https://github.com/machakann/vim-sandwich.git
+	branch = master
+[submodule "nvim/start/nnn.nvim"]
+	path = nvim/start/nnn.nvim
+	url = https://github.com/luukvbaal/nnn.nvim.git
 	branch = master

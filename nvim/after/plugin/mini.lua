@@ -16,10 +16,10 @@ mini_ai.setup({
     e = mini_extra.gen_ai_spec.buffer(),
     i = mini_extra.gen_ai_spec.indent(),
     -- Any common matching pairs.
-    m = {
-      { "%b''", '%b""', "%b``", "%b()", "%b[]", "%b{}", "%b<>" },
-      "^.().*().$",
-    },
+    -- m = {
+    --   { "%b''", '%b""', "%b``", "%b()", "%b[]", "%b{}", "%b<>" },
+    --   "^.().*().$",
+    -- },
   },
 })
 
@@ -43,7 +43,7 @@ mini_operators.setup({
     prefix = "yx",
   },
   multiply = {
-    prefix = "ym",
+    prefix = "",
   },
   replace = {
     prefix = "yp",
@@ -114,29 +114,29 @@ mini_statusline.setup({
   use_icons = false,
 })
 
-mini_surround.setup({
-  custom_surroundings = {
-    -- Replicate the <Plug>(sandwich-delete-auto) and
-    -- <Plug>(sandwich-replace-auto) mappings from vim-sandwich so you can
-    -- easily delete the nearest balanced surroundings without having to think
-    -- about which keys to press.
-    m = {
-      input = {
-        { "%b''", '%b""', "%b``", "%b()", "%b[]", "%b{}", "%b<>" },
-        "^.().*().$",
-      },
-    },
-  },
-  mappings = {
-    add = "ma",
-    delete = "md",
-    find = "mf",
-    find_left = "mF",
-    highlight = "mh",
-    replace = "mr",
-    update_n_lines = "mn",
-  },
-})
+-- mini_surround.setup({
+--   custom_surroundings = {
+-- Replicate the <Plug>(sandwich-delete-auto) and
+-- <Plug>(sandwich-replace-auto) mappings from vim-sandwich so you can
+-- easily delete the nearest balanced surroundings without having to think
+-- about which keys to press.
+--     m = {
+--       input = {
+--         { "%b''", '%b""', "%b``", "%b()", "%b[]", "%b{}", "%b<>" },
+--         "^.().*().$",
+--       },
+--     },
+--   },
+--   mappings = {
+--     add = "ma",
+--     delete = "md",
+--     find = "mf",
+--     find_left = "mF",
+--     highlight = "mh",
+--     replace = "mr",
+--     update_n_lines = "mn",
+--   },
+-- })
 
 mini_keymap.map_multistep(
   "i",

@@ -4,6 +4,9 @@ vim.api.nvim_create_augroup("Config", { clear = true })
 -- Use space for leader.
 vim.g.mapleader = vim.keycode("<Space>")
 
+-- Disable default mappings in the following plugins.
+vim.g["sandwich_no_default_key_mappings"] = 1
+
 -- Use the sneak label mode for faster jumping.
 vim.g["sneak#label"] = 1
 
@@ -193,12 +196,16 @@ vim.lsp.enable("lua_ls")
 vim.lsp.enable("tailwindcss")
 vim.lsp.enable("vtsls")
 
+-- Sandwich text-objects for matching characters.
+vim.keymap.set({ "x", "o" }, "am", "<Plug>(textobj-sandwich-auto-a)")
+vim.keymap.set({ "x", "o" }, "im", "<Plug>(textobj-sandwich-auto-i)")
+
 -- The basics.
 vim.keymap.set("n", "<Leader><Space>", "<Cmd>FzfLua files<CR>")
 vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
 vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
 vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
-vim.keymap.set("n", "<Leader>e", "<Cmd>Oil<CR>")
+vim.keymap.set("n", "<Leader>e", "<Cmd>NnnPicker %:p:h<CR>")
 vim.keymap.set("n", "<Leader>ff", "<Cmd>FzfLua live_grep<CR>")
 vim.keymap.set("n", "<Leader>fw", "<Cmd>FzfLua grep_cword<CR>")
 vim.keymap.set("n", "<Leader>fW", "<Cmd>FzfLua grep_cWORD<CR>")
@@ -239,7 +246,22 @@ vim.keymap.set("n", "j", "&wrap && v:count == 0 ? 'gj' : 'j'", { expr = true })
 vim.keymap.set("n", "k", "&wrap && v:count == 0 ? 'gk' : 'k'", { expr = true })
 
 -- Use "m" for matches and moves.
-vim.keymap.set({ "n", "x" }, "m", "<Nop>")
+vim.keymap.set({ "n", "x", "o" }, "m", "<Nop>")
+vim.keymap.set(
+  { "n", "x", "o" },
+  "ma",
+  "<Plug>(sandwich-add)",
+  { silent = true }
+)
+vim.keymap.set({ "n", "x" }, "md", "<Plug>(sandwich-delete)", { silent = true })
+vim.keymap.set("n", "mdd", "<Plug>(sandwich-delete-auto)", { silent = true })
+vim.keymap.set(
+  { "n", "x" },
+  "mr",
+  "<Plug>(sandwich-replace)",
+  { silent = true }
+)
+vim.keymap.set("n", "mrr", "<Plug>(sandwich-replace-auto)", { silent = true })
 
 -- Keep the cursor centered when gowng through search results.
 vim.keymap.set("n", "n", "nzzzv")
