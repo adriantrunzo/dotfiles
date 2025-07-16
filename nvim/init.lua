@@ -5,10 +5,16 @@ vim.api.nvim_create_augroup("Config", { clear = true })
 vim.g.mapleader = vim.keycode("<Space>")
 
 -- Disable default mappings in the following plugins.
-vim.g["sandwich_no_default_key_mappings"] = 1
+vim.g.sandwich_no_default_key_mappings = 1
 
 -- Use the sneak label mode for faster jumping.
 vim.g["sneak#label"] = 1
+
+-- Use vim-matchup instead of matchit.
+vim.g.loaded_matchit = 1
+
+-- Don't show offscreen matches as they cause odd statusline issues.
+vim.g.matchup_matchparen_offscreen = {}
 
 -- Highlight the column after textwidth.
 vim.opt.colorcolumn = { "+1" }
@@ -112,7 +118,6 @@ vim.diagnostic.config({
       [vim.diagnostic.severity.WARN] = "●",
     },
   },
-  virtual_lines = true,
 })
 
 -- Configure language servers.

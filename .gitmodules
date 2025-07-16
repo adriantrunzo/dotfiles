@@ -63,3 +63,7 @@
 	path = nvim/start/nnn.nvim
 	url = https://github.com/luukvbaal/nnn.nvim.git
 	branch = master
+[submodule "nvim/start/vim-matchup"]
+	path = nvim/start/vim-matchup
+	url = https://github.com/andymass/vim-matchup.git
+	branch = master
