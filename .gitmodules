@@ -42,7 +42,7 @@
 [submodule "nvim/start/nvim-treesitter"]
 	path = nvim/start/nvim-treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
-	branch = master
+	branch = main
 [submodule "nvim/start/vim-sneak"]
 	path = nvim/start/vim-sneak
 	url = https://github.com/justinmk/vim-sneak.git
