@@ -29,6 +29,23 @@ FZF_OPTIONS=(
   '--reverse'
 )
 
+BREW_PACKAGES=(
+  'bat'
+  'fd'
+  'fnm'
+  'fzf'
+  'git'
+  'lua-language-server'
+  'neovim'
+  'nnn'
+  'oven-sh/bun/bun'
+  'ripgrep'
+  'starship'
+  'stylua'
+  'tree-sitter-cli'
+  'vim'
+)
+
 # fzf configuration. https://github.com/junegunn/fzf#settings
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -77,7 +94,7 @@ bindkey -v
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-nnn-plugins='curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh'
-alias install-tools='brew install bat bun fd fnm fzf git nnn ripgrep starship vim'
+alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
 
 # Miscellaneous maintenance.
 alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
