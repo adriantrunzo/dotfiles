@@ -32,13 +32,13 @@ FZF_OPTIONS=(
 BREW_PACKAGES=(
   'bat'
   'fd'
-  'fnm'
   'fzf'
   'git'
   'lua-language-server'
   'neovim'
   'nnn'
   'oven-sh/bun/bun'
+  'pnpm'
   'ripgrep'
   'starship'
   'stylua'
@@ -94,6 +94,7 @@ bindkey -v
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-nnn-plugins='curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh'
+alias install-nvm='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
 alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
 
 # Miscellaneous maintenance.
@@ -114,9 +115,9 @@ for p ($PLUGINS) {
 
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
-if type fnm &>/dev/null; then
-  eval "$(fnm env --corepack-enabled --use-on-cd)"
-fi
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 if type starship &>/dev/null; then
   eval "$(starship init zsh)"
