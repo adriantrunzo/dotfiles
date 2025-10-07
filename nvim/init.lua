@@ -123,11 +123,10 @@ vim.diagnostic.config({
 -- Configure language servers.
 vim.lsp.config("cssls", {
   cmd = {
-    "npx",
-    "--yes",
+    "pnpm",
     "--package",
     "vscode-langservers-extracted",
-    "--",
+    "dlx",
     "vscode-css-language-server",
     "--stdio",
   },
@@ -135,11 +134,10 @@ vim.lsp.config("cssls", {
 
 vim.lsp.config("html", {
   cmd = {
-    "npx",
-    "--yes",
+    "pnpm",
     "--package",
     "vscode-langservers-extracted",
-    "--",
+    "dlx",
     "vscode-html-language-server",
     "--stdio",
   },
@@ -147,11 +145,10 @@ vim.lsp.config("html", {
 
 vim.lsp.config("jsonls", {
   cmd = {
-    "npx",
-    "--yes",
+    "pnpm",
     "--package",
     "vscode-langservers-extracted",
-    "--",
+    "dlx",
     "vscode-json-language-server",
     "--stdio",
   },
@@ -159,11 +156,10 @@ vim.lsp.config("jsonls", {
 
 vim.lsp.config("eslint", {
   cmd = {
-    "npx",
-    "--yes",
+    "pnpm",
     "--package",
     "vscode-langservers-extracted",
-    "--",
+    "dlx",
     "vscode-eslint-language-server",
     "--stdio",
   },
@@ -171,15 +167,17 @@ vim.lsp.config("eslint", {
 
 vim.lsp.config("tailwindcss", {
   cmd = {
-    "npx",
-    "--yes",
+    "pnpm",
+    "--package",
     "@tailwindcss/language-server",
+    "dlx",
+    "tailwindcss-language-server",
     "--stdio",
   },
 })
 
 vim.lsp.config("vtsls", {
-  cmd = { "npx", "--yes", "@vtsls/language-server", "--stdio" },
+  cmd = { "pnpx", "@vtsls/language-server", "--stdio" },
   settings = {
     vtsls = {
       autoUseWorkspaceTsdk = true,
