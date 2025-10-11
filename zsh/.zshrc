@@ -1,7 +1,8 @@
-export PATH=/opt/homebrew/bin:/opt/homebrew/sbin:$PATH
+export NVM_DIR="$HOME/.nvm"
 
-# bat configuration. https://github.com/sharkdp/bat#customization
-export BAT_THEME=Dracula
+if type /opt/homebrew/bin/brew &>/dev/null; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
 
 # https://draculatheme.com/fzf
 FZF_COLORS=(
@@ -46,6 +47,9 @@ BREW_PACKAGES=(
   'vim'
 )
 
+# bat configuration. https://github.com/sharkdp/bat#customization
+export BAT_THEME=Dracula
+
 # fzf configuration. https://github.com/junegunn/fzf#settings
 export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
@@ -61,7 +65,8 @@ _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-# nnn configuration. https://github.com/jarun/nnn/wiki/Usage#configuration
+# nnn configuration.
+# https://github.com/jarun/nnn/wiki/Usage#configuration
 # https://draculatheme.com/nnn
 export NNN_FCOLORS="D4DEB778E79F9F67D2E5E5D2"
 export NNN_OPTS="Ae"
@@ -69,24 +74,31 @@ export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
 
 export VISUAL="nvim"
 
-# Load Homebrew completions.
-if type brew &>/dev/null; then
-  chmod -R go-w "$(brew --prefix)/share"
-  FPATH=$(brew --prefix)/share/zsh/site-functions:$FPATH
-
-  autoload -Uz compinit
-  compinit
-fi
-
 # Load npm completion.
 if type npm &>/dev/null; then
   eval "$(npm completion)"
 fi
 
-# Load fzf integration.
-if type fzf &>/dev/null; then
-  eval "$(fzf --zsh)"
-fi
+# Enable nvm.
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+PLUGINS=(
+  $HOME/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
+  $HOME/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  $HOME/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+  # Private, work-related configuration.
+  $HOME/.zshrc.local
+)
+
+for p ($PLUGINS) {
+  [ -f $p ] && source $p
+}
+
+# Enable better Zsh completion.
+autoload -Uz compinit
+compinit
 
 # Use Vi bindings.
 bindkey -v
@@ -100,24 +112,7 @@ alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
 # Miscellaneous maintenance.
 alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
 
-PLUGINS=(
-  ~/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
-  ~/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-  ~/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-
-  # Private, work-related configuration.
-  ~/slice/slice.zsh
-)
-
-for p ($PLUGINS) {
-  [ -f $p ] && source $p
-}
-
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 if type starship &>/dev/null; then
   eval "$(starship init zsh)"
