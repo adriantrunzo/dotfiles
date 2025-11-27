@@ -30,4 +30,9 @@ cursor-color = f8f8f2
 cursor-text = 282a36
 selection-background = 44475a
 selection-foreground = f8f8f2
+
+keybind = super+arrow_down=goto_split:down
+keybind = super+arrow_left=goto_split:left
+keybind = super+arrow_right=goto_split:right
+keybind = super+arrow_up=goto_split:up
 keybind = alt+enter=text:\x1b\r
