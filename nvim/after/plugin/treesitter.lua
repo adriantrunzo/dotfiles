@@ -33,18 +33,8 @@ treesitter.install(parsers)
 
 vim.api.nvim_create_autocmd("FileType", {
   pattern = filetypes,
-  callback = function(event)
-    local parser = event.match
-
-    if parser == "javascriptreact" then
-      parser = "jsx"
-    end
-
-    if parser == "typescriptreact" then
-      parser = "tsx"
-    end
-
-    vim.treesitter.start(event.buf, parser)
+  callback = function()
+    vim.treesitter.start()
     vim.wo.foldexpr = "v:lua.vim.treesitter.foldexpr()"
     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end,
