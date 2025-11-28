@@ -11,10 +11,6 @@
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 	branch = master
-[submodule "vim/minpac"]
-	path = vim/minpac
-	url = https://github.com/k-takata/minpac.git
-	branch = master
 [submodule "zsh/fzf-tab"]
 	path = zsh/fzf-tab
 	url = https://github.com/Aloxaf/fzf-tab.git

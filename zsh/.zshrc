@@ -38,13 +38,11 @@ BREW_PACKAGES=(
   'lua-language-server'
   'neovim'
   'nnn'
-  'oven-sh/bun/bun'
   'pnpm'
   'ripgrep'
   'starship'
   'stylua'
   'tree-sitter-cli'
-  'vim'
 )
 
 # bat configuration. https://github.com/sharkdp/bat#customization

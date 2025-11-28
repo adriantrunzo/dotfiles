@@ -22,17 +22,7 @@
     ~/.local/share/nvim/site/pack/plugin/start:
       create: true
       path: nvim/start
-    ~/.vim/coc-settings.json: vim/coc-settings.json
-    ~/.vim/pack/minpac/opt/minpac:
-      create: true
-      path: vim/minpac
-    ~/.vim/vimrc: vim/vimrc
     ~/.gitconfig: git/.gitconfig
     ~/.gitignore: git/.gitignore
     ~/.zshrc: zsh/.zshrc
-
-- create:
-    ~/.vim/backup:
-    ~/.vim/swap:
-    ~/.vim/undo:
 
