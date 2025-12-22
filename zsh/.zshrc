@@ -4,6 +4,14 @@ if type /opt/homebrew/bin/brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
+# pnpm
+export PNPM_HOME="~/.pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
 # https://draculatheme.com/fzf
 FZF_COLORS=(
   'fg:#f8f8f2'
