@@ -4,10 +4,16 @@
 # timeout rather frequently.
 command_timeout = 5000
 
+[aws]
+disabled = true
+
 [character]
 success_symbol = "[i❯](bold green) "
 error_symbol = "[i❯](bold red) "
-vicmd_symbol = "[n❯](bold green) "
+vicmd_symbol = "[n❯](bold purple) "
+vimcmd_visual_symbol = "[v❯](bold yellow)"
+vimcmd_replace_symbol = "[R❯](bold orange)"
+vimcmd_replace_one_symbol = "[r❯](bold orange)"
 
 [docker_context]
 disabled = true
