@@ -4,13 +4,11 @@ if type /opt/homebrew/bin/brew &>/dev/null; then
   eval "$(/opt/homebrew/bin/brew shellenv)"
 fi
 
-# pnpm
-export PNPM_HOME="~/.pnpm"
+export PNPM_HOME="$HOME/.pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-# pnpm end
 
 # https://draculatheme.com/fzf
 FZF_COLORS=(
@@ -83,6 +81,11 @@ export VISUAL="nvim"
 # Load npm completion.
 if type npm &>/dev/null; then
   eval "$(npm completion)"
+fi
+
+# Load pnpm completion.
+if type pnpm &>/dev/null; then
+  eval "$(pnpm completion zsh)"
 fi
 
 # Enable nvm.
