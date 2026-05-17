@@ -79,8 +79,8 @@ vim.opt.splitkeep = "topline"
 -- Open vertical splits to the right.
 vim.opt.splitright = true
 
--- Break text after 80 characters.
-vim.opt.textwidth = 80
+-- Break text after 100 characters.
+vim.opt.textwidth = 100
 
 -- Persistent undo.
 vim.opt.undofile = true
