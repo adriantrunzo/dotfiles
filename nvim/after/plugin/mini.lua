@@ -7,7 +7,6 @@ local mini_keymap = require("mini.keymap")
 local mini_move = require("mini.move")
 local mini_operators = require("mini.operators")
 local mini_pairs = require("mini.pairs")
-local mini_snippets = require("mini.snippets")
 local mini_statusline = require("mini.statusline")
 
 mini_ai.setup({
@@ -52,8 +51,6 @@ vim.keymap.set("n", "<Leader>yp", '"*yp', { remap = true })
 vim.keymap.set("n", "<Leader>yP", '"*ypg_', { remap = true })
 
 mini_pairs.setup()
-
-mini_snippets.setup()
 
 mini_statusline.setup({
   content = {
