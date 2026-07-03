@@ -104,6 +104,150 @@ vim.diagnostic.config({
   },
 })
 
+require("conform").setup({
+  formatters_by_ft = {
+    css = { "oxfmt", "prettier", stop_after_first = true },
+    handlebars = { "oxfmt", "prettier", stop_after_first = true },
+    javascript = { "oxfmt", "prettier", stop_after_first = true },
+    javascriptreact = { "oxfmt", "prettier", stop_after_first = true },
+    json = { "oxfmt", "prettier", stop_after_first = true },
+    lua = { "stylua" },
+    markdown = { "oxfmt", "prettier", stop_after_first = true },
+    scss = { "oxfmt", "prettier", stop_after_first = true },
+    typescript = { "oxfmt", "prettier", stop_after_first = true },
+    typescriptreact = { "oxfmt", "prettier", stop_after_first = true },
+    yaml = { "oxfmt", "prettier", stop_after_first = true },
+    ["_"] = { "trim_whitespace", "trim_newlines" },
+  },
+  format_on_save = {
+    timeout_ms = 1000,
+    lsp_format = "fallback",
+  },
+})
+require("fzf-lua").register_ui_select()
+require("mini.ai").setup({
+  custom_textobjects = {
+    e = require("mini.extra").gen_ai_spec.buffer(),
+    i = require("mini.extra").gen_ai_spec.indent(),
+  },
+})
+require("mini.bracketed").setup()
+require("mini.completion").setup()
+require("mini.cmdline").setup()
+require("mini.diff").setup({
+  view = {
+    style = "sign",
+  },
+})
+require("mini.move").setup()
+require("mini.operators").setup({
+  evaluate = {
+    prefix = "",
+  },
+  exchange = {
+    prefix = "yx",
+  },
+  multiply = {
+    prefix = "",
+  },
+  replace = {
+    prefix = "yp",
+  },
+  sort = {
+    prefix = "gs",
+  },
+})
+require("mini.pairs").setup()
+require("mini.statusline").setup({
+  content = {
+    active = function()
+      local mode, mode_hl = MiniStatusline.section_mode({})
+
+      local buffer_type = vim.bo.buftype
+      local file_format = vim.bo.fileformat
+      local file_encoding = vim.bo.fileencoding or vim.bo.encoding
+
+      local git_diff = vim.b.minidiff_summary_string or ""
+      local git_status = vim.fn.FugitiveStatusline() or ""
+      local git_modifier = (git_diff ~= "") and "!" or ""
+      local git_branch = string.match(git_status, "Git%((.+)%)") or ""
+      local ticket = string.match(git_branch, "sc%-%d+")
+
+      local is_tiny = MiniStatusline.is_truncated(100)
+      local is_small = MiniStatusline.is_truncated(120)
+      local is_terminal = buffer_type == "terminal"
+      local is_special_buffer = buffer_type ~= ""
+
+      local vcs = (ticket or git_branch) .. git_modifier
+      local diagnostics = is_tiny and ""
+        or MiniStatusline.section_diagnostics({
+          icon = "",
+          signs = {
+            ERROR = "%#DiagnosticError#●%#DraculaFg# ",
+            WARN = "%#DiagnosticWarn#●%#DraculaFg# ",
+            INFO = "%#DraculaYellow#●%#DraculaFg# ",
+            HINT = "%#DiagnosticInfo#●%#DraculaFg# ",
+          },
+        })
+      local file_info = (is_small or is_special_buffer) and ""
+        or string.format("%s[%s]", file_encoding, file_format)
+      local file_name = is_terminal and "%t"
+        or (is_small and "%f%m%r" or "%F%m%r")
+      local file_type = vim.bo.filetype
+      local location = "%l:%v"
+
+      return MiniStatusline.combine_groups({
+        { hl = mode_hl, strings = { mode } },
+        { hl = "MiniStatuslineDevinfo", strings = { vcs } },
+        "%<", -- Mark general truncate point
+        { hl = "MiniStatuslineFilename", strings = { file_name } },
+        "%=", -- End left alignment
+        { strings = { diagnostics, file_type } },
+        { hl = "MiniStatuslineFileinfo", strings = { file_info } },
+        { hl = mode_hl, strings = { location } },
+      })
+    end,
+  },
+  use_icons = false,
+})
+
+require("mini.keymap").map_multistep(
+  "i",
+  "<Tab>",
+  { "minisnippets_next", "minisnippets_expand", "pmenu_next" }
+)
+require("mini.keymap").map_multistep(
+  "i",
+  "<S-Tab>",
+  { "minisnippets_prev", "pmenu_prev" }
+)
+require("mini.keymap").map_multistep(
+  "i",
+  "<CR>",
+  { "pmenu_accept", "minipairs_cr" }
+)
+require("mini.keymap").map_multistep("i", "<BS>", { "minipairs_bs" })
+require("nnn").setup()
+require("nvim-treesitter").install({
+  "comment",
+  "css",
+  "dockerfile",
+  "html",
+  "javascript",
+  "json",
+  "jsx",
+  "lua",
+  "make",
+  "nginx",
+  "python",
+  "ruby",
+  "terraform",
+  "tsx",
+  "typescript",
+  "vimdoc",
+  "yaml",
+})
+
 -- Configure language servers.
 vim.lsp.config("cssls", {
   cmd = {
@@ -201,6 +345,8 @@ vim.keymap.set("v", "<Leader>f", "<Cmd>FzfLua grep_visual<CR>")
 vim.keymap.set("n", "<Leader>g", "<Cmd>Git<CR>")
 vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
 vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
+vim.keymap.set("n", "<Leader>yp", '"*yp', { remap = true })
+vim.keymap.set("n", "<Leader>yP", '"*ypg_', { remap = true })
 
 -- Thumb clusters on Advantage keyboard.
 vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
@@ -269,6 +415,8 @@ vim.keymap.set(
   "U",
   "<C-r><Cmd>lua MiniBracketed.register_undo_state()<CR>"
 )
+
+vim.keymap.set("n", "yP", "ypg_", { remap = true })
 
 -- Unused y-mappings: yc yd ym yo yp yq yr ys yu yx yz
 -- Make Y behave as expected, though don't yank the trailing whitespace.
@@ -452,4 +600,26 @@ vim.api.nvim_create_autocmd("LspAttach", {
     )
   end,
   group = "Config",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    vim.treesitter.start()
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+  group = "Config",
+  pattern = {
+    "css",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "lua",
+    "python",
+    "ruby",
+    "terraform",
+    "typescript",
+    "typescriptreact",
+    "yaml",
+  },
 })
