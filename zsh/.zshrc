@@ -43,7 +43,6 @@ BREW_PACKAGES=(
   'git'
   'lua-language-server'
   'neovim'
-  'nnn'
   'pnpm'
   'ripgrep'
   'starship'
@@ -69,13 +68,6 @@ _fzf_compgen_path() {
 _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
-
-# nnn configuration.
-# https://github.com/jarun/nnn/wiki/Usage#configuration
-# https://draculatheme.com/nnn
-export NNN_FCOLORS="D4DEB778E79F9F67D2E5E5D2"
-export NNN_OPTS="Ae"
-export NNN_PLUG='d:fzcd;o:fzopen;r:gitroot'
 
 export VISUAL="nvim"
 
@@ -115,12 +107,8 @@ bindkey -v
 
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-alias install-nnn-plugins='curl -Ls https://raw.githubusercontent.com/jarun/nnn/master/plugins/getplugs | sh'
 alias install-nvm='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
 alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
-
-# Miscellaneous maintenance.
-alias update-nnn-plugins='~/.config/nnn/plugins/getplugs'
 
 zstyle ':fzf-tab:*' use-fzf-default-opts yes
 

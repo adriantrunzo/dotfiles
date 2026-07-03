@@ -139,6 +139,14 @@ require("mini.diff").setup({
     style = "sign",
   },
 })
+require("mini.files").setup({
+  mappings = {
+    close = "<Esc>",
+    go_in_plus = "<CR>",
+    go_out = "",
+    go_out_plus = "h",
+  },
+})
 require("mini.move").setup()
 require("mini.operators").setup({
   evaluate = {
@@ -227,7 +235,6 @@ require("mini.keymap").map_multistep(
   { "pmenu_accept", "minipairs_cr" }
 )
 require("mini.keymap").map_multistep("i", "<BS>", { "minipairs_bs" })
-require("nnn").setup()
 require("nvim-treesitter").install({
   "comment",
   "css",
@@ -337,7 +344,11 @@ vim.keymap.set("n", "<Leader><Space>", "<Cmd>FzfLua files<CR>")
 vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
 vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
 vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
-vim.keymap.set("n", "<Leader>e", "<Cmd>NnnPicker %:p:h<CR>")
+vim.keymap.set(
+  "n",
+  "<Leader>e",
+  "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>"
+)
 vim.keymap.set("n", "<Leader>ff", "<Cmd>FzfLua live_grep hidden=true<CR>")
 vim.keymap.set("n", "<Leader>fw", "<Cmd>FzfLua grep_cword<CR>")
 vim.keymap.set("n", "<Leader>fW", "<Cmd>FzfLua grep_cWORD<CR>")
