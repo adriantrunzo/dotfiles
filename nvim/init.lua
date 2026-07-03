@@ -199,8 +199,7 @@ require("mini.statusline").setup({
         })
       local file_info = (is_small or is_special_buffer) and ""
         or string.format("%s[%s]", file_encoding, file_format)
-      local file_name = is_terminal and "%t"
-        or (is_small and "%f%m%r" or "%F%m%r")
+      local file_name = is_terminal and "%t" or (is_small and "%f%m%r" or "%F%m%r")
       local file_type = vim.bo.filetype
       local location = "%l:%v"
 
@@ -224,16 +223,8 @@ require("mini.keymap").map_multistep(
   "<Tab>",
   { "minisnippets_next", "minisnippets_expand", "pmenu_next" }
 )
-require("mini.keymap").map_multistep(
-  "i",
-  "<S-Tab>",
-  { "minisnippets_prev", "pmenu_prev" }
-)
-require("mini.keymap").map_multistep(
-  "i",
-  "<CR>",
-  { "pmenu_accept", "minipairs_cr" }
-)
+require("mini.keymap").map_multistep("i", "<S-Tab>", { "minisnippets_prev", "pmenu_prev" })
+require("mini.keymap").map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
 require("mini.keymap").map_multistep("i", "<BS>", { "minipairs_bs" })
 require("nvim-treesitter").install({
   "comment",
@@ -344,11 +335,7 @@ vim.keymap.set("n", "<Leader><Space>", "<Cmd>FzfLua files<CR>")
 vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
 vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
 vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
-vim.keymap.set(
-  "n",
-  "<Leader>e",
-  "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>"
-)
+vim.keymap.set("n", "<Leader>e", "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>")
 vim.keymap.set("n", "<Leader>ff", "<Cmd>FzfLua live_grep hidden=true<CR>")
 vim.keymap.set("n", "<Leader>fw", "<Cmd>FzfLua grep_cword<CR>")
 vim.keymap.set("n", "<Leader>fW", "<Cmd>FzfLua grep_cWORD<CR>")
@@ -392,20 +379,10 @@ vim.keymap.set("n", "k", "&wrap && v:count == 0 ? 'gk' : 'k'", { expr = true })
 
 -- Use "m" for matches and moves.
 vim.keymap.set({ "n", "x", "o" }, "m", "<Nop>")
-vim.keymap.set(
-  { "n", "x", "o" },
-  "ma",
-  "<Plug>(sandwich-add)",
-  { silent = true }
-)
+vim.keymap.set({ "n", "x", "o" }, "ma", "<Plug>(sandwich-add)", { silent = true })
 vim.keymap.set({ "n", "x" }, "md", "<Plug>(sandwich-delete)", { silent = true })
 vim.keymap.set("n", "mdd", "<Plug>(sandwich-delete-auto)", { silent = true })
-vim.keymap.set(
-  { "n", "x" },
-  "mr",
-  "<Plug>(sandwich-replace)",
-  { silent = true }
-)
+vim.keymap.set({ "n", "x" }, "mr", "<Plug>(sandwich-replace)", { silent = true })
 vim.keymap.set("n", "mrr", "<Plug>(sandwich-replace-auto)", { silent = true })
 
 -- Keep the cursor centered when gowng through search results.
@@ -421,11 +398,7 @@ vim.keymap.set("o", "s", "<Plug>Sneak_s")
 vim.keymap.set({ "o", "x" }, "S", "<Plug>Sneak_S")
 
 -- Better redo.
-vim.keymap.set(
-  "n",
-  "U",
-  "<C-r><Cmd>lua MiniBracketed.register_undo_state()<CR>"
-)
+vim.keymap.set("n", "U", "<C-r><Cmd>lua MiniBracketed.register_undo_state()<CR>")
 
 vim.keymap.set("n", "yP", "ypg_", { remap = true })
 
@@ -521,14 +494,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
         callback = vim.lsp.buf.document_highlight,
         group = "ConfigLsp",
       })
-      vim.api.nvim_create_autocmd(
-        { "CursorMoved", "InsertEnter", "BufLeave" },
-        {
-          buffer = buffer,
-          callback = vim.lsp.buf.clear_references,
-          group = "ConfigLsp",
-        }
-      )
+      vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
+        buffer = buffer,
+        callback = vim.lsp.buf.clear_references,
+        group = "ConfigLsp",
+      })
     end
 
     -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
@@ -553,12 +523,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     -- | `diagnostics_workspace`      | Workspace Diagnostics            |
     -- | `lsp_document_diagnostics`   | alias to `diagnostics_document`  |
     -- | `lsp_workspace_diagnostics`  | alias to `diagnostics_workspace` |
-    vim.keymap.set(
-      "n",
-      "cd",
-      "<Cmd>FzfLua lsp_definitions jump1=true<CR>",
-      { buffer = event.buf }
-    )
+    vim.keymap.set("n", "cd", "<Cmd>FzfLua lsp_definitions jump1=true<CR>", { buffer = event.buf })
     vim.keymap.set(
       "n",
       "cm",
@@ -578,37 +543,12 @@ vim.api.nvim_create_autocmd("LspAttach", {
       "<Cmd>FzfLua lsp_implementations jump1=false<CR>",
       { buffer = event.buf }
     )
-    vim.keymap.set(
-      "n",
-      "cpr",
-      "<Cmd>FzfLua lsp_references jump1=false<CR>",
-      { buffer = event.buf }
-    )
-    vim.keymap.set(
-      "n",
-      "cpy",
-      "<Cmd>FzfLua lsp_typedefs jump1=false<CR>",
-      { buffer = event.buf }
-    )
+    vim.keymap.set("n", "cpr", "<Cmd>FzfLua lsp_references jump1=false<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cpy", "<Cmd>FzfLua lsp_typedefs jump1=false<CR>", { buffer = event.buf })
     vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
-    vim.keymap.set(
-      "n",
-      "cr",
-      "<Cmd>FzfLua lsp_references jump1=true<CR>",
-      { buffer = event.buf }
-    )
-    vim.keymap.set(
-      "n",
-      "cy",
-      "<Cmd>FzfLua lsp_typedefs jump1=true<CR>",
-      { buffer = event.buf }
-    )
-    vim.keymap.set(
-      "n",
-      "cz",
-      "<Cmd>FzfLua lsp_code_actions<CR>",
-      { buffer = event.buf }
-    )
+    vim.keymap.set("n", "cr", "<Cmd>FzfLua lsp_references jump1=true<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cy", "<Cmd>FzfLua lsp_typedefs jump1=true<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cz", "<Cmd>FzfLua lsp_code_actions<CR>", { buffer = event.buf })
   end,
   group = "Config",
 })
