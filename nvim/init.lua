@@ -197,6 +197,7 @@ vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("tailwindcss")
+vim.lsp.enable("ty")
 vim.lsp.enable("vtsls")
 
 -- Sandwich text-objects for matching characters.

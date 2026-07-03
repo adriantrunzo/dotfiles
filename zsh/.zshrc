@@ -49,6 +49,7 @@ BREW_PACKAGES=(
   'starship'
   'stylua'
   'tree-sitter-cli'
+  'ty'
 )
 
 # bat configuration. https://github.com/sharkdp/bat#customization
