@@ -85,12 +85,6 @@ vim.opt.textwidth = 100
 -- Persistent undo.
 vim.opt.undofile = true
 
--- Don't automatically select a wildmenu option. Sort buffers by last used.
-vim.opt.wildmode = { "noselect:lastused", "full" }
-
--- Use fuzzy matching and the pum for the wildmenu.
-vim.opt.wildoptions = { "fuzzy", "pum" }
-
 -- Default to rounded float borders.
 vim.opt.winborder = "rounded"
 

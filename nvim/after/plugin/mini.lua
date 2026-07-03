@@ -1,5 +1,6 @@
 local mini_ai = require("mini.ai")
 local mini_bracketed = require("mini.bracketed")
+local mini_cmdline = require("mini.cmdline")
 local mini_completion = require("mini.completion")
 local mini_diff = require("mini.diff")
 local mini_extra = require("mini.extra")
@@ -19,6 +20,7 @@ mini_ai.setup({
 mini_bracketed.setup()
 
 mini_completion.setup()
+mini_cmdline.setup()
 
 mini_diff.setup({
   view = {
