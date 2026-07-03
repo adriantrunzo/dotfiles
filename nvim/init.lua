@@ -88,16 +88,6 @@ vim.opt.undofile = true
 -- Default to rounded float borders.
 vim.opt.winborder = "rounded"
 
--- Allow customizing a color scheme using the "after/colors" directory.
--- https://vi.stackexchange.com/a/24847
-vim.api.nvim_create_autocmd("ColorScheme", {
-  callback = function()
-    vim.cmd.runtime("after/colors/" .. vim.fn.expand("<amatch>") .. ".lua")
-  end,
-  group = "Config",
-  pattern = "*",
-})
-
 -- Use the Dracula color scheme.
 vim.cmd.colorscheme("dracula")
 
