@@ -124,7 +124,6 @@ require("conform").setup({
     lsp_format = "fallback",
   },
 })
-require("fzf-lua").register_ui_select()
 require("mini.ai").setup({
   custom_textobjects = {
     e = require("mini.extra").gen_ai_spec.buffer(),
@@ -139,6 +138,7 @@ require("mini.diff").setup({
     style = "sign",
   },
 })
+require("mini.extra").setup()
 require("mini.files").setup({
   mappings = {
     close = "<Esc>",
@@ -166,6 +166,21 @@ require("mini.operators").setup({
   },
 })
 require("mini.pairs").setup()
+require("mini.pick").setup({
+  window = {
+    config = function()
+      local height = math.floor(0.75 * vim.o.lines)
+      local width = math.floor(0.90 * vim.o.columns)
+      return {
+        anchor = "NW",
+        height = height,
+        width = width,
+        row = math.floor(0.5 * (vim.o.lines - height)),
+        col = math.floor(0.5 * (vim.o.columns - width)),
+      }
+    end,
+  },
+})
 require("mini.statusline").setup({
   content = {
     active = function()
@@ -331,15 +346,12 @@ vim.keymap.set({ "x", "o" }, "am", "<Plug>(textobj-sandwich-auto-a)")
 vim.keymap.set({ "x", "o" }, "im", "<Plug>(textobj-sandwich-auto-i)")
 
 -- The basics.
-vim.keymap.set("n", "<Leader><Space>", "<Cmd>FzfLua files<CR>")
-vim.keymap.set("n", "<Leader>b", "<Cmd>FzfLua buffers<CR>")
+vim.keymap.set("n", "<Leader><Space>", "<Cmd>Pick files<CR>")
+vim.keymap.set("n", "<Leader>b", "<Cmd>Pick buffers<CR>")
 vim.keymap.set("n", "<Leader>c", "<Cmd>close<CR>")
 vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
 vim.keymap.set("n", "<Leader>e", "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>")
-vim.keymap.set("n", "<Leader>ff", "<Cmd>FzfLua live_grep hidden=true<CR>")
-vim.keymap.set("n", "<Leader>fw", "<Cmd>FzfLua grep_cword<CR>")
-vim.keymap.set("n", "<Leader>fW", "<Cmd>FzfLua grep_cWORD<CR>")
-vim.keymap.set("v", "<Leader>f", "<Cmd>FzfLua grep_visual<CR>")
+vim.keymap.set("n", "<Leader>f", "<Cmd>Pick grep_live<CR>")
 vim.keymap.set("n", "<Leader>g", "<Cmd>Git<CR>")
 vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
 vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
@@ -502,53 +514,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
     end
 
     -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
-    -- " nnoremap <buffer> co <Cmd>LspOutline<CR>
-    -- " nnoremap <buffer> cpx <Cmd>LspPeekDeclaration<CR>
-    -- " nnoremap <buffer> cpy <Cmd>LspPeekTypeDef<CR>
-    -- nmap <silent> cq <Plug>(coc-format)
-    -- nmap <silent> cx <Plug>(coc-declaration)
-    -- | `lsp_references`             | References                       |
-    -- | `lsp_definitions`            | Definitions                      |
-    -- | `lsp_declarations`           | Declarations                     |
-    -- | `lsp_typedefs`               | Type Definitions                 |
-    -- | `lsp_implementations`        | Implementations                  |
-    -- | `lsp_document_symbols`       | Document Symbols                 |
-    -- | `lsp_workspace_symbols`      | Workspace Symbols                |
-    -- | `lsp_live_workspace_symbols` | Workspace Symbols (live query)   |
-    -- | `lsp_incoming_calls`         | Incoming Calls                   |
-    -- | `lsp_outgoing_calls`         | Outgoing Calls                   |
-    -- | `lsp_code_actions`           | Code Actions                     |
-    -- | `lsp_finder`                 | All LSP locations, combined view |
-    -- | `diagnostics_document`       | Document Diagnostics             |
-    -- | `diagnostics_workspace`      | Workspace Diagnostics            |
-    -- | `lsp_document_diagnostics`   | alias to `diagnostics_document`  |
-    -- | `lsp_workspace_diagnostics`  | alias to `diagnostics_workspace` |
-    vim.keymap.set("n", "cd", "<Cmd>FzfLua lsp_definitions jump1=true<CR>", { buffer = event.buf })
-    vim.keymap.set(
-      "n",
-      "cm",
-      "<Cmd>FzfLua lsp_implementations jump1=true<CR>",
-      { buffer = event.buf }
-    )
+    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = event.buf })
     vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = event.buf })
-    vim.keymap.set(
-      "n",
-      "cpd",
-      "<Cmd>FzfLua lsp_definitions jump1=false<CR>",
-      { buffer = event.buf }
-    )
-    vim.keymap.set(
-      "n",
-      "cpm",
-      "<Cmd>FzfLua lsp_implementations jump1=false<CR>",
-      { buffer = event.buf }
-    )
-    vim.keymap.set("n", "cpr", "<Cmd>FzfLua lsp_references jump1=false<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cpy", "<Cmd>FzfLua lsp_typedefs jump1=false<CR>", { buffer = event.buf })
     vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
-    vim.keymap.set("n", "cr", "<Cmd>FzfLua lsp_references jump1=true<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cy", "<Cmd>FzfLua lsp_typedefs jump1=true<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cz", "<Cmd>FzfLua lsp_code_actions<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = event.buf })
   end,
   group = "Config",
 })
