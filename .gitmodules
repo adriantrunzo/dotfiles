@@ -11,7 +11,3 @@
 	path = zsh/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions.git
 	branch = master
-[submodule "zsh/fzf-tab"]
-	path = zsh/fzf-tab
-	url = https://github.com/Aloxaf/fzf-tab.git
-	branch = master

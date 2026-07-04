@@ -10,36 +10,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 
-# https://draculatheme.com/fzf
-FZF_COLORS=(
-  'fg:#f8f8f2'
-  'bg:#282a36'
-  'hl:#bd93f9'
-  'fg+:#f8f8f2'
-  'bg+:#44475a'
-  'hl+:#bd93f9'
-  'info:#ffb86c'
-  'prompt:#50fa7b'
-  'pointer:#ff79c6'
-  'marker:#ff79c6'
-  'spinner:#ffb86c'
-  'header:#6272a4'
-)
-
-FZF_OPTIONS=(
-  '--bind=alt-space:toggle-all,ctrl-a:toggle-all,ctrl-space:toggle'
-  '--bind=ctrl-j:preview-down,ctrl-k:preview-up'
-  "--color=${(j[,])FZF_COLORS}"
-  '--highlight-line'
-  '--info=inline'
-  '--marker=*'
-  '--reverse'
-)
-
 BREW_PACKAGES=(
   'bat'
-  'fd'
-  'fzf'
   'git'
   'lua-language-server'
   'neovim'
@@ -51,24 +23,7 @@ BREW_PACKAGES=(
   'ty'
 )
 
-# bat configuration. https://github.com/sharkdp/bat#customization
 export BAT_THEME=Dracula
-
-# fzf configuration. https://github.com/junegunn/fzf#settings
-export FZF_DEFAULT_COMMAND='fd --type file --follow --hidden --exclude .git'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_DEFAULT_OPTS="${(j[ ])FZF_OPTIONS}"
-
-# Use fd to generate the list for file completion.
-_fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
-}
-
-# Use fd to generate the list for directory completion.
-_fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
-}
-
 export VISUAL="nvim"
 
 # Load npm completion.
@@ -86,7 +41,6 @@ fi
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 PLUGINS=(
-  $HOME/.config/zsh/fzf-tab/fzf-tab.plugin.zsh
   $HOME/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
   $HOME/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
@@ -109,8 +63,6 @@ bindkey -v
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
 alias install-nvm='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
 alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
-
-zstyle ':fzf-tab:*' use-fzf-default-opts yes
 
 if type starship &>/dev/null; then
   eval "$(starship init zsh)"
