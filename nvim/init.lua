@@ -104,9 +104,25 @@ vim.diagnostic.config({
   },
 })
 
-local indentscope = require("mini.indentscope")
+local conform = require("conform")
+local mini_ai = require("mini.ai")
+local mini_bracketed = require("mini.bracketed")
+local mini_cmdline = require("mini.cmdline")
+local mini_completion = require("mini.completion")
+local mini_diff = require("mini.diff")
+local mini_extra = require("mini.extra")
+local mini_files = require("mini.files")
+local mini_indentscope = require("mini.indentscope")
+local mini_keymap = require("mini.keymap")
+local mini_move = require("mini.files")
+local mini_operators = require("mini.operators")
+local mini_pairs = require("mini.pairs")
+local mini_pick = require("mini.pick")
+local mini_statusline = require("mini.statuslin")
+local mini_trailspace = require("mini.trailspace")
+local treesitter = require("nvim-treesitter")
 
-require("conform").setup({
+conform.setup({
   formatters_by_ft = {
     css = { "oxfmt", "prettier", stop_after_first = true },
     handlebars = { "oxfmt", "prettier", stop_after_first = true },
@@ -126,21 +142,26 @@ require("conform").setup({
     lsp_format = "fallback",
   },
 })
-require("mini.ai").setup({
+
+mini_ai.setup({
   custom_textobjects = {
-    e = require("mini.extra").gen_ai_spec.buffer(),
+    e = mini_extra.gen_ai_spec.buffer(),
   },
 })
-require("mini.bracketed").setup()
-require("mini.completion").setup()
-require("mini.cmdline").setup()
-require("mini.diff").setup({
+
+mini_bracketed.setup()
+mini_completion.setup()
+mini_cmdline.setup()
+
+mini_diff.setup({
   view = {
     style = "sign",
   },
 })
-require("mini.extra").setup()
-require("mini.files").setup({
+
+mini_extra.setup()
+
+mini_files.setup({
   mappings = {
     close = "<Esc>",
     go_in_plus = "<CR>",
@@ -148,16 +169,19 @@ require("mini.files").setup({
     go_out_plus = "h",
   },
 })
-indentscope.setup({
+
+mini_indentscope.setup({
   draw = {
-    animation = indentscope.gen_animation.none(),
+    animation = mini_indentscope.gen_animation.none(),
   },
   options = {
     indent_at_cursor = false,
   },
 })
-require("mini.move").setup()
-require("mini.operators").setup({
+
+mini_move.setup()
+
+mini_operators.setup({
   evaluate = {
     prefix = "",
   },
@@ -174,12 +198,15 @@ require("mini.operators").setup({
     prefix = "gs",
   },
 })
-require("mini.pairs").setup()
-require("mini.pick").setup({
+
+mini_pairs.setup()
+
+mini_pick.setup({
   window = {
     config = function()
       local height = math.floor(0.75 * vim.o.lines)
       local width = math.floor(0.90 * vim.o.columns)
+
       return {
         anchor = "NW",
         height = height,
@@ -190,7 +217,8 @@ require("mini.pick").setup({
     end,
   },
 })
-require("mini.statusline").setup({
+
+mini_statusline.setup({
   content = {
     active = function()
       local mode, mode_hl = MiniStatusline.section_mode({})
@@ -242,15 +270,9 @@ require("mini.statusline").setup({
   use_icons = false,
 })
 
-require("mini.keymap").map_multistep(
-  "i",
-  "<Tab>",
-  { "minisnippets_next", "minisnippets_expand", "pmenu_next" }
-)
-require("mini.keymap").map_multistep("i", "<S-Tab>", { "minisnippets_prev", "pmenu_prev" })
-require("mini.keymap").map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
-require("mini.keymap").map_multistep("i", "<BS>", { "minipairs_bs" })
-require("nvim-treesitter").install({
+mini_trailspace.setup()
+
+treesitter.install({
   "comment",
   "css",
   "dockerfile",
@@ -269,7 +291,6 @@ require("nvim-treesitter").install({
   "vimdoc",
   "yaml",
 })
-require("mini.trailspace").setup()
 
 -- Configure language servers.
 vim.lsp.config("cssls", {
@@ -367,6 +388,15 @@ vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
 vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
 vim.keymap.set("n", "<Leader>yp", '"*yp', { remap = true })
 vim.keymap.set("n", "<Leader>yP", '"*ypg_', { remap = true })
+
+mini_keymap.map_multistep(
+  "i",
+  "<Tab>",
+  { "minisnippets_next", "minisnippets_expand", "pmenu_next" }
+)
+mini_keymap.map_multistep("i", "<S-Tab>", { "minisnippets_prev", "pmenu_prev" })
+mini_keymap.map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
+mini_keymap.map_multistep("i", "<BS>", { "minipairs_bs" })
 
 -- Thumb clusters on Advantage keyboard.
 vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
