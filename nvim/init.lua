@@ -1,6 +1,3 @@
--- Autocommand group to use throughout this configuration file.
-vim.api.nvim_create_augroup("Config", { clear = true })
-
 -- Use space for leader.
 vim.g.mapleader = vim.keycode("<Space>")
 
@@ -101,6 +98,142 @@ vim.diagnostic.config({
   },
 })
 
+-- Autocommand group to use throughout this configuration file.
+vim.api.nvim_create_augroup("Config", { clear = true })
+
+-- Restore default <CR> mapping in command-line window.
+-- https://stackoverflow.com/a/16360104
+vim.api.nvim_create_autocmd("CmdWinEnter", {
+  callback = function(event)
+    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
+  end,
+  group = "Config",
+  pattern = "*",
+})
+
+-- Restore default <CR> mapping in location and quickfix windows.
+-- https://stackoverflow.com/a/16360104
+vim.api.nvim_create_autocmd("BufReadPost", {
+  callback = function(event)
+    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
+  end,
+  group = "Config",
+  pattern = "quickfix",
+})
+
+-- Highlight on yank.
+vim.api.nvim_create_autocmd("TextYankPost", {
+  callback = function()
+    vim.hl.on_yank({ higroup = "IncSearch", timeout = 500 })
+  end,
+  group = "Config",
+  pattern = "*",
+})
+
+-- Remove search highlighting when the cursor moves off a search result.
+vim.api.nvim_create_autocmd("CursorMoved", {
+  callback = function()
+    if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
+      vim.schedule(function()
+        vim.cmd.nohlsearch()
+      end)
+    end
+  end,
+  group = "Config",
+})
+
+-- Open the quickfix window automatically.
+-- https://noahfrederick.com/log/vim-streamlining-grep
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+  callback = function()
+    vim.cmd.cwindow()
+  end,
+  group = "Config",
+  pattern = "[^l]*",
+})
+
+-- Open the location window automatically.
+-- https://noahfrederick.com/log/vim-streamlining-grep
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+  callback = function()
+    vim.cmd.lwindow()
+  end,
+  group = "Config",
+  pattern = "l*",
+})
+
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(event)
+    local buffer = event.buf
+    local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
+    local methods = vim.lsp.protocol.Methods
+
+    vim.api.nvim_create_augroup("ConfigLsp", { clear = false })
+
+    if client.name == "eslint" then
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = buffer,
+        command = "LspEslintFixAll",
+        group = "ConfigLsp",
+      })
+    end
+
+    if client:supports_method(methods.textDocument_documentHighlight) then
+      vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
+        buffer = buffer,
+        callback = vim.lsp.buf.document_highlight,
+        group = "ConfigLsp",
+      })
+      vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
+        buffer = buffer,
+        callback = vim.lsp.buf.clear_references,
+        group = "ConfigLsp",
+      })
+    end
+
+    -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
+    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = event.buf })
+    vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
+    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = event.buf })
+    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = event.buf })
+  end,
+  group = "Config",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    vim.opt_local.number = true
+    vim.opt_local.relativenumber = true
+  end,
+  group = "Config",
+  pattern = "help",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
+    vim.treesitter.start()
+    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+  end,
+  group = "Config",
+  pattern = {
+    "css",
+    "html",
+    "javascript",
+    "javascriptreact",
+    "json",
+    "lua",
+    "python",
+    "ruby",
+    "terraform",
+    "typescript",
+    "typescriptreact",
+    "yaml",
+  },
+})
+
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(ev)
     local name, kind = ev.data.spec.name, ev.data.kind
@@ -129,7 +262,6 @@ vim.pack.add({
   { name = "treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 })
 
--- Use the Dracula color scheme.
 vim.cmd.colorscheme("dracula")
 
 local conform = require("conform")
@@ -320,7 +452,6 @@ treesitter.install({
   "yaml",
 })
 
--- Configure language servers.
 vim.lsp.config("cssls", {
   cmd = {
     "npx",
@@ -385,7 +516,6 @@ vim.lsp.config("vtsls", {
   },
 })
 
--- Enable LSP servers.
 vim.lsp.enable("cssls")
 vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
@@ -485,136 +615,3 @@ vim.keymap.set("n", "Y", "yg_")
 -- http://ddrscott.github.io/blog/2016/yank-without-jank/
 vim.keymap.set("v", "y", "myy`y")
 vim.keymap.set("v", "Y", "myY`y")
-
--- Restore default <CR> mapping in command-line window.
--- https://stackoverflow.com/a/16360104
-vim.api.nvim_create_autocmd("CmdWinEnter", {
-  callback = function(event)
-    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
-  end,
-  group = "Config",
-  pattern = "*",
-})
-
--- Restore default <CR> mapping in location and quickfix windows.
--- https://stackoverflow.com/a/16360104
-vim.api.nvim_create_autocmd("BufReadPost", {
-  callback = function(event)
-    vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
-  end,
-  group = "Config",
-  pattern = "quickfix",
-})
-
--- Highlight on yank.
-vim.api.nvim_create_autocmd("TextYankPost", {
-  callback = function()
-    vim.hl.on_yank({ higroup = "IncSearch", timeout = 500 })
-  end,
-  group = "Config",
-  pattern = "*",
-})
-
--- Remove search highlighting when the cursor moves off a search result.
-vim.api.nvim_create_autocmd("CursorMoved", {
-  callback = function()
-    if vim.v.hlsearch == 1 and vim.fn.searchcount().exact_match == 0 then
-      vim.schedule(function()
-        vim.cmd.nohlsearch()
-      end)
-    end
-  end,
-  group = "Config",
-})
-
--- Open the quickfix window automatically.
--- https://noahfrederick.com/log/vim-streamlining-grep
-vim.api.nvim_create_autocmd("QuickFixCmdPost", {
-  callback = function()
-    vim.cmd.cwindow()
-  end,
-  group = "Config",
-  pattern = "[^l]*",
-})
-
--- Open the location window automatically.
--- https://noahfrederick.com/log/vim-streamlining-grep
-vim.api.nvim_create_autocmd("QuickFixCmdPost", {
-  callback = function()
-    vim.cmd.lwindow()
-  end,
-  group = "Config",
-  pattern = "l*",
-})
-
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(event)
-    local buffer = event.buf
-    local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
-    local methods = vim.lsp.protocol.Methods
-
-    vim.api.nvim_create_augroup("ConfigLsp", { clear = false })
-
-    if client.name == "eslint" then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = buffer,
-        command = "LspEslintFixAll",
-        group = "ConfigLsp",
-      })
-    end
-
-    if client:supports_method(methods.textDocument_documentHighlight) then
-      vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-        buffer = buffer,
-        callback = vim.lsp.buf.document_highlight,
-        group = "ConfigLsp",
-      })
-      vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
-        buffer = buffer,
-        callback = vim.lsp.buf.clear_references,
-        group = "ConfigLsp",
-      })
-    end
-
-    -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
-    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = event.buf })
-    vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
-    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = event.buf })
-  end,
-  group = "Config",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    vim.opt_local.number = true
-    vim.opt_local.relativenumber = true
-  end,
-  group = "Config",
-  pattern = "help",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  callback = function()
-    vim.treesitter.start()
-    vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-  end,
-  group = "Config",
-  pattern = {
-    "css",
-    "html",
-    "javascript",
-    "javascriptreact",
-    "json",
-    "lua",
-    "python",
-    "ruby",
-    "terraform",
-    "typescript",
-    "typescriptreact",
-    "yaml",
-  },
-})
