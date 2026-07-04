@@ -256,6 +256,7 @@ vim.pack.add({
   { name = "lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
   { name = "matchup", src = "https://github.com/andymass/vim-matchup" },
   { name = "mini", src = "https://github.com/nvim-mini/mini.nvim" },
+  { name = "quicker", src = "https://github.com/stevearc/quicker.nvim" },
   { name = "rsi", src = "https://github.com/tpope/vim-rsi" },
   { name = "sandwich", src = "https://github.com/machakann/vim-sandwich" },
   { name = "sneak", src = "https://github.com/justinmk/vim-sneak" },
@@ -284,6 +285,7 @@ local mini_pairs = require("mini.pairs")
 local mini_pick = require("mini.pick")
 local mini_statusline = require("mini.statusline")
 local mini_trailspace = require("mini.trailspace")
+local quicker = require("quicker")
 local treesitter = require("nvim-treesitter")
 
 conform.setup({
@@ -441,6 +443,25 @@ mini_statusline.setup({
 
 mini_trailspace.setup()
 
+quicker.setup({
+  keys = {
+    {
+      ">",
+      function()
+        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
+      end,
+      desc = "Expand quickfix context",
+    },
+    {
+      "<",
+      function()
+        require("quicker").collapse()
+      end,
+      desc = "Collapse quickfix context",
+    },
+  },
+})
+
 treesitter.install({
   "comment",
   "css",
@@ -557,6 +578,12 @@ vim.keymap.set("n", "<Leader>d", "<Cmd>bdelete<CR>")
 vim.keymap.set("n", "<Leader>e", "<Cmd>lua MiniFiles.open(vim.api.nvim_buf_get_name(0), false)<CR>")
 vim.keymap.set("n", "<Leader>f", "<Cmd>Pick grep_live<CR>")
 vim.keymap.set("n", "<Leader>g", "<Cmd>Git<CR>")
+vim.keymap.set("n", "<leader>l", function()
+  require("quicker").toggle({ loclist = true })
+end)
+vim.keymap.set("n", "<leader>q", function()
+  require("quicker").toggle()
+end)
 vim.keymap.set("n", "<Leader>s", "<Cmd>update<CR>")
 vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
 vim.keymap.set("n", "<Leader>yp", '"*yp', { remap = true })
