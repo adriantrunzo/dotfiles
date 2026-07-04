@@ -235,11 +235,11 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("PackChanged", {
-  callback = function(ev)
-    local name, kind = ev.data.spec.name, ev.data.kind
+  callback = function(event)
+    local active, kind, name = event.data.active, event.data.kind, event.data.spec.name
 
     if name == "treesitter" and kind == "update" then
-      if not ev.data.active then
+      if not active then
         vim.cmd.packadd("treesitter")
       end
 
@@ -263,6 +263,10 @@ vim.pack.add({
 })
 
 vim.cmd.colorscheme("dracula")
+
+-- nvim-treesitter stores queries in the runtime/, which packadd does not automatically add to the
+-- runtime path.
+vim.opt.runtimepath:append(vim.pack.get({ "treesitter" })[1].path .. "/runtime")
 
 local conform = require("conform")
 local mini_ai = require("mini.ai")
