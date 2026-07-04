@@ -295,6 +295,11 @@ conform.setup({
     json = { "oxfmt", "prettier", stop_after_first = true },
     lua = { "stylua" },
     markdown = { "oxfmt", "prettier", stop_after_first = true },
+    python = {
+      "ruff_fix",
+      "ruff_format",
+      "ruff_organize_imports",
+    },
     scss = { "oxfmt", "prettier", stop_after_first = true },
     typescript = { "oxfmt", "prettier", stop_after_first = true },
     typescriptreact = { "oxfmt", "prettier", stop_after_first = true },
@@ -525,6 +530,7 @@ vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
 vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
+vim.lsp.enable("ruff")
 vim.lsp.enable("tailwindcss")
 vim.lsp.enable("ty")
 vim.lsp.enable("vtsls")
