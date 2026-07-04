@@ -1,9 +1,3 @@
-export NVM_DIR="$HOME/.nvm"
-
-if type /opt/homebrew/bin/brew &>/dev/null; then
-  eval "$(/opt/homebrew/bin/brew shellenv)"
-fi
-
 BREW_PACKAGES=(
   'bat'
   'git'
@@ -16,18 +10,6 @@ BREW_PACKAGES=(
   'ty'
 )
 
-export BAT_THEME=Dracula
-export VISUAL="nvim"
-
-# Load npm completion.
-if type npm &>/dev/null; then
-  eval "$(npm completion)"
-fi
-
-# Enable nvm.
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
-
 PLUGINS=(
   $HOME/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
   $HOME/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
@@ -36,9 +18,9 @@ PLUGINS=(
   $HOME/.zshrc.local
 )
 
-for p ($PLUGINS) {
-  [ -f $p ] && source $p
-}
+export BAT_THEME=Dracula
+export NVM_DIR="$HOME/.nvm"
+export VISUAL="nvim"
 
 # Enable better Zsh completion.
 autoload -Uz compinit
@@ -46,6 +28,25 @@ compinit
 
 # Use Vi bindings.
 bindkey -v
+
+# Initialize Homebrew.
+if type /opt/homebrew/bin/brew &>/dev/null; then
+  eval "$(/opt/homebrew/bin/brew shellenv)"
+fi
+
+# Enable nvm.
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Load npm completion.
+if type npm &>/dev/null; then
+  eval "$(npm completion)"
+fi
+
+# Load plugins.
+for p ($PLUGINS) {
+  [ -f $p ] && source $p
+}
 
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
