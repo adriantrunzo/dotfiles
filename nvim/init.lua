@@ -323,10 +323,9 @@ treesitter.install({
 -- Configure language servers.
 vim.lsp.config("cssls", {
   cmd = {
-    "pnpm",
+    "npx",
     "--package",
     "vscode-langservers-extracted",
-    "dlx",
     "vscode-css-language-server",
     "--stdio",
   },
@@ -334,10 +333,9 @@ vim.lsp.config("cssls", {
 
 vim.lsp.config("html", {
   cmd = {
-    "pnpm",
+    "npx",
     "--package",
     "vscode-langservers-extracted",
-    "dlx",
     "vscode-html-language-server",
     "--stdio",
   },
@@ -345,10 +343,9 @@ vim.lsp.config("html", {
 
 vim.lsp.config("jsonls", {
   cmd = {
-    "pnpm",
+    "npx",
     "--package",
     "vscode-langservers-extracted",
-    "dlx",
     "vscode-json-language-server",
     "--stdio",
   },
@@ -356,10 +353,9 @@ vim.lsp.config("jsonls", {
 
 vim.lsp.config("eslint", {
   cmd = {
-    "pnpm",
+    "npx",
     "--package",
     "vscode-langservers-extracted",
-    "dlx",
     "vscode-eslint-language-server",
     "--stdio",
   },
@@ -367,17 +363,16 @@ vim.lsp.config("eslint", {
 
 vim.lsp.config("tailwindcss", {
   cmd = {
-    "pnpm",
+    "npx",
     "--package",
     "@tailwindcss/language-server",
-    "dlx",
     "tailwindcss-language-server",
     "--stdio",
   },
 })
 
 vim.lsp.config("vtsls", {
-  cmd = { "pnpx", "@vtsls/language-server", "--stdio" },
+  cmd = { "npx", "@vtsls/language-server", "--stdio" },
   settings = {
     vtsls = {
       autoUseWorkspaceTsdk = true,
