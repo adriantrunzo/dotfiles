@@ -269,6 +269,7 @@ require("nvim-treesitter").install({
   "vimdoc",
   "yaml",
 })
+require("mini.trailspace").setup()
 
 -- Configure language servers.
 vim.lsp.config("cssls", {
