@@ -466,6 +466,8 @@ vim.lsp.config("cssls", {
     "npx",
     "--package",
     "vscode-langservers-extracted",
+    "--yes",
+    "--",
     "vscode-css-language-server",
     "--stdio",
   },
@@ -476,6 +478,8 @@ vim.lsp.config("html", {
     "npx",
     "--package",
     "vscode-langservers-extracted",
+    "--yes",
+    "--",
     "vscode-html-language-server",
     "--stdio",
   },
@@ -486,6 +490,8 @@ vim.lsp.config("jsonls", {
     "npx",
     "--package",
     "vscode-langservers-extracted",
+    "--yes",
+    "--",
     "vscode-json-language-server",
     "--stdio",
   },
@@ -496,6 +502,8 @@ vim.lsp.config("eslint", {
     "npx",
     "--package",
     "vscode-langservers-extracted",
+    "--yes",
+    "--",
     "vscode-eslint-language-server",
     "--stdio",
   },
@@ -506,13 +514,15 @@ vim.lsp.config("tailwindcss", {
     "npx",
     "--package",
     "@tailwindcss/language-server",
+    "--yes",
+    "--",
     "tailwindcss-language-server",
     "--stdio",
   },
 })
 
 vim.lsp.config("vtsls", {
-  cmd = { "npx", "@vtsls/language-server", "--stdio" },
+  cmd = { "npx", "--yes", "--", "@vtsls/language-server", "--stdio" },
   settings = {
     vtsls = {
       autoUseWorkspaceTsdk = true,
