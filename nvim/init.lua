@@ -104,6 +104,8 @@ vim.diagnostic.config({
   },
 })
 
+local indentscope = require("mini.indentscope")
+
 require("conform").setup({
   formatters_by_ft = {
     css = { "oxfmt", "prettier", stop_after_first = true },
@@ -127,7 +129,6 @@ require("conform").setup({
 require("mini.ai").setup({
   custom_textobjects = {
     e = require("mini.extra").gen_ai_spec.buffer(),
-    i = require("mini.extra").gen_ai_spec.indent(),
   },
 })
 require("mini.bracketed").setup()
@@ -145,6 +146,14 @@ require("mini.files").setup({
     go_in_plus = "<CR>",
     go_out = "",
     go_out_plus = "h",
+  },
+})
+indentscope.setup({
+  draw = {
+    animation = indentscope.gen_animation.none(),
+  },
+  options = {
+    indent_at_cursor = false,
   },
 })
 require("mini.move").setup()
