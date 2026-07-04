@@ -88,9 +88,6 @@ vim.opt.undofile = true
 -- Default to rounded float borders.
 vim.opt.winborder = "rounded"
 
--- Use the Dracula color scheme.
-vim.cmd.colorscheme("dracula")
-
 -- Configure diagnostics.
 vim.diagnostic.config({
   severity_sort = true,
@@ -104,6 +101,37 @@ vim.diagnostic.config({
   },
 })
 
+vim.api.nvim_create_autocmd("PackChanged", {
+  callback = function(ev)
+    local name, kind = ev.data.spec.name, ev.data.kind
+
+    if name == "treesitter" and kind == "update" then
+      if not ev.data.active then
+        vim.cmd.packadd("treesitter")
+      end
+
+      vim.cmd("TSUpdate")
+    end
+  end,
+  group = "Config",
+})
+
+vim.pack.add({
+  { name = "conform", src = "https://github.com/stevearc/conform.nvim" },
+  { name = "dracula", src = "https://github.com/dracula/vim" },
+  { name = "fugitive", src = "https://github.com/tpope/vim-fugitive" },
+  { name = "lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
+  { name = "matchup", src = "https://github.com/andymass/vim-matchup" },
+  { name = "mini", src = "https://github.com/nvim-mini/mini.nvim" },
+  { name = "rsi", src = "https://github.com/tpope/vim-rsi" },
+  { name = "sandwich", src = "https://github.com/machakann/vim-sandwich" },
+  { name = "sneak", src = "https://github.com/justinmk/vim-sneak" },
+  { name = "treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter" },
+})
+
+-- Use the Dracula color scheme.
+vim.cmd.colorscheme("dracula")
+
 local conform = require("conform")
 local mini_ai = require("mini.ai")
 local mini_bracketed = require("mini.bracketed")
@@ -114,11 +142,11 @@ local mini_extra = require("mini.extra")
 local mini_files = require("mini.files")
 local mini_indentscope = require("mini.indentscope")
 local mini_keymap = require("mini.keymap")
-local mini_move = require("mini.files")
+local mini_move = require("mini.move")
 local mini_operators = require("mini.operators")
 local mini_pairs = require("mini.pairs")
 local mini_pick = require("mini.pick")
-local mini_statusline = require("mini.statuslin")
+local mini_statusline = require("mini.statusline")
 local mini_trailspace = require("mini.trailspace")
 local treesitter = require("nvim-treesitter")
 

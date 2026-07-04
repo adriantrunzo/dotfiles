@@ -6,8 +6,10 @@
   "workspace": {
     "checkThirdParty": false,
     "library": [
-      "$VIMRUNTIME/lua",
-      "./nvim/start/mini.nvim/lua"
+      "$VIMRUNTIME/lua"
     ]
-  }
+  },
+  "diagnostics.globals": [
+    "MiniStatusline"
+  ]
 }
