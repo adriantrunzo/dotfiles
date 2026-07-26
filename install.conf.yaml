@@ -12,6 +12,7 @@
 - link:
     ~/.config/ghostty/config: ghostty/config
     ~/.config/nvim/init.lua: nvim/init.lua
+    ~/.config/ripgrep/config: ripgrep/config
     ~/.config/starship.toml: starship/starship.toml
     ~/.config/zsh/zsh-autosuggestions: zsh/zsh-autosuggestions
     ~/.config/zsh/zsh-syntax-highlighting: zsh/zsh-syntax-highlighting

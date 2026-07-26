@@ -1,3 +1,5 @@
+CONFIG="$HOME/.config"
+
 BREW_PACKAGES=(
   'bat'
   'git'
@@ -11,8 +13,8 @@ BREW_PACKAGES=(
 )
 
 PLUGINS=(
-  $HOME/.config/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-  $HOME/.config/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  $CONFIG/zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+  $CONFIG/zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
   # Private, work-related configuration.
   $HOME/.zshrc.local
@@ -20,6 +22,7 @@ PLUGINS=(
 
 export BAT_THEME=Dracula
 export NVM_DIR="$HOME/.nvm"
+export RIPGREP_CONFIG_PATH="$CONFIG/ripgrep/config"
 export VISUAL="nvim"
 
 # Enable better Zsh completion.
