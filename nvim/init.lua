@@ -103,7 +103,7 @@ vim.api.nvim_create_augroup("Config", { clear = true })
 
 -- Restore default <CR> mapping in command-line window.
 -- https://stackoverflow.com/a/16360104
-vim.api.nvim_create_autocmd("CmdWinEnter", {
+vim.api.nvim_create_autocmd("CmdwinEnter", {
   callback = function(event)
     vim.keymap.set("n", "<CR>", "<CR>", { buffer = event.buf })
   end,
