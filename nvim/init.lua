@@ -482,68 +482,7 @@ treesitter.install({
   "yaml",
 })
 
-vim.lsp.config("cssls", {
-  cmd = {
-    "npx",
-    "--package",
-    "vscode-langservers-extracted",
-    "--yes",
-    "--",
-    "vscode-css-language-server",
-    "--stdio",
-  },
-})
-
-vim.lsp.config("html", {
-  cmd = {
-    "npx",
-    "--package",
-    "vscode-langservers-extracted",
-    "--yes",
-    "--",
-    "vscode-html-language-server",
-    "--stdio",
-  },
-})
-
-vim.lsp.config("jsonls", {
-  cmd = {
-    "npx",
-    "--package",
-    "vscode-langservers-extracted",
-    "--yes",
-    "--",
-    "vscode-json-language-server",
-    "--stdio",
-  },
-})
-
-vim.lsp.config("eslint", {
-  cmd = {
-    "npx",
-    "--package",
-    "vscode-langservers-extracted",
-    "--yes",
-    "--",
-    "vscode-eslint-language-server",
-    "--stdio",
-  },
-})
-
-vim.lsp.config("tailwindcss", {
-  cmd = {
-    "npx",
-    "--package",
-    "@tailwindcss/language-server",
-    "--yes",
-    "--",
-    "tailwindcss-language-server",
-    "--stdio",
-  },
-})
-
 vim.lsp.config("vtsls", {
-  cmd = { "npx", "--yes", "--", "@vtsls/language-server", "--stdio" },
   settings = {
     vtsls = {
       autoUseWorkspaceTsdk = true,
@@ -559,10 +498,13 @@ vim.lsp.config("vtsls", {
 vim.lsp.enable("cssls")
 vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
-vim.lsp.enable("eslint")
+-- vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
+-- vim.lsp.enable("oxfmt")
+vim.lsp.enable("oxlint")
 vim.lsp.enable("ruff")
 vim.lsp.enable("tailwindcss")
+-- vim.lsp.enable("tsc")
 vim.lsp.enable("ty")
 vim.lsp.enable("vtsls")
 
