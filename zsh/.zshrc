@@ -5,11 +5,19 @@ BREW_PACKAGES=(
   'git'
   'lua-language-server'
   'neovim'
+  'nvm'
+  'oxfmt'
+  'oxlint'
   'ripgrep'
+  'ruff'
   'starship'
   'stylua'
+  'tailwindcss-language-server'
   'tree-sitter-cli'
   'ty'
+  'typescript'
+  'vscode-langservers-extracted'
+  'vtsls'
 )
 
 PLUGINS=(
@@ -53,7 +61,6 @@ for p ($PLUGINS) {
 
 # Helpful commands for finishing the setup of a new machine.
 alias install-brew='/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"'
-alias install-nvm='curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash'
 alias install-tools="brew install ${(j[ ])BREW_PACKAGES}"
 
 if type starship &>/dev/null; then
