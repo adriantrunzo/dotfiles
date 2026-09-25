@@ -224,6 +224,14 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
+    vim.opt_local.textwidth = 88
+  end,
+  group = "Config",
+  pattern = "python",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+  callback = function()
     vim.treesitter.start()
     vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
   end,
