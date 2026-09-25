@@ -317,9 +317,10 @@ mini_extra.setup()
 mini_files.setup({
   mappings = {
     close = "<Esc>",
+    go_in = "",
     go_in_plus = "<CR>",
     go_out = "",
-    go_out_plus = "h",
+    go_out_plus = "-",
   },
 })
 
