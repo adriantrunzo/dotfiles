@@ -25,9 +25,6 @@ vim.opt.expandtab = true
 -- Allow project configuration files.
 vim.opt.exrc = true
 
--- Use conform for gq.
-vim.opt.formatexpr = 'v:lua.require"conform".formatexpr()'
-
 -- Ignore case when searching.
 vim.opt.ignorecase = true
 
@@ -191,14 +188,27 @@ vim.api.nvim_create_autocmd("LspAttach", {
       })
     end
 
+    if
+        not client:supports_method("textDocument/willSaveWaitUntil")
+        and client:supports_method("textDocument/formatting")
+    then
+      vim.api.nvim_create_autocmd("BufWritePre", {
+        buffer = buffer,
+        callback = function()
+          vim.lsp.buf.format({ bufnr = buffer, id = client.id, timeout_ms = 1000 })
+        end,
+        group = "ConfigLsp",
+      })
+    end
+
     -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
-    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = event.buf })
-    vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = event.buf })
-    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = event.buf })
-    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = event.buf })
+    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = buffer })
+    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = buffer })
+    vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = buffer })
+    vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = buffer })
+    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = buffer })
+    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = buffer })
+    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = buffer })
   end,
   group = "Config",
 })
@@ -250,16 +260,15 @@ vim.api.nvim_create_autocmd("PackChanged", {
 })
 
 vim.pack.add({
-  { name = "conform", src = "https://github.com/stevearc/conform.nvim" },
-  { name = "dracula", src = "https://github.com/dracula/vim" },
-  { name = "fugitive", src = "https://github.com/tpope/vim-fugitive" },
-  { name = "lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
-  { name = "matchup", src = "https://github.com/andymass/vim-matchup" },
-  { name = "mini", src = "https://github.com/nvim-mini/mini.nvim" },
-  { name = "quicker", src = "https://github.com/stevearc/quicker.nvim" },
-  { name = "rsi", src = "https://github.com/tpope/vim-rsi" },
-  { name = "sandwich", src = "https://github.com/machakann/vim-sandwich" },
-  { name = "sneak", src = "https://github.com/justinmk/vim-sneak" },
+  { name = "dracula",    src = "https://github.com/dracula/vim" },
+  { name = "fugitive",   src = "https://github.com/tpope/vim-fugitive" },
+  { name = "lspconfig",  src = "https://github.com/neovim/nvim-lspconfig" },
+  { name = "matchup",    src = "https://github.com/andymass/vim-matchup" },
+  { name = "mini",       src = "https://github.com/nvim-mini/mini.nvim" },
+  { name = "quicker",    src = "https://github.com/stevearc/quicker.nvim" },
+  { name = "rsi",        src = "https://github.com/tpope/vim-rsi" },
+  { name = "sandwich",   src = "https://github.com/machakann/vim-sandwich" },
+  { name = "sneak",      src = "https://github.com/justinmk/vim-sneak" },
   { name = "treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 })
 
@@ -269,7 +278,6 @@ vim.cmd.colorscheme("dracula")
 -- runtime path.
 vim.opt.runtimepath:append(vim.pack.get({ "treesitter" })[1].path .. "/runtime")
 
-local conform = require("conform")
 local mini_ai = require("mini.ai")
 local mini_bracketed = require("mini.bracketed")
 local mini_cmdline = require("mini.cmdline")
@@ -287,32 +295,6 @@ local mini_statusline = require("mini.statusline")
 local mini_trailspace = require("mini.trailspace")
 local quicker = require("quicker")
 local treesitter = require("nvim-treesitter")
-
-conform.setup({
-  formatters_by_ft = {
-    css = { "oxfmt", "prettier", stop_after_first = true },
-    handlebars = { "oxfmt", "prettier", stop_after_first = true },
-    javascript = { "oxfmt", "prettier", stop_after_first = true },
-    javascriptreact = { "oxfmt", "prettier", stop_after_first = true },
-    json = { "oxfmt", "prettier", stop_after_first = true },
-    lua = { "stylua" },
-    markdown = { "oxfmt", "prettier", stop_after_first = true },
-    python = {
-      "ruff_fix",
-      "ruff_format",
-      "ruff_organize_imports",
-    },
-    scss = { "oxfmt", "prettier", stop_after_first = true },
-    typescript = { "oxfmt", "prettier", stop_after_first = true },
-    typescriptreact = { "oxfmt", "prettier", stop_after_first = true },
-    yaml = { "oxfmt", "prettier", stop_after_first = true },
-    ["_"] = { "trim_whitespace", "trim_newlines" },
-  },
-  format_on_save = {
-    timeout_ms = 1000,
-    lsp_format = "fallback",
-  },
-})
 
 mini_ai.setup({
   custom_textobjects = {
@@ -411,30 +393,30 @@ mini_statusline.setup({
 
       local vcs = (ticket or git_branch) .. git_modifier
       local diagnostics = is_tiny and ""
-        or MiniStatusline.section_diagnostics({
-          icon = "",
-          signs = {
-            ERROR = "%#DiagnosticError#●%#DraculaFg# ",
-            WARN = "%#DiagnosticWarn#●%#DraculaFg# ",
-            INFO = "%#DraculaYellow#●%#DraculaFg# ",
-            HINT = "%#DiagnosticInfo#●%#DraculaFg# ",
-          },
-        })
+          or MiniStatusline.section_diagnostics({
+            icon = "",
+            signs = {
+              ERROR = "%#DiagnosticError#●%#DraculaFg# ",
+              WARN = "%#DiagnosticWarn#●%#DraculaFg# ",
+              INFO = "%#DraculaYellow#●%#DraculaFg# ",
+              HINT = "%#DiagnosticInfo#●%#DraculaFg# ",
+            },
+          })
       local file_info = (is_small or is_special_buffer) and ""
-        or string.format("%s[%s]", file_encoding, file_format)
+          or string.format("%s[%s]", file_encoding, file_format)
       local file_name = is_terminal and "%t" or (is_small and "%f%m%r" or "%F%m%r")
       local file_type = vim.bo.filetype
       local location = "%l:%v"
 
       return MiniStatusline.combine_groups({
-        { hl = mode_hl, strings = { mode } },
+        { hl = mode_hl,                 strings = { mode } },
         { hl = "MiniStatuslineDevinfo", strings = { vcs } },
         "%<", -- Mark general truncate point
-        { hl = "MiniStatuslineFilename", strings = { file_name } },
+        { hl = "MiniStatuslineFilename",       strings = { file_name } },
         "%=", -- End left alignment
         { strings = { diagnostics, file_type } },
-        { hl = "MiniStatuslineFileinfo", strings = { file_info } },
-        { hl = mode_hl, strings = { location } },
+        { hl = "MiniStatuslineFileinfo",       strings = { file_info } },
+        { hl = mode_hl,                        strings = { location } },
       })
     end,
   },
@@ -500,9 +482,10 @@ vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
 -- vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
--- vim.lsp.enable("oxfmt")
+vim.lsp.enable("oxfmt")
 vim.lsp.enable("oxlint")
 vim.lsp.enable("ruff")
+vim.lsp.enable("stylua")
 vim.lsp.enable("tailwindcss")
 -- vim.lsp.enable("tsc")
 vim.lsp.enable("ty")
