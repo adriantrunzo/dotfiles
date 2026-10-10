@@ -489,16 +489,14 @@ vim.lsp.config("vtsls", {
 vim.lsp.enable("cssls")
 vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
--- vim.lsp.enable("eslint")
 vim.lsp.enable("lua_ls")
 vim.lsp.enable("oxfmt")
 vim.lsp.enable("oxlint")
 vim.lsp.enable("ruff")
 vim.lsp.enable("stylua")
 vim.lsp.enable("tailwindcss")
--- vim.lsp.enable("tsc")
+vim.lsp.enable("tsc")
 vim.lsp.enable("ty")
-vim.lsp.enable("vtsls")
 
 -- Sandwich text-objects for matching characters.
 vim.keymap.set({ "x", "o" }, "am", "<Plug>(textobj-sandwich-auto-a)")
