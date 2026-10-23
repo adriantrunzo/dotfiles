@@ -473,19 +473,6 @@ treesitter.install({
   "yaml",
 })
 
-vim.lsp.config("vtsls", {
-  settings = {
-    vtsls = {
-      autoUseWorkspaceTsdk = true,
-      experimental = {
-        completion = {
-          enableServerSideFuzzyMatch = true,
-        },
-      },
-    },
-  },
-})
-
 vim.lsp.enable("cssls")
 vim.lsp.enable("html")
 vim.lsp.enable("jsonls")
