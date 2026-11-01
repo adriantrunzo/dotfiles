@@ -17,7 +17,6 @@ BREW_PACKAGES=(
   'ty'
   'typescript'
   'vscode-langservers-extracted'
-  'vtsls'
 )
 
 PLUGINS=(
