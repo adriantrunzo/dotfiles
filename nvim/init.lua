@@ -343,7 +343,14 @@ require("mini.pick").setup({
   },
 })
 
-require("mini.statuscolumn").setup()
+require("mini.statuscolumn").setup({
+  content = require("mini.statuscolumn").gen_content.main({
+    { format = "s=lf", sep = " │ " },
+    { ltype = "virt", lnum = "•" },
+    { ltype = "wrap", lnum = "↳" },
+  }),
+})
+
 require("mini.statusline").setup({
   content = {
     active = function()
