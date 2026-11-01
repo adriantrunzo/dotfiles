@@ -141,10 +141,21 @@ vim.api.nvim_create_autocmd("CursorMoved", {
 
 -- Highlight references using LSP.
 vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-  callback = vim.lsp.buf.document_highlight,
+  callback = function()
+    local bufnr = vim.fn.bufnr("%")
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+    for _, client in pairs(clients) do
+      if client:supports_method("textDocument/documentHighlight") then
+        vim.lsp.buf.document_highlight()
+        break
+      end
+    end
+  end,
   group = "Config",
 })
 
+-- Clear reference highlights.
 vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
   callback = vim.lsp.buf.clear_references,
   group = "Config",
@@ -246,6 +257,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
         and client:supports_method("textDocument/formatting")
       then
         vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+        break
       end
     end
   end,
