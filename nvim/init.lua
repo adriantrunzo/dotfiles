@@ -139,6 +139,17 @@ vim.api.nvim_create_autocmd("CursorMoved", {
   group = "Config",
 })
 
+-- Highlight references using LSP.
+vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
+  callback = vim.lsp.buf.document_highlight,
+  group = "Config",
+})
+
+vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
+  callback = vim.lsp.buf.clear_references,
+  group = "Config",
+})
+
 -- Open the quickfix window automatically.
 -- https://noahfrederick.com/log/vim-streamlining-grep
 vim.api.nvim_create_autocmd("QuickFixCmdPost", {
@@ -159,60 +170,7 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
   pattern = "l*",
 })
 
-vim.api.nvim_create_autocmd("LspAttach", {
-  callback = function(event)
-    local buffer = event.buf
-    local client = assert(vim.lsp.get_client_by_id(event.data.client_id))
-    local methods = vim.lsp.protocol.Methods
-
-    vim.api.nvim_create_augroup("ConfigLsp", { clear = false })
-
-    if client.name == "eslint" then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = buffer,
-        command = "LspEslintFixAll",
-        group = "ConfigLsp",
-      })
-    end
-
-    if client:supports_method(methods.textDocument_documentHighlight) then
-      vim.api.nvim_create_autocmd({ "CursorHold", "InsertLeave" }, {
-        buffer = buffer,
-        callback = vim.lsp.buf.document_highlight,
-        group = "ConfigLsp",
-      })
-      vim.api.nvim_create_autocmd({ "CursorMoved", "InsertEnter", "BufLeave" }, {
-        buffer = buffer,
-        callback = vim.lsp.buf.clear_references,
-        group = "ConfigLsp",
-      })
-    end
-
-    if
-        not client:supports_method("textDocument/willSaveWaitUntil")
-        and client:supports_method("textDocument/formatting")
-    then
-      vim.api.nvim_create_autocmd("BufWritePre", {
-        buffer = buffer,
-        callback = function()
-          vim.lsp.buf.format({ bufnr = buffer, id = client.id, timeout_ms = 1000 })
-        end,
-        group = "ConfigLsp",
-      })
-    end
-
-    -- " Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
-    vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { buffer = buffer })
-    vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { buffer = buffer })
-    vim.keymap.set("n", "cn", vim.lsp.buf.rename, { buffer = buffer })
-    vim.keymap.set("n", "cq", vim.lsp.buf.format, { buffer = buffer })
-    vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { buffer = buffer })
-    vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { buffer = buffer })
-    vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { buffer = buffer })
-  end,
-  group = "Config",
-})
-
+-- Specific settings for help files.
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.number = true
@@ -222,6 +180,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "help",
 })
 
+-- Specific settings for python files.
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.opt_local.textwidth = 88
@@ -230,6 +189,8 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "python",
 })
 
+-- Enable treesitter for supported file types.
+-- https://github.com/nvim-treesitter/nvim-treesitter#supported-features
 vim.api.nvim_create_autocmd("FileType", {
   callback = function()
     vim.treesitter.start()
@@ -252,6 +213,7 @@ vim.api.nvim_create_autocmd("FileType", {
   },
 })
 
+-- Update treesitter parsers after updating the treesitter plugin.
 vim.api.nvim_create_autocmd("PackChanged", {
   callback = function(event)
     local active, kind, name = event.data.active, event.data.kind, event.data.spec.name
@@ -267,16 +229,39 @@ vim.api.nvim_create_autocmd("PackChanged", {
   group = "Config",
 })
 
+-- Lint and format on save.
+vim.api.nvim_create_autocmd("BufWritePre", {
+  callback = function()
+    local bufnr = vim.fn.bufnr("%")
+    local clients = vim.lsp.get_clients({ bufnr = bufnr })
+
+    if vim.fn.exists(":LspOxlintFixAll") > 0 then
+      vim.cmd("LspOxlintFixAll")
+    end
+
+    for _, client in pairs(clients) do
+      if
+        (client.name == "oxfmt" or client.name == "ruff" or client.name == "stylua")
+        and not client:supports_method("textDocument/willSaveWaitUntil")
+        and client:supports_method("textDocument/formatting")
+      then
+        vim.lsp.buf.format({ bufnr = bufnr, id = client.id, timeout_ms = 1000 })
+      end
+    end
+  end,
+  group = "Config",
+})
+
 vim.pack.add({
-  { name = "dracula",    src = "https://github.com/dracula/vim" },
-  { name = "fugitive",   src = "https://github.com/tpope/vim-fugitive" },
-  { name = "lspconfig",  src = "https://github.com/neovim/nvim-lspconfig" },
-  { name = "matchup",    src = "https://github.com/andymass/vim-matchup" },
-  { name = "mini",       src = "https://github.com/nvim-mini/mini.nvim" },
-  { name = "quicker",    src = "https://github.com/stevearc/quicker.nvim" },
-  { name = "rsi",        src = "https://github.com/tpope/vim-rsi" },
-  { name = "sandwich",   src = "https://github.com/machakann/vim-sandwich" },
-  { name = "sneak",      src = "https://github.com/justinmk/vim-sneak" },
+  { name = "dracula", src = "https://github.com/dracula/vim" },
+  { name = "fugitive", src = "https://github.com/tpope/vim-fugitive" },
+  { name = "lspconfig", src = "https://github.com/neovim/nvim-lspconfig" },
+  { name = "matchup", src = "https://github.com/andymass/vim-matchup" },
+  { name = "mini", src = "https://github.com/nvim-mini/mini.nvim" },
+  { name = "quicker", src = "https://github.com/stevearc/quicker.nvim" },
+  { name = "rsi", src = "https://github.com/tpope/vim-rsi" },
+  { name = "sandwich", src = "https://github.com/machakann/vim-sandwich" },
+  { name = "sneak", src = "https://github.com/justinmk/vim-sneak" },
   { name = "treesitter", src = "https://github.com/nvim-treesitter/nvim-treesitter" },
 })
 
@@ -286,43 +271,23 @@ vim.cmd.colorscheme("dracula")
 -- runtime path.
 vim.opt.runtimepath:append(vim.pack.get({ "treesitter" })[1].path .. "/runtime")
 
-local mini_ai = require("mini.ai")
-local mini_bracketed = require("mini.bracketed")
-local mini_cmdline = require("mini.cmdline")
-local mini_completion = require("mini.completion")
-local mini_diff = require("mini.diff")
-local mini_extra = require("mini.extra")
-local mini_files = require("mini.files")
-local mini_indentscope = require("mini.indentscope")
-local mini_keymap = require("mini.keymap")
-local mini_move = require("mini.move")
-local mini_operators = require("mini.operators")
-local mini_pairs = require("mini.pairs")
-local mini_pick = require("mini.pick")
-local mini_statusline = require("mini.statusline")
-local mini_trailspace = require("mini.trailspace")
-local quicker = require("quicker")
-local treesitter = require("nvim-treesitter")
-
-mini_ai.setup({
+require("mini.ai").setup({
   custom_textobjects = {
-    e = mini_extra.gen_ai_spec.buffer(),
+    e = require("mini.extra").gen_ai_spec.buffer(),
   },
 })
 
-mini_bracketed.setup()
-mini_completion.setup()
-mini_cmdline.setup()
-
-mini_diff.setup({
+require("mini.bracketed").setup()
+require("mini.completion").setup()
+require("mini.cmdline").setup()
+require("mini.diff").setup({
   view = {
     style = "sign",
   },
 })
 
-mini_extra.setup()
-
-mini_files.setup({
+require("mini.extra").setup()
+require("mini.files").setup({
   mappings = {
     close = "<Esc>",
     go_in = "",
@@ -332,18 +297,17 @@ mini_files.setup({
   },
 })
 
-mini_indentscope.setup({
+require("mini.indentscope").setup({
   draw = {
-    animation = mini_indentscope.gen_animation.none(),
+    animation = require("mini.indentscope").gen_animation.none(),
   },
   options = {
     indent_at_cursor = false,
   },
 })
 
-mini_move.setup()
-
-mini_operators.setup({
+require("mini.move").setup()
+require("mini.operators").setup({
   evaluate = {
     prefix = "",
   },
@@ -361,9 +325,8 @@ mini_operators.setup({
   },
 })
 
-mini_pairs.setup()
-
-mini_pick.setup({
+require("mini.pairs").setup()
+require("mini.pick").setup({
   window = {
     config = function()
       local height = math.floor(0.75 * vim.o.lines)
@@ -380,7 +343,8 @@ mini_pick.setup({
   },
 })
 
-mini_statusline.setup({
+require("mini.statuscolumn").setup()
+require("mini.statusline").setup({
   content = {
     active = function()
       local mode, mode_hl = MiniStatusline.section_mode({})
@@ -402,39 +366,38 @@ mini_statusline.setup({
 
       local vcs = (ticket or git_branch) .. git_modifier
       local diagnostics = is_tiny and ""
-          or MiniStatusline.section_diagnostics({
-            icon = "",
-            signs = {
-              ERROR = "%#DiagnosticError#●%#DraculaFg# ",
-              WARN = "%#DiagnosticWarn#●%#DraculaFg# ",
-              INFO = "%#DraculaYellow#●%#DraculaFg# ",
-              HINT = "%#DiagnosticInfo#●%#DraculaFg# ",
-            },
-          })
+        or MiniStatusline.section_diagnostics({
+          icon = "",
+          signs = {
+            ERROR = "%#DiagnosticError#●%#DraculaFg# ",
+            WARN = "%#DiagnosticWarn#●%#DraculaFg# ",
+            INFO = "%#DraculaYellow#●%#DraculaFg# ",
+            HINT = "%#DiagnosticInfo#●%#DraculaFg# ",
+          },
+        })
       local file_info = (is_small or is_special_buffer) and ""
-          or string.format("%s[%s]", file_encoding, file_format)
+        or string.format("%s[%s]", file_encoding, file_format)
       local file_name = is_terminal and "%t" or (is_small and "%f%m%r" or "%F%m%r")
       local file_type = vim.bo.filetype
       local location = "%l:%v"
 
       return MiniStatusline.combine_groups({
-        { hl = mode_hl,                 strings = { mode } },
+        { hl = mode_hl, strings = { mode } },
         { hl = "MiniStatuslineDevinfo", strings = { vcs } },
         "%<", -- Mark general truncate point
-        { hl = "MiniStatuslineFilename",       strings = { file_name } },
+        { hl = "MiniStatuslineFilename", strings = { file_name } },
         "%=", -- End left alignment
         { strings = { diagnostics, file_type } },
-        { hl = "MiniStatuslineFileinfo",       strings = { file_info } },
-        { hl = mode_hl,                        strings = { location } },
+        { hl = "MiniStatuslineFileinfo", strings = { file_info } },
+        { hl = mode_hl, strings = { location } },
       })
     end,
   },
   use_icons = false,
 })
 
-mini_trailspace.setup()
-
-quicker.setup({
+require("mini.trailspace").setup()
+require("quicker").setup({
   keys = {
     {
       ">",
@@ -453,7 +416,7 @@ quicker.setup({
   },
 })
 
-treesitter.install({
+require("nvim-treesitter").install({
   "comment",
   "css",
   "dockerfile",
@@ -508,14 +471,14 @@ vim.keymap.set("n", "<Leader>x", "<Cmd>exit<CR>")
 vim.keymap.set("n", "<Leader>yp", '"*yp', { remap = true })
 vim.keymap.set("n", "<Leader>yP", '"*ypg_', { remap = true })
 
-mini_keymap.map_multistep(
+require("mini.keymap").map_multistep(
   "i",
   "<Tab>",
   { "minisnippets_next", "minisnippets_expand", "pmenu_next" }
 )
-mini_keymap.map_multistep("i", "<S-Tab>", { "minisnippets_prev", "pmenu_prev" })
-mini_keymap.map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
-mini_keymap.map_multistep("i", "<BS>", { "minipairs_bs" })
+require("mini.keymap").map_multistep("i", "<S-Tab>", { "minisnippets_prev", "pmenu_prev" })
+require("mini.keymap").map_multistep("i", "<CR>", { "pmenu_accept", "minipairs_cr" })
+require("mini.keymap").map_multistep("i", "<BS>", { "minipairs_bs" })
 
 -- Thumb clusters on Advantage keyboard.
 vim.keymap.set("n", "<CR>", "<Cmd>update<CR>")
@@ -542,6 +505,15 @@ vim.keymap.set({ "n", "v", "o" }, "\\", "?")
 -- Reselect visual selection after indenting.
 vim.keymap.set("v", "<", "<gv")
 vim.keymap.set("v", ">", ">gv")
+
+-- Unused c-mappings: cd cm co cp cq cr cs cu cx cy cz
+vim.keymap.set("n", "cd", "<Cmd>Pick lsp scope='definition'<CR>", { silent = true })
+vim.keymap.set("n", "cm", "<Cmd>Pick lsp scope='implementation'<CR>", { silent = true })
+vim.keymap.set("n", "cn", vim.lsp.buf.rename, { silent = true })
+vim.keymap.set("n", "cq", vim.lsp.buf.format, { silent = true })
+vim.keymap.set("n", "cr", "<Cmd>Pick lsp scope='references'<CR>", { silent = true })
+vim.keymap.set("n", "cy", "<Cmd>Pick lsp scope='type_definition'<CR>", { silent = true })
+vim.keymap.set("n", "cz", vim.lsp.buf.code_action, { silent = true })
 
 -- Move vertically by visual line with wrapping enabled.
 -- https://vi.stackexchange.com/a/37629
